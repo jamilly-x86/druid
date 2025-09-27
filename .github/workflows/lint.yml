@@ -49,7 +49,11 @@ jobs:
         apt install -y libxkbcommon-x11-dev libxcb-icccm4-dev libxcb-sync0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev libxinerama-dev
 
     - name: cmake-configure
-      run: cmake --preset x64-linux-clang-tidy
+      run: cmake --preset x64-linux-clang-debug
+      shell: bash
+
+    - name: cmake-build
+      run: cmake --build --preset x64-linux-clang-debug
       shell: bash
 
     - name: run-clang-tidy
