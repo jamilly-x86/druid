@@ -1,0 +1,98 @@
+name: build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        config:
+          - compiler: gcc
+            os: ubuntu-latest
+            preset: x64-linux-gcc-release
+          - compiler: clang
+            os: ubuntu-latest
+            preset: x64-linux-clang-debug
+          - compiler: msvc
+            os: windows-latest
+            preset: x64-windows-msvc-debug
+          - compiler: clang
+            os: macos-latest
+            preset: arm64-osx-clang-release
+
+    runs-on: ${{ matrix.config.os }}
+    container: ${{ matrix.config.os == 'ubuntu-latest' && 'ubuntu:25.04' || null }}
+
+    env:
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/.vcpkg_cache
+      VCPKG_BINARY_SOURCES: "default"
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: vcpkg-cache-directory
+      run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
+      shell: bash
+    
+    - name: vcpkg-cache-restore
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
+        key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg.json') }}
+        restore-keys: |
+          vcpkg-${{ runner.os }}-
+
+    - name: install-tools-linux
+      if: ${{ matrix.config.os == 'ubuntu-latest' }}
+      run: |
+          apt update -y
+          apt upgrade -y
+          apt install -y curl tar git zip unzip make autoconf libtool python3-jinja2 ninja-build
+          apt install -y g++-15 clang-20 cmake
+          update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 10
+          update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-15 10
+          update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 20
+          update-alternatives --set cc /usr/bin/gcc
+          update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 20
+          update-alternatives --set c++ /usr/bin/g++
+          update-alternatives --install /usr/bin/clang clang /usr/bin/clang-20 200
+          update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-20 200
+
+    - name: install-tools-windows
+      if: ${{ matrix.config.os == 'windows-latest' }}
+      run: |
+        choco install -y cmake ninja
+      shell: bash
+
+    - name: install-tools-macos
+      if: ${{ matrix.config.os == 'macos-latest' }}
+      run: |
+        # Install LLVM 20 via Homebrew
+        brew install llvm@20 ninja cmake
+        echo "/opt/homebrew/opt/llvm@20/bin" >> $GITHUB_PATH
+      shell: bash
+
+    - name: install-dependencies-linux
+      if: ${{ matrix.config.os == 'ubuntu-latest' }}
+      run: |
+        apt install -y '^libxcb.*-dev' libfontconfig1-dev libfreetype6-dev libx11-dev libxext-dev libxfixes-dev libgl1-mesa-dev libglu1-mesa-dev libegl1-mesa-dev
+        apt install -y libxrender-dev libxi-dev libxcb1-dev libxcb-glx0-dev libxcb-keysyms1-dev libxcb-image0-dev libxcb-shm0-dev libx11-xcb-dev libxkbcommon-dev
+        apt install -y libxkbcommon-x11-dev libxcb-icccm4-dev libxcb-sync0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev libxinerama-dev
+
+    - name: setup-msvc
+      if: ${{ matrix.config.os == 'windows-latest' }}
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: amd64
+
+    - name: cmake-configure
+      run: cmake --preset ${{ matrix.config.preset }}
+      shell: bash
+
+    - name: cmake-build
+      run: cmake --build --preset ${{ matrix.config.preset }}
+      shell: bash
