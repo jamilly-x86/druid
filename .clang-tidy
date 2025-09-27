@@ -6,16 +6,14 @@ Checks: '-*,
   cert-*,
   cppcoreguidelines-*,
   misc-*,
-  -misc-include-cleaner,
   modernize-*,
-  -modernize-use-trailing-return-type,
   readability-*,
   -readability-identifier-length,
   -readability-simplify-boolean-expr,
   performance-*
 '
 WarningsAsErrors: '*'
-HeaderFilterRegex: '^.*emit/(app|module)/.*\.h$'
+HeaderFilterRegex: '.*[\\/](app|module|src|include)[\\/].*\\.(h|hpp|hh|hxx|inl|ipp)$'
 FormatStyle: file
 UseColor: 'true'
 CheckOptions:
