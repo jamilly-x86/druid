@@ -1,0 +1,31 @@
+{
+  "name": "druid",
+  "version-string": "2025.9.27",
+  "port-version": 1,
+  "description": "A modern C++ game engine for creation and exploration.",
+  "homepage": "https://github.com/druidengine/druid",
+  "dependencies": [
+    "gtest",
+    "glm",
+    {
+      "host": true,
+      "name": "glslang",
+      "features": [
+        "tools"
+      ]
+    },
+    {
+      "name": "sdl3",
+      "features": [
+        "vulkan"
+      ]
+    },
+    "sdl3-image",
+    "sdl3-ttf",
+    {
+      "host": true,
+      "name": "spirv-cross"
+    },
+    "magic-enum"
+  ]
+}

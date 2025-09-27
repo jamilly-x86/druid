@@ -1,0 +1,405 @@
+{
+    "version": 6,
+    "include": [
+        "cmake/preset/config-build-dir.json",
+        "cmake/preset/config-debug.json",
+        "cmake/preset/config-release.json",
+        "cmake/preset/config-relwithdebinfo.json",
+        "cmake/preset/host-arm64-linux.json",
+        "cmake/preset/host-arm64-osx.json",
+        "cmake/preset/host-arm64-windows.json",
+        "cmake/preset/host-x64-linux.json",
+        "cmake/preset/host-x64-windows.json",
+        "cmake/preset/target-arm64-android.json",
+        "cmake/preset/target-arm64-linux.json",
+        "cmake/preset/target-arm64-osx.json",
+        "cmake/preset/target-arm64-windows.json",
+        "cmake/preset/target-wasm32-emscripten.json",
+        "cmake/preset/target-x64-android.json",
+        "cmake/preset/target-x64-linux.json",
+        "cmake/preset/target-x64-windows.json",
+        "cmake/preset/use-clang.json",
+        "cmake/preset/use-emscripten.json",
+        "cmake/preset/use-gcc.json",
+        "cmake/preset/use-msvc.json",
+        "cmake/preset/use-ninja.json",
+        "cmake/preset/use-vcpkg.json",
+        "cmake/preset/use-visualstudio.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "x64-windows-visualstudio",
+            "inherits": [
+                "host-x64-windows",
+                "target-x64-windows",
+                "use-visualstudio",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-windows-msvc-debug",
+            "inherits": [
+                "host-x64-windows",
+                "target-x64-windows",
+                "config-debug",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-windows-msvc-relwithdebinfo",
+            "inherits": [
+                "host-x64-windows",
+                "target-x64-windows",
+                "config-relwithdebinfo",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-windows-msvc-release",
+            "inherits": [
+                "host-x64-windows",
+                "target-x64-windows",
+                "config-release",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-windows-msvc-debug",
+            "inherits": [
+                "host-arm64-windows",
+                "target-arm64-windows",
+                "config-debug",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-windows-msvc-relwithdebinfo",
+            "inherits": [
+                "host-arm64-windows",
+                "target-arm64-windows",
+                "config-relwithdebinfo",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-windows-msvc-release",
+            "inherits": [
+                "host-arm64-windows",
+                "target-arm64-windows",
+                "config-release",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-osx-clang-debug",
+            "inherits": [
+                "host-arm64-osx",
+                "target-arm64-osx",
+                "config-debug",
+                "config-build-dir",
+                "use-clang",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-osx-clang-release",
+            "inherits": [
+                "host-arm64-osx",
+                "target-arm64-osx",
+                "config-release",
+                "config-build-dir",
+                "use-clang",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-linux-clang-debug",
+            "inherits": [
+                "host-x64-linux",
+                "target-x64-linux",
+                "config-debug",
+                "config-build-dir",
+                "use-clang",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-linux-clang-release",
+            "inherits": [
+                "host-x64-linux",
+                "target-x64-linux",
+                "config-release",
+                "config-build-dir",
+                "use-clang",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-linux-clang-tidy",
+            "inherits": "x64-linux-clang-debug",
+            "cacheVariables": {
+                "CMAKE_CXX_CLANG_TIDY": "clang-tidy"
+            }
+        },
+        {
+            "name": "x64-linux-gcc-debug",
+            "inherits": [
+                "host-x64-linux",
+                "target-x64-linux",
+                "config-debug",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-linux-gcc-release",
+            "inherits": [
+                "host-x64-linux",
+                "target-x64-linux",
+                "config-release",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-linux-gcc-debug",
+            "inherits": [
+                "host-arm64-linux",
+                "target-arm64-linux",
+                "config-debug",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-linux-gcc-release",
+            "inherits": [
+                "host-arm64-linux",
+                "target-arm64-linux",
+                "config-release",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "wasm32-emscripten-debug",
+            "inherits": [
+                "host-x64-linux",
+                "target-wasm32-emscripten",
+                "config-debug",
+                "config-build-dir",
+                "use-emscripten",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "wasm32-emscripten-release",
+            "inherits": [
+                "host-x64-linux",
+                "target-wasm32-emscripten",
+                "config-release",
+                "config-build-dir",
+                "use-emscripten",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-android-debug",
+            "inherits": [
+                "host-x64-linux",
+                "target-x64-android",
+                "config-debug",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-android-release",
+            "inherits": [
+                "host-x64-linux",
+                "target-x64-android",
+                "config-release",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-android-debug",
+            "inherits": [
+                "host-x64-linux",
+                "target-arm64-android",
+                "config-debug",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-android-release",
+            "inherits": [
+                "host-x64-linux",
+                "target-arm64-android",
+                "config-release",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-android-x64-windows-debug",
+            "inherits": [
+                "host-x64-windows",
+                "target-arm64-android",
+                "config-debug",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-android-x64-windows-release",
+            "inherits": [
+                "host-x64-windows",
+                "target-arm64-android",
+                "config-release",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "x64-windows-msvc-debug",
+            "configurePreset": "x64-windows-msvc-debug"
+        },
+        {
+            "name": "x64-windows-msvc-relwithdebinfo",
+            "configurePreset": "x64-windows-msvc-relwithdebinfo"
+        },
+        {
+            "name": "x64-windows-msvc-release",
+            "configurePreset": "x64-windows-msvc-release"
+        },
+        {
+            "name": "arm64-windows-msvc-debug",
+            "configurePreset": "arm64-windows-msvc-debug"
+        },
+        {
+            "name": "arm64-windows-msvc-relwithdebinfo",
+            "configurePreset": "arm64-windows-msvc-relwithdebinfo"
+        },
+        {
+            "name": "arm64-windows-msvc-release",
+            "configurePreset": "arm64-windows-msvc-release"
+        },
+        {
+            "name": "arm64-osx-clang-debug",
+            "configurePreset": "arm64-osx-clang-debug"
+        },
+        {
+            "name": "arm64-osx-clang-release",
+            "configurePreset": "arm64-osx-clang-release"
+        },
+        {
+            "name": "x64-linux-clang-debug",
+            "configurePreset": "x64-linux-gcc-debug"
+        },
+        {
+            "name": "x64-linux-clang-release",
+            "configurePreset": "x64-linux-gcc-release"
+        },
+        {
+            "name": "x64-linux-clang-tidy",
+            "configurePreset": "x64-linux-clang-tidy"
+        },
+        {
+            "name": "x64-linux-gcc-debug",
+            "configurePreset": "x64-linux-gcc-debug"
+        },
+        {
+            "name": "x64-linux-gcc-release",
+            "configurePreset": "x64-linux-gcc-release"
+        },
+        {
+            "name": "arm64-linux-gcc-debug",
+            "configurePreset": "arm64-linux-gcc-debug"
+        },
+        {
+            "name": "arm64-linux-gcc-release",
+            "configurePreset": "arm64-linux-gcc-release"
+        },
+        {
+            "name": "wasm32-emscripten-debug",
+            "configurePreset": "wasm32-emscripten-debug"
+        },
+        {
+            "name": "wasm32-emscripten-release",
+            "configurePreset": "wasm32-emscripten-release"
+        },
+        {
+            "name": "x64-android-debug",
+            "configurePreset": "x64-android-debug"
+        },
+        {
+            "name": "x64-android-release",
+            "configurePreset": "x64-android-release"
+        },
+        {
+            "name": "arm64-android-debug",
+            "configurePreset": "arm64-android-debug"
+        },
+        {
+            "name": "arm64-android-release",
+            "configurePreset": "arm64-android-release"
+        },
+        {
+            "name": "arm64-android-x64-windows-debug",
+            "configurePreset": "arm64-android-x64-windows-debug"
+        },
+        {
+            "name": "arm64-android-x64-windows-release",
+            "configurePreset": "arm64-android-x64-windows-release"
+        }
+    ]
+}

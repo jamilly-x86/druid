@@ -1,0 +1,12 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "config-relwithdebinfo",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+            }
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "target-x64-android",
+            "hidden": true,
+            "cacheVariables": {
+                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/toolchains/android.cmake",
+                "VCPKG_TARGET_TRIPLET": "x64-android-druid",
+                "VCPKG_INSTALL_OPTIONS": "--allow-unsupported",
+                "ANDROID_STL": "c++_shared",
+                "ANDROID_SDK_ROOT": "$env{ANDROID_HOME}",
+                "ANDROID_PLATFORM": "34",
+                "ANDROID_ABI": "x86_64"
+            },
+            "environment": {
+                "VCPKG_KEEP_ENV_VARS": "ANDROID_HOME;ANDROID_NDK_HOME;JAVA_HOME"
+            }
+        }
+    ]
+}

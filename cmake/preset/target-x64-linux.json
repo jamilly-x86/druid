@@ -1,0 +1,13 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "target-x64-linux",
+            "hidden": true,
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": "x64-linux-druid",
+                "BUILD_SHARED_LIBS": false
+            }
+        }
+    ]
+}

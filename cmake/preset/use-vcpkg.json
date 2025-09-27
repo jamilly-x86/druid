@@ -1,0 +1,10 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "use-vcpkg",
+            "hidden": true,
+            "toolchainFile": "${sourceDir}/build/_deps/vcpkg-src/scripts/buildsystems/vcpkg.cmake"
+        }
+    ]
+}

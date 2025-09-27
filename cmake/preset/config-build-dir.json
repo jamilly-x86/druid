@@ -1,0 +1,10 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "config-build-dir",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build"
+        }
+    ]
+}
