@@ -1,7 +1,9 @@
 module;
 
 #include <SDL3/SDL_gpu.h>
+#include <SDL3/SDL_video.h>
 #include <filesystem>
+#include <memory>
 #include <string_view>
 
 export module druid.graphics.renderer;
@@ -20,7 +22,7 @@ constexpr auto ShaderExt = ".msl";
 #else
 #endif
 
-namespace druid::graphics
+namespace
 {
 	auto ShaderExtension(std::string_view x) -> std::filesystem::path
 	{
@@ -28,7 +30,10 @@ namespace druid::graphics
 		path += ShaderExt;
 		return path;
 	}
+}
 
+namespace druid::graphics
+{
 	export class Renderer
 	{
 	public:

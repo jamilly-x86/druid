@@ -126,7 +126,7 @@ namespace druid::graphics
 			return this->traits.height;
 		}
 
-		auto processEvents() const noexcept -> void
+		auto processEvents() const -> void
 		{
 			SDL_Event e{};
 			while(SDL_PollEvent(&e) == true)

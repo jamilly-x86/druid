@@ -10,7 +10,7 @@ namespace druid::graphics
 {
 	export struct EventWindow
 	{
-		enum class Type : int
+		enum class Type : std::uint16_t
 		{
 			None = SDL_EVENT_FIRST,
 			Shown = SDL_EVENT_WINDOW_SHOWN,
@@ -41,7 +41,7 @@ namespace druid::graphics
 			First = SDL_EVENT_WINDOW_FIRST
 		};
 
-		std::chrono::steady_clock::time_point timestamp{};
+		std::chrono::steady_clock::time_point timestamp;
 		int x{};
 		int y{};
 		int width{};

@@ -30,7 +30,7 @@ namespace druid::graphics
 	export class Color
 	{
 	public:
-		static const Color druid;
+		static const Color Druid;
 		static const Color Red;
 		static const Color Green;
 		static const Color Blue;
@@ -93,7 +93,7 @@ namespace druid::graphics
 		Rgba rgba{};
 	};
 
-	constexpr Color Color::druid{{.r = 53, .g = 39, .b = 39}};
+	constexpr Color Color::Druid{{.r = 53, .g = 39, .b = 39}};
 	constexpr Color Color::Red{{.r = Rgba::Max}};
 	constexpr Color Color::Green{{.g = Rgba::Max}};
 	constexpr Color Color::Blue{{.b = Rgba::Max}};

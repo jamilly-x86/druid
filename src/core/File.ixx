@@ -21,6 +21,8 @@ namespace druid::core
 
 		v.resize(ifs.tellg());
 		ifs.seekg(0, std::ios::beg);
+
+		// NOLINTNEXTLINE (cppcoreguidelines-pro-type-reinterpret-cast)
 		ifs.read(reinterpret_cast<char*>(v.data()), static_cast<std::streamsize>(v.size()));
 		return v;
 	}

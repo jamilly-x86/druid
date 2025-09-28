@@ -1,8 +1,10 @@
 module;
 
 #include <SDL3/SDL_gpu.h>
+#include <SDL3/SDL_stdinc.h>
 #include <array>
 #include <filesystem>
+#include <string>
 
 export module druid.graphics.pipeline;
 
@@ -85,6 +87,12 @@ namespace druid::graphics
 			SDL_ReleaseGPUGraphicsPipeline(this->device, this->pipeline);
 		}
 
+		Pipeline(const Pipeline&) = delete;
+		Pipeline(Pipeline&&) noexcept = delete;
+
+		auto operator=(const Pipeline&) -> Pipeline& = delete;
+		auto operator=(Pipeline&&) noexcept -> Pipeline& = delete;
+
 		[[nodiscard]] auto handle() const -> SDL_GPUGraphicsPipeline*
 		{
 			return this->pipeline;
@@ -101,6 +109,8 @@ namespace druid::graphics
 			}
 
 			SDL_GPUShaderCreateInfo info{};
+
+			// NOLINTNEXTLINE
 			info.code = reinterpret_cast<const Uint8*>(spv.data());
 			info.code_size = std::size(spv);
 			info.entrypoint = this->entryPoint.c_str();
