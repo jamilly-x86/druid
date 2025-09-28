@@ -135,7 +135,7 @@ try
 	druid::graphics::Window window{};
 
 	window.onEvent(
-		[&window](const druid::graphics::EventWindow& e)
+		[&window](const druid::graphics::EventWindow& e) -> void
 		{
 			switch(e.type)
 			{

@@ -53,26 +53,30 @@ namespace druid::graphics
 			vertexDesc.instance_step_rate = 0;
 			vertexDesc.pitch = sizeof(Vertex);
 
-			std::array<SDL_GPUVertexAttribute, 3> vertexAttrib{};
-			vertexAttrib[0].buffer_slot = 0;
-			vertexAttrib[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2;
-			vertexAttrib[0].location = 0;
-			vertexAttrib[0].offset = 0;
+			std::vector<SDL_GPUVertexAttribute> vertexAttribs;
 
-			vertexAttrib[1].buffer_slot = 0;
-			vertexAttrib[1].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT4;
-			vertexAttrib[1].location = 1;
-			vertexAttrib[1].offset = sizeof(Vertex::position);
+			auto vertexAttrib = vertexAttribs.emplace_back();
+			vertexAttrib.buffer_slot = 0;
+			vertexAttrib.format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2;
+			vertexAttrib.location = 0;
+			vertexAttrib.offset = 0;
 
-			vertexAttrib[2].buffer_slot = 0;
-			vertexAttrib[2].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2;
-			vertexAttrib[2].location = 2;
-			vertexAttrib[2].offset = sizeof(Vertex::position) + sizeof(Vertex::color);
+			vertexAttrib = vertexAttribs.emplace_back();
+			vertexAttrib.buffer_slot = 0;
+			vertexAttrib.format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT4;
+			vertexAttrib.location = 1;
+			vertexAttrib.offset = sizeof(Vertex::position);
+
+			vertexAttrib = vertexAttribs.emplace_back();
+			vertexAttrib.buffer_slot = 0;
+			vertexAttrib.format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2;
+			vertexAttrib.location = 2;
+			vertexAttrib.offset = sizeof(Vertex::position) + sizeof(Vertex::color);
 
 			pipelineDesc.vertex_input_state.num_vertex_buffers = 1;
 			pipelineDesc.vertex_input_state.vertex_buffer_descriptions = &vertexDesc;
-			pipelineDesc.vertex_input_state.vertex_attributes = vertexAttrib.data();
-			pipelineDesc.vertex_input_state.num_vertex_attributes = static_cast<Uint32>(vertexAttrib.size());
+			pipelineDesc.vertex_input_state.vertex_attributes = vertexAttribs.data();
+			pipelineDesc.vertex_input_state.num_vertex_attributes = static_cast<Uint32>(vertexAttribs.size());
 			pipelineDesc.props = 0;
 			pipelineDesc.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
 

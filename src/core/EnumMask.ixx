@@ -25,7 +25,7 @@ export namespace druid::core
 			}
 		}
 
-		constexpr auto test(T x) const noexcept -> bool
+		[[nodiscard]] constexpr auto test(T x) const noexcept -> bool
 		{
 			return (this->mask & static_cast<UnderlyingType>(x)) != 0x0;
 		}
@@ -35,7 +35,7 @@ export namespace druid::core
 			this->mask |= static_cast<UnderlyingType>(x);
 		}
 
-		constexpr auto get() const noexcept -> UnderlyingType
+		[[nodiscard]] constexpr auto get() const noexcept -> UnderlyingType
 		{
 			return this->mask;
 		}
