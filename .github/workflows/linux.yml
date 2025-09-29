@@ -15,6 +15,8 @@ jobs:
             compiler: gcc
           - preset: x64-linux-clang-release
             compiler: clang
+          - preset: x64-linux-clang-tidy
+            compiler: clang
 
     runs-on: "ubuntu-latest"
     container: "ubuntu:25.04"
