@@ -14,25 +14,24 @@
 - **Cross-Platform**: Supports Windows, Linux, macOS, Android, and WebAssembly
 - **Educational Focus**: Designed as a learning platform for modern C++ and graphics programming
 
-## Project Structure
-
-- `src/core/` - Core utilities and fundamental concepts
-- `src/graphics/` - Graphics rendering system with Vulkan backend
-- `app/pong/` - Example Pong game implementation
-- `cmake/` - CMake configuration and preset definitions
-- `vcpkg/` - Package manager integration for dependencies
-
-## Building
+## Compiling from source
 
 This project uses CMake with presets for easy configuration and building across different platforms and architectures.
 
+To see all available presets for your platform:
+```bash
+cmake --list-presets
+```
+
 ### Prerequisites
 
-- CMake 3.25 or later
-- A C++20 compliant compiler (MSVC 2022, GCC 12+, or Clang 15+)
+- CMake 3.31+, Ninja 1.10+
+- g++15+, Clang-20+, MSVC 17.14+
 - Git
 
 ### Windows
+
+For supported presets review [platform-windows.json](./cmake/preset/platform-windows.json)
 
 #### Using Visual Studio 2022
 
@@ -57,12 +56,9 @@ This project uses CMake with presets for easy configuration and building across 
    .\build\app\pong\druid-pong.exe
    ```
 
-#### Alternative Presets for Windows
-
-- **Release build**: `x64-windows-msvc-release`
-- **ARM64 architecture**: `arm64-windows-msvc-debug`
-
 ### Linux
+
+For supported presets review [platform-linux.json](./cmake/preset/platform-windows.json)
 
 #### Using GCC
 
@@ -75,7 +71,10 @@ This project uses CMake with presets for easy configuration and building across 
 2. Install dependencies (Ubuntu/Debian):
    ```bash
    sudo apt update
-   sudo apt install build-essential cmake ninja-build pkg-config
+   sudo apt install -y curl tar git zip unzip make autoconf libtool python3-jinja2 ninja-build cmake
+   sudo apt install -y '^libxcb.*-dev' libfontconfig1-dev libfreetype6-dev libx11-dev libxext-dev libxfixes-dev libgl1-mesa-dev libglu1-mesa-dev libegl1-mesa-dev
+   sudo apt install -y libxrender-dev libxi-dev libxcb1-dev libxcb-glx0-dev libxcb-keysyms1-dev libxcb-image0-dev libxcb-shm0-dev libx11-xcb-dev libxkbcommon-dev
+   sudo apt install -y libxkbcommon-x11-dev libxcb-icccm4-dev libxcb-sync0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev libxinerama-dev
    ```
 
 3. Configure the project:
@@ -93,43 +92,6 @@ This project uses CMake with presets for easy configuration and building across 
    ./build/app/pong/druid-pong
    ```
 
-#### Alternative Presets for Linux
+## Community and contributing
 
-- **Release build**: `x64-linux-gcc-release`
-- **Clang compiler**: `x64-linux-clang-debug`
-- **ARM64 architecture**: `arm64-linux-gcc-debug`
-
-### Available CMake Presets
-
-The project includes comprehensive preset configurations for:
-
-- **Configurations**: Debug, Release, RelWithDebInfo
-- **Platforms**: Windows (x64, ARM64), Linux (x64, ARM64), macOS (ARM64), Android, WebAssembly
-- **Compilers**: MSVC, GCC, Clang, Emscripten, Android NDK
-- **Build Systems**: Ninja, Visual Studio
-
-To see all available presets:
-```bash
-cmake --list-presets
-```
-
-## Development
-
-### Running Tests
-
-```bash
-# After building, run the test suite
-ctest --preset <your-preset-name>
-```
-
-### Project Configuration
-
-The project uses vcpkg for dependency management and CMake presets for configuration management. All presets automatically handle dependency installation and configuration.
-
-## Contributing
-
-This is primarily an educational project for exploring modern C++ and graphics programming concepts. Contributions and suggestions are welcome.
-
-## License
-
-See `LICENSE` file for license information.
+To get started contributing to the project, review the [CONTRIBUTING.md](CONTRIBUTING.md) document.
