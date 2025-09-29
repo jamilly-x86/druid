@@ -1,0 +1,130 @@
+{
+    "version": 7,
+    "include": [
+        "config-build-dir.json",
+        "config-debug.json",
+        "config-release.json",
+        "host-arm64-linux.json",
+        "host-x64-linux.json",
+        "target-arm64-linux.json",
+        "target-x64-linux.json",
+        "use-clang.json",
+        "use-gcc.json",
+        "use-msvc.json",
+        "use-ninja.json",
+        "use-vcpkg.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "x64-linux-clang-debug",
+            "inherits": [
+                "host-x64-linux",
+                "target-x64-linux",
+                "config-debug",
+                "config-build-dir",
+                "use-clang",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-linux-clang-release",
+            "inherits": [
+                "host-x64-linux",
+                "target-x64-linux",
+                "config-release",
+                "config-build-dir",
+                "use-clang",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-linux-clang-tidy",
+            "inherits": [
+                "x64-linux-clang-debug"
+            ],
+            "cacheVariables": {
+                "CMAKE_CXX_CLANG_TIDY": "clang-tidy"
+            }
+        },
+        {
+            "name": "x64-linux-gcc-debug",
+            "inherits": [
+                "host-x64-linux",
+                "target-x64-linux",
+                "config-debug",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-linux-gcc-release",
+            "inherits": [
+                "host-x64-linux",
+                "target-x64-linux",
+                "config-release",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-linux-gcc-debug",
+            "inherits": [
+                "host-arm64-linux",
+                "target-arm64-linux",
+                "config-debug",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-linux-gcc-release",
+            "inherits": [
+                "host-arm64-linux",
+                "target-arm64-linux",
+                "config-release",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "x64-linux-clang-debug",
+            "configurePreset": "x64-linux-clang-debug"
+        },
+        {
+            "name": "x64-linux-clang-release",
+            "configurePreset": "x64-linux-clang-release"
+        },
+        {
+            "name": "x64-linux-clang-tidy",
+            "configurePreset": "x64-linux-clang-tidy"
+        },
+        {
+            "name": "x64-linux-gcc-debug",
+            "configurePreset": "x64-linux-gcc-debug"
+        },
+        {
+            "name": "x64-linux-gcc-release",
+            "configurePreset": "x64-linux-gcc-release"
+        },
+        {
+            "name": "arm64-linux-gcc-debug",
+            "configurePreset": "arm64-linux-gcc-debug"
+        },
+        {
+            "name": "arm64-linux-gcc-release",
+            "configurePreset": "arm64-linux-gcc-release"
+        }
+    ]
+}

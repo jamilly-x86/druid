@@ -1,0 +1,49 @@
+{
+    "version": 7,
+    "include": [
+        "config-build-dir.json",
+        "config-debug.json",
+        "config-release.json",
+        "host-x64-linux.json",
+        "target-wasm32-emscripten.json",
+        "use-emscripten.json",
+        "use-ninja.json",
+        "use-vcpkg.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "wasm32-emscripten-debug",
+            "inherits": [
+                "host-x64-linux",
+                "target-wasm32-emscripten",
+                "config-debug",
+                "config-build-dir",
+                "use-emscripten",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "wasm32-emscripten-release",
+            "inherits": [
+                "host-x64-linux",
+                "target-wasm32-emscripten",
+                "config-release",
+                "config-build-dir",
+                "use-emscripten",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "wasm32-emscripten-debug",
+            "configurePreset": "wasm32-emscripten-debug"
+        },
+        {
+            "name": "wasm32-emscripten-release",
+            "configurePreset": "wasm32-emscripten-release"
+        }
+    ]
+}

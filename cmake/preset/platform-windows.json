@@ -1,0 +1,126 @@
+{
+    "version": 7,
+    "include": [
+        "config-build-dir.json",
+        "config-debug.json",
+        "config-release.json",
+        "config-relwithdebinfo.json",
+        "host-arm64-windows.json",
+        "host-x64-windows.json",
+        "target-arm64-windows.json",
+        "target-x64-windows.json",
+        "use-msvc.json",
+        "use-ninja.json",
+        "use-vcpkg.json",
+        "use-visualstudio.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "x64-windows-visualstudio",
+            "inherits": [
+                "host-x64-windows",
+                "target-x64-windows",
+                "use-visualstudio",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-windows-msvc-debug",
+            "inherits": [
+                "host-x64-windows",
+                "target-x64-windows",
+                "config-debug",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-windows-msvc-relwithdebinfo",
+            "inherits": [
+                "host-x64-windows",
+                "target-x64-windows",
+                "config-relwithdebinfo",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-windows-msvc-release",
+            "inherits": [
+                "host-x64-windows",
+                "target-x64-windows",
+                "config-release",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-windows-msvc-debug",
+            "inherits": [
+                "host-arm64-windows",
+                "target-arm64-windows",
+                "config-debug",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-windows-msvc-relwithdebinfo",
+            "inherits": [
+                "host-arm64-windows",
+                "target-arm64-windows",
+                "config-relwithdebinfo",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-windows-msvc-release",
+            "inherits": [
+                "host-arm64-windows",
+                "target-arm64-windows",
+                "config-release",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "x64-windows-msvc-debug",
+            "configurePreset": "x64-windows-msvc-debug"
+        },
+        {
+            "name": "x64-windows-msvc-relwithdebinfo",
+            "configurePreset": "x64-windows-msvc-relwithdebinfo"
+        },
+        {
+            "name": "x64-windows-msvc-release",
+            "configurePreset": "x64-windows-msvc-release"
+        },
+        {
+            "name": "arm64-windows-msvc-debug",
+            "configurePreset": "arm64-windows-msvc-debug"
+        },
+        {
+            "name": "arm64-windows-msvc-relwithdebinfo",
+            "configurePreset": "arm64-windows-msvc-relwithdebinfo"
+        },
+        {
+            "name": "arm64-windows-msvc-release",
+            "configurePreset": "arm64-windows-msvc-release"
+        }
+    ]
+}
