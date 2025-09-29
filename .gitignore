@@ -49,3 +49,6 @@ emsdk/
 
 # Visual Studio
 .vs/
+
+# clion
+.idea/
