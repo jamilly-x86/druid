@@ -52,3 +52,4 @@ emsdk/
 
 # clion
 .idea/
+.DS_Store
