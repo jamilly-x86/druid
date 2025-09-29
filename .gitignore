@@ -49,3 +49,7 @@ emsdk/
 
 # Visual Studio
 .vs/
+
+# clion
+.idea/
+.DS_Store
