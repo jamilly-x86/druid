@@ -1,0 +1,14 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "target-x64-osx",
+            "hidden": true,
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": "x64-osx-druid",
+                "BUILD_SHARED_LIBS": false,
+                "CMAKE_OSX_SYSROOT": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+            }
+        }
+    ]
+}
