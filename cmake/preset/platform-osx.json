@@ -1,0 +1,49 @@
+{
+    "version": 7,
+    "include": [
+        "config-release.json",
+        "host-arm64-osx.json",
+        "target-arm64-osx.json",
+        "config-debug.json",
+        "config-build-dir.json",
+        "use-clang.json",
+        "use-ninja.json",
+        "use-vcpkg.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "arm64-osx-clang-debug",
+            "inherits": [
+                "host-arm64-osx",
+                "target-arm64-osx",
+                "config-debug",
+                "config-build-dir",
+                "use-clang",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-osx-clang-release",
+            "inherits": [
+                "host-arm64-osx",
+                "target-arm64-osx",
+                "config-release",
+                "config-build-dir",
+                "use-clang",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "arm64-osx-clang-debug",
+            "configurePreset": "arm64-osx-clang-debug"
+        },
+        {
+            "name": "arm64-osx-clang-release",
+            "configurePreset": "arm64-osx-clang-release"
+        }
+    ]
+}

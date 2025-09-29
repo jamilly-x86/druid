@@ -1,0 +1,116 @@
+{
+    "version": 7,
+    "include": [
+        "config-build-dir.json",
+        "config-debug.json",
+        "config-release.json",
+        "host-x64-linux.json",
+        "host-x64-windows.json",
+        "target-arm64-android.json",
+        "target-x64-android.json",
+        "use-gcc.json",
+        "use-msvc.json",
+        "use-ninja.json",
+        "use-vcpkg.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "x64-android-debug",
+            "inherits": [
+                "host-x64-linux",
+                "target-x64-android",
+                "config-debug",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-android-release",
+            "inherits": [
+                "host-x64-linux",
+                "target-x64-android",
+                "config-release",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-android-debug",
+            "inherits": [
+                "host-x64-linux",
+                "target-arm64-android",
+                "config-debug",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-android-release",
+            "inherits": [
+                "host-x64-linux",
+                "target-arm64-android",
+                "config-release",
+                "config-build-dir",
+                "use-gcc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-android-x64-windows-debug",
+            "inherits": [
+                "host-x64-windows",
+                "target-arm64-android",
+                "config-debug",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        },
+        {
+            "name": "arm64-android-x64-windows-release",
+            "inherits": [
+                "host-x64-windows",
+                "target-arm64-android",
+                "config-release",
+                "config-build-dir",
+                "use-msvc",
+                "use-ninja",
+                "use-vcpkg"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "x64-android-debug",
+            "configurePreset": "x64-android-debug"
+        },
+        {
+            "name": "x64-android-release",
+            "configurePreset": "x64-android-release"
+        },
+        {
+            "name": "arm64-android-debug",
+            "configurePreset": "arm64-android-debug"
+        },
+        {
+            "name": "arm64-android-release",
+            "configurePreset": "arm64-android-release"
+        },
+        {
+            "name": "arm64-android-x64-windows-debug",
+            "configurePreset": "arm64-android-x64-windows-debug"
+        },
+        {
+            "name": "arm64-android-x64-windows-release",
+            "configurePreset": "arm64-android-x64-windows-release"
+        }
+    ]
+}
