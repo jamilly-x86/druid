@@ -1,4 +1,4 @@
-name: build
+name: osx
 
 on:
   push:
@@ -11,14 +11,9 @@ jobs:
     strategy:
       matrix:
         config:
-          - compiler: msvc
-            os: windows-latest
-            preset: x64-windows-msvc-debug
-          - compiler: clang
-            os: macos-latest
-            preset: arm64-osx-clang-release
+          - preset: arm64-osx-clang-release
 
-    runs-on: ${{ matrix.config.os }}
+    runs-on: macos-latest
 
     env:
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/.vcpkg_cache
@@ -39,25 +34,11 @@ jobs:
           restore-keys: |
             vcpkg-${{ runner.os }}-
 
-      - name: install-tools-windows
-        if: ${{ matrix.config.os == 'windows-latest' }}
-        run: |
-          choco install -y cmake ninja
-        shell: bash
-
       - name: install-tools-macos
-        if: ${{ matrix.config.os == 'macos-latest' }}
         run: |
-          # Install LLVM 20 via Homebrew
           brew install llvm@20 ninja cmake
           echo "/opt/homebrew/opt/llvm@20/bin" >> $GITHUB_PATH
         shell: bash
-
-      - name: setup-msvc
-        if: ${{ matrix.config.os == 'windows-latest' }}
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: amd64
 
       - name: cmake-configure
         run: cmake --preset ${{ matrix.config.preset }}
