@@ -40,7 +40,7 @@ jobs:
           chmod +x llvm.sh
           ./llvm.sh 22
           apt update -y
-          apt install -y clang-22 clang-tidy-22
+          apt install -y clang-22 clang-tidy-22 clang-format-22
           update-alternatives --install /usr/bin/clang clang /usr/bin/clang-22 200
           update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-22 200
           update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 200
