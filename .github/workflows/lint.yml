@@ -35,7 +35,7 @@ jobs:
           apt update -y
           apt upgrade -y
           apt install -y curl tar git zip unzip make autoconf libtool python3-jinja2 ninja-build cmake
-          apt install -y wget gpg add-apt-repository lsb-release
+          apt install -y wget software-properties-common gnupg lsb-release
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           ./llvm.sh 22
