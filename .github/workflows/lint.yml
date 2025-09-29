@@ -34,7 +34,7 @@ jobs:
       run: |
           apt update -y
           apt upgrade -y
-          apt install -y wget curl tar git zip unzip make autoconf libtool python3-jinja2 ninja-build cmake
+          apt install -y wget curl tar git zip unzip make autoconf libtool python3-jinja2 ninja-build cmake lsb-release
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           ./llvm.sh 22
