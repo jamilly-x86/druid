@@ -58,7 +58,7 @@ For supported presets review [platform-windows.json](./cmake/preset/platform-win
 
 ### Linux
 
-For supported presets review [platform-linux.json](./cmake/preset/platform-windows.json)
+For supported presets review [platform-linux.json](./cmake/preset/platform-linux.json)
 
 #### Using GCC
 
@@ -70,7 +70,6 @@ For supported presets review [platform-linux.json](./cmake/preset/platform-windo
 
 2. Install dependencies (Ubuntu/Debian):
    ```bash
-   sudo apt update
    sudo apt install -y curl tar git zip unzip make autoconf libtool python3-jinja2 ninja-build cmake
    sudo apt install -y '^libxcb.*-dev' libfontconfig1-dev libfreetype6-dev libx11-dev libxext-dev libxfixes-dev libgl1-mesa-dev libglu1-mesa-dev libegl1-mesa-dev
    sudo apt install -y libxrender-dev libxi-dev libxcb1-dev libxcb-glx0-dev libxcb-keysyms1-dev libxcb-image0-dev libxcb-shm0-dev libx11-xcb-dev libxkbcommon-dev
