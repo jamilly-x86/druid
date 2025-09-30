@@ -7,4 +7,5 @@ target_sources(${PROJECT_NAME} PUBLIC
         Concepts.ixx
         EnumMask.ixx
         File.ixx
+        Object.ixx
 )
