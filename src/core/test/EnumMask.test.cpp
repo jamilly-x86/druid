@@ -1,9 +1,10 @@
-#include <druid/core/EnumMask.h>
 #include <gtest/gtest.h>
+
+import druid.core.enummask;
 
 namespace
 {
-	enum class TestEnum : int
+	enum class TestEnum : std::uint8_t
 	{
 		One = 0b0001,
 		Two = 0b0010,
@@ -13,7 +14,7 @@ namespace
 
 TEST(EnumMask, constructor)
 {
-	druid::core::EnumMask<TestEnum> test{TestEnum::One, TestEnum::Two, TestEnum::Three};
+	const druid::core::EnumMask<TestEnum> test{TestEnum::One, TestEnum::Two, TestEnum::Three};
 	EXPECT_TRUE(test.test(TestEnum::One));
 	EXPECT_TRUE(test.test(TestEnum::Two));
 	EXPECT_TRUE(test.test(TestEnum::Three));
