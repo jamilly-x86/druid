@@ -3,7 +3,7 @@ function(project_add_library)
 
     project_compile_lib()
 
-    if(BUILD_TESTING AND EXISTS test)
+    if(BUILD_TESTING AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/test)
         add_subdirectory(test)
     endif()
 endfunction()

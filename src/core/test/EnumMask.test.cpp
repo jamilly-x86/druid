@@ -4,7 +4,7 @@ import druid.core.enummask;
 
 namespace
 {
-	enum class TestEnum : int
+	enum class TestEnum : std::uint8_t
 	{
 		One = 0b0001,
 		Two = 0b0010,

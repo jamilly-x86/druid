@@ -9,7 +9,7 @@ function(project_add_executable target)
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     )
 
-    if(BUILD_TESTING AND EXISTS test)
+    if(BUILD_TESTING AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/test)
         add_subdirectory(test)
     endif()
 
