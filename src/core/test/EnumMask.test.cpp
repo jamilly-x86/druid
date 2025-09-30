@@ -14,7 +14,7 @@ namespace
 
 TEST(EnumMask, constructor)
 {
-	druid::core::EnumMask<TestEnum> test{TestEnum::One, TestEnum::Two, TestEnum::Three};
+	const druid::core::EnumMask<TestEnum> test{TestEnum::One, TestEnum::Two, TestEnum::Three};
 	EXPECT_TRUE(test.test(TestEnum::One));
 	EXPECT_TRUE(test.test(TestEnum::Two));
 	EXPECT_TRUE(test.test(TestEnum::Three));
