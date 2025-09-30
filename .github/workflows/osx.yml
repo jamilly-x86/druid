@@ -24,7 +24,6 @@ jobs:
 
       - name: vcpkg-cache-directory
         run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
-        shell: bash
 
       - name: vcpkg-cache-restore
         uses: actions/cache@v4
@@ -38,12 +37,12 @@ jobs:
         run: |
           brew install llvm@20 ninja cmake
           echo "/opt/homebrew/opt/llvm@20/bin" >> $GITHUB_PATH
-        shell: bash
 
       - name: cmake-configure
         run: cmake --preset ${{ matrix.config.preset }}
-        shell: bash
 
       - name: cmake-build
         run: cmake --build --preset ${{ matrix.config.preset }}
-        shell: bash
+
+      - name: cmake-test
+        run: ctest --preset ${{ matrix.config.preset }}

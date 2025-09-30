@@ -122,5 +122,27 @@
             "name": "arm64-windows-msvc-release",
             "configurePreset": "arm64-windows-msvc-release"
         }
+    ],
+    "testPresets": [
+        {
+            "name": "x64-windows-msvc-debug",
+            "configurePreset": "x64-windows-msvc-debug",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 2
+            }
+        },
+        {
+            "name": "x64-windows-msvc-release",
+            "configurePreset": "x64-windows-msvc-release",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 2
+            }
+        }
     ]
 }

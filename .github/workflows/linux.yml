@@ -70,3 +70,6 @@ jobs:
 
       - name: cmake-build
         run: cmake --build --preset ${{ matrix.config.preset }}
+
+      - name: cmake-test
+        run: ctest --preset ${{ matrix.config.preset }}

@@ -126,5 +126,47 @@
             "name": "arm64-linux-gcc-release",
             "configurePreset": "arm64-linux-gcc-release"
         }
+    ],
+    "testPresets": [
+        {
+            "name": "x64-linux-clang-debug",
+            "configurePreset": "x64-linux-clang-debug",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 2
+            }
+        },
+        {
+            "name": "x64-linux-clang-release",
+            "configurePreset": "x64-linux-clang-release",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 2
+            }
+        },
+        {
+            "name": "x64-linux-gcc-debug",
+            "configurePreset": "x64-linux-gcc-debug",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 2
+            }
+        },
+        {
+            "name": "x64-linux-gcc-release",
+            "configurePreset": "x64-linux-gcc-release",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 2
+            }
+        }
     ]
 }
