@@ -2,6 +2,7 @@ module;
 
 #include <algorithm>
 #include <memory>
+#include <string>
 #include <string_view>
 #include <vector>
 
@@ -68,7 +69,7 @@ export namespace druid::core
 				return nullptr;
 			}
 
-			auto it = std::ranges::find_if(this->parent->children, [this](const auto& o) { return this == o.get(); });
+			auto it = std::ranges::find_if(this->parent->children, [this](const auto& o) -> auto { return this == o.get(); });
 
 			if(it == std::end(this->parent->children))
 			{
@@ -93,7 +94,7 @@ export namespace druid::core
 		/// @return The object whose name matches the given name.
 		[[nodiscard]] auto findChild(std::string_view x) const -> Object*
 		{
-			const auto it = std::ranges::find_if(this->children, [x](auto& o) { return x == o->getName(); });
+			const auto it = std::ranges::find_if(this->children, [x](auto& o) -> auto { return x == o->getName(); });
 
 			if(it == std::end(this->children))
 			{
