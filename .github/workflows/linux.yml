@@ -13,9 +13,7 @@ jobs:
         config:
           - preset: x64-linux-gcc-release
             compiler: gcc
-          - preset: x64-linux-clang-release
-            compiler: clang
-          - preset: x64-linux-clang-tidy
+          - preset: x64-linux-clang-debug
             compiler: clang
 
     runs-on: "ubuntu-latest"

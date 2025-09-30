@@ -25,7 +25,10 @@
                 "use-clang",
                 "use-ninja",
                 "use-vcpkg"
-            ]
+            ],
+            "cacheVariables": {
+                "CMAKE_CXX_CLANG_TIDY": "clang-tidy"
+            }
         },
         {
             "name": "x64-linux-clang-release",
@@ -38,15 +41,6 @@
                 "use-ninja",
                 "use-vcpkg"
             ]
-        },
-        {
-            "name": "x64-linux-clang-tidy",
-            "inherits": [
-                "x64-linux-clang-debug"
-            ],
-            "cacheVariables": {
-                "CMAKE_CXX_CLANG_TIDY": "clang-tidy"
-            }
         },
         {
             "name": "x64-linux-gcc-debug",
@@ -105,10 +99,6 @@
         {
             "name": "x64-linux-clang-release",
             "configurePreset": "x64-linux-clang-release"
-        },
-        {
-            "name": "x64-linux-clang-tidy",
-            "configurePreset": "x64-linux-clang-tidy"
         },
         {
             "name": "x64-linux-gcc-debug",
