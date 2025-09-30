@@ -13,9 +13,7 @@ jobs:
         config:
           - preset: x64-linux-gcc-release
             compiler: gcc
-          - preset: x64-linux-clang-release
-            compiler: clang
-          - preset: x64-linux-clang-tidy
+          - preset: x64-linux-clang-debug
             compiler: clang
 
     runs-on: "ubuntu-latest"
@@ -70,3 +68,6 @@ jobs:
 
       - name: cmake-build
         run: cmake --build --preset ${{ matrix.config.preset }}
+
+      - name: cmake-test
+        run: ctest --preset ${{ matrix.config.preset }}

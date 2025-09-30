@@ -30,3 +30,5 @@ To contribute a pull request to this repo you must fork the repository and creat
 1. Perform your work, commit, and push the branch to the forked repository.
 1. Navigate to [Pull requests](https://github.com/druidengine/druid/pulls) and create a pull request targeting your branch to be merged to `main.
 1. All pull requests **must** pass all CI/CD jobs before being merged.
+
+>**NOTE** Be sure to check clang-tidy passes locally via `run-clang-tidy -p build`

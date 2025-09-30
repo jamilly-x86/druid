@@ -41,19 +41,24 @@ For supported presets review [platform-windows.json](./cmake/preset/platform-win
    cd druid
    ```
 
-2. Configure the project using a preset:
+1. Configure the project using a preset:
    ```powershell
    cmake --preset x64-windows-msvc-debug
    ```
 
-3. Build the project:
+1. Build the project:
    ```powershell
    cmake --build --preset x64-windows-msvc-debug
    ```
 
-4. Run the Pong example:
+1. Run the Pong example:
    ```powershell
    .\build\app\pong\druid-pong.exe
+   ```
+
+1. Run unit tests:
+   ```powershell
+   ctest --preset x64-windows-msvc-debug
    ```
 
 ### Linux
@@ -68,7 +73,7 @@ For supported presets review [platform-linux.json](./cmake/preset/platform-linux
    cd druid
    ```
 
-2. Install dependencies (Ubuntu/Debian):
+1. Install dependencies (Ubuntu/Debian):
    ```bash
    sudo apt install -y curl tar git zip unzip make autoconf libtool python3-jinja2 ninja-build cmake
    sudo apt install -y '^libxcb.*-dev' libfontconfig1-dev libfreetype6-dev libx11-dev libxext-dev libxfixes-dev libgl1-mesa-dev libglu1-mesa-dev libegl1-mesa-dev
@@ -76,19 +81,24 @@ For supported presets review [platform-linux.json](./cmake/preset/platform-linux
    sudo apt install -y libxkbcommon-x11-dev libxcb-icccm4-dev libxcb-sync0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev libxinerama-dev
    ```
 
-3. Configure the project:
+1. Configure the project:
    ```bash
    cmake --preset x64-linux-gcc-debug
    ```
 
-4. Build the project:
+1. Build the project:
    ```bash
    cmake --build --preset x64-linux-gcc-debug
    ```
 
-5. Run the Pong example:
+1. Run the Pong example:
    ```bash
    ./build/app/pong/druid-pong
+   ```
+
+1. Run unit tests:
+   ```bash
+   ctest --preset x64-linux-gcc-debug
    ```
 
 ## Community and contributing

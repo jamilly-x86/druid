@@ -25,7 +25,10 @@
                 "use-clang",
                 "use-ninja",
                 "use-vcpkg"
-            ]
+            ],
+            "cacheVariables": {
+                "CMAKE_CXX_CLANG_TIDY": "clang-tidy"
+            }
         },
         {
             "name": "x64-linux-clang-release",
@@ -38,15 +41,6 @@
                 "use-ninja",
                 "use-vcpkg"
             ]
-        },
-        {
-            "name": "x64-linux-clang-tidy",
-            "inherits": [
-                "x64-linux-clang-debug"
-            ],
-            "cacheVariables": {
-                "CMAKE_CXX_CLANG_TIDY": "clang-tidy"
-            }
         },
         {
             "name": "x64-linux-gcc-debug",
@@ -107,10 +101,6 @@
             "configurePreset": "x64-linux-clang-release"
         },
         {
-            "name": "x64-linux-clang-tidy",
-            "configurePreset": "x64-linux-clang-tidy"
-        },
-        {
             "name": "x64-linux-gcc-debug",
             "configurePreset": "x64-linux-gcc-debug"
         },
@@ -125,6 +115,48 @@
         {
             "name": "arm64-linux-gcc-release",
             "configurePreset": "arm64-linux-gcc-release"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "x64-linux-clang-debug",
+            "configurePreset": "x64-linux-clang-debug",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 2
+            }
+        },
+        {
+            "name": "x64-linux-clang-release",
+            "configurePreset": "x64-linux-clang-release",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 2
+            }
+        },
+        {
+            "name": "x64-linux-gcc-debug",
+            "configurePreset": "x64-linux-gcc-debug",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 2
+            }
+        },
+        {
+            "name": "x64-linux-gcc-release",
+            "configurePreset": "x64-linux-gcc-release",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 2
+            }
         }
     ]
 }

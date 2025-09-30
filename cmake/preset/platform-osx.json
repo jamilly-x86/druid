@@ -79,5 +79,47 @@
             "name": "x64-osx-clang-release",
             "configurePreset": "arm64-osx-clang-release"
         }
+    ],
+    "testPresets": [
+        {
+            "name": "arm64-osx-clang-debug",
+            "configurePreset": "arm64-osx-clang-debug",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 2
+            }
+        },
+        {
+            "name": "arm64-osx-clang-release",
+            "configurePreset": "arm64-osx-clang-release",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 2
+            }
+        },
+        {
+            "name": "x64-osx-clang-debug",
+            "configurePreset": "arm64-osx-clang-debug",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 2
+            }
+        },
+        {
+            "name": "x64-osx-clang-release",
+            "configurePreset": "arm64-osx-clang-release",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 2
+            }
+        }
     ]
 }
