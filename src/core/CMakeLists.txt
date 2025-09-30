@@ -8,3 +8,5 @@ target_sources(${PROJECT_NAME} PUBLIC
         EnumMask.ixx
         File.ixx
 )
+
+add_subdirectory(test)
