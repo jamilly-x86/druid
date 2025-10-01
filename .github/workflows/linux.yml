@@ -16,8 +16,8 @@ jobs:
           - preset: x64-linux-clang-debug
             compiler: clang
 
-    runs-on: "ubuntu-latest"
-    container: "ubuntu:25.04"
+    runs-on: ubuntu-latest
+    container: ghcr.io/druidengine/images/ubuntu-dev:main
 
     env:
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/.vcpkg_cache
@@ -37,31 +37,6 @@ jobs:
           key: vcpkg-${{ matrix.config.compiler }}-${{ hashFiles('vcpkg.json') }}
           restore-keys: |
             vcpkg-${{ matrix.config.compiler }}-
-
-      - name: install-tools-linux
-        run: |
-          apt update -y
-          apt upgrade -y
-          apt install -y wget software-properties-common gnupg lsb-release
-          apt install -y curl tar git zip unzip make autoconf libtool python3-jinja2 ninja-build cmake
-          wget https://apt.llvm.org/llvm.sh
-          chmod +x llvm.sh
-          ./llvm.sh 22
-          apt update -y
-          apt install -y clang-22 clang-tidy-22 clang-format-22 g++-15
-          update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 10
-          update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-15 10
-          update-alternatives --install /usr/bin/clang clang /usr/bin/clang-22 200
-          update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-22 200
-          update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 200
-          update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-22 200
-          update-alternatives --install /usr/bin/run-clang-tidy run-clang-tidy /usr/bin/run-clang-tidy-22 200
-
-      - name: install-dependencies-linux
-        run: |
-          apt install -y '^libxcb.*-dev' libfontconfig1-dev libfreetype6-dev libx11-dev libxext-dev libxfixes-dev libgl1-mesa-dev libglu1-mesa-dev libegl1-mesa-dev
-          apt install -y libxrender-dev libxi-dev libxcb1-dev libxcb-glx0-dev libxcb-keysyms1-dev libxcb-image0-dev libxcb-shm0-dev libx11-xcb-dev libxkbcommon-dev
-          apt install -y libxkbcommon-x11-dev libxcb-icccm4-dev libxcb-sync0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev libxinerama-dev
 
       - name: cmake-configure
         run: cmake --preset ${{ matrix.config.preset }}
