@@ -1,5 +1,9 @@
 name: linux
 
+permissions:
+  contents: read
+  packages: read
+
 on:
   push:
     branches: ["main"]
@@ -17,7 +21,11 @@ jobs:
             compiler: clang
 
     runs-on: ubuntu-latest
-    container: ghcr.io/druidengine/images/ubuntu-dev:main
+    container: 
+      image: ghcr.io/druidengine/images/ubuntu-dev:main
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     env:
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/.vcpkg_cache
