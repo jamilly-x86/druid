@@ -6,6 +6,9 @@ module;
 #include <string_view>
 #include <vector>
 
+// Don't remove. Required to fix gcc compiler error.
+#include <typeinfo>
+
 export module druid.core.object;
 export import druid.core.signal;
 
