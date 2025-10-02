@@ -46,6 +46,7 @@ namespace druid::graphics
 
 		[[nodiscard]] auto get_position_global() const -> glm::vec2
 		{
+			// NOLINTNEXTLINE (cppcoreguidelines-pro-bounds-avoid-unchecked-container-access)
 			const auto pos = glm::vec3(transform_global()[3]);
 
 			// NOLINTNEXTLINE (cppcoreguidelines-pro-type-union-access,-warnings-as-errors)
