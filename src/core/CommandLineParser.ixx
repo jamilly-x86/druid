@@ -16,84 +16,98 @@ export namespace druid::core
 	{
 	public:
 		explicit CommandLineParser(std::string programName, std::optional<std::string> programDescription)
-			: optionsDescription("Options"), programName(std::move(programName)), programDescription(std::move(programDescription))
+			: options_description_("Options"), program_name_(std::move(programName)), program_description_(std::move(programDescription))
 		{
 			// should always have help option
-			this->optionsDescription.add_options()("help,h", "Display this help message");
+			options_description_.add_options()("help,h", "Display this help message");
 		}
 
-		auto addFlag(const std::string& name, const std::string& description) -> CommandLineParser&
+		auto add_flag(const std::string& name, const std::string& description) -> CommandLineParser&
 		{
-			this->optionsDescription.add_options()(name.c_str(), description.c_str());
+			options_description_.add_options()(name.c_str(), description.c_str());
 			return *this;
 		}
 
 		template <typename T>
-		auto addOption(const std::string& name, const std::string& description) -> CommandLineParser&
+		auto add_option(const std::string& name, const std::string& description) -> CommandLineParser&
 		{
-			this->optionsDescription.add_options()(name.c_str(), po::value<T>(), description.c_str());
+			options_description_.add_options()(name.c_str(), po::value<T>(), description.c_str());
 			return *this;
 		}
 
 		template <typename T>
-		auto addOption(const std::string& name, const T& defaultValue, const std::string& description) -> CommandLineParser&
+		auto add_option(const std::string& name, const T& defaultValue, const std::string& description) -> CommandLineParser&
 		{
-			this->optionsDescription.add_options()(name.c_str(), po::value<T>()->default_value(defaultValue), description.c_str());
+			options_description_.add_options()(name.c_str(), po::value<T>()->default_value(defaultValue), description.c_str());
 			return *this;
 		}
 
-		auto addPositional(const std::string& name, int maxCount = -1) -> CommandLineParser&
+		auto add_positional(const std::string& name, int maxCount = -1) -> CommandLineParser&
 		{
-			this->positionalDescription.add(name.c_str(), maxCount);
-			this->positionalNames.emplace_back(name);
+			positional_description_.add(name.c_str(), maxCount);
+			positional_names_.emplace_back(name);
 			return *this;
 		}
 
-		auto setParsed(bool parsed) -> void
+		auto set_parsed(bool parsed) -> void
 		{
-			if(this->parsed != parsed)
+			if(parsed_ != parsed)
 			{
-				this->parsed = parsed;
+				parsed_ = parsed;
 			}
 		}
 
-		[[nodiscard]] auto getParsed() const -> bool
+		[[nodiscard]] auto get_parsed() const -> bool
 		{
-			return this->parsed;
+			return parsed_;
 		}
+
+		auto set_error_message(const std::string& error_message) -> void
+		{
+			if(error_message_ != error_message)
+			{
+				error_message_ = error_message;
+			}
+		}
+
+		[[nodiscard]] auto get_error_message() const -> std::string
+		{
+			return error_message_;
+		}
+
 
 		[[nodiscard]] auto parse(int argc, std::span<char*> argv) -> bool
 		{
 			try
 			{
-				po::store(po::command_line_parser(argc, argv.data()).options(this->optionsDescription).positional(this->positionalDescription).run(),
-						  this->variablesMap);
-				po::notify(this->variablesMap);
+				po::store(po::command_line_parser(argc, argv.data()).options(options_description_).positional(positional_description_).run(),
+						  variables_map_);
+				po::notify(variables_map_);
 
-				if(this->variablesMap.contains("help") == true)
+				if(variables_map_.contains("help") == true)
 				{
 					// this->printHelp();
-					return this->getParsed();
+					return this->get_parsed();
 				}
 
-				this->setParsed(true);
-				return this->getParsed();
+				this->set_parsed(true);
+				return this->get_parsed();
 			}
 			catch(const po::error& e)
 			{
-				this->errorMessage = e.what();
-				return this->getParsed();
+				this->set_error_message(e.what());
+				return this->get_parsed();
 			}
 		}
 
 	private:
-		po::options_description optionsDescription;
-		po::variables_map variablesMap;
-		po::positional_options_description positionalDescription;
-		std::vector<std::string> positionalNames;
-		std::string programName;
-		std::optional<std::string> programDescription;
-		std::string errorMessage;
-		bool parsed{false};
+		po::options_description options_description_;
+		po::variables_map variables_map_;
+		po::positional_options_description positional_description_;
+		std::vector<std::string> positional_names_;
+		std::string program_name_;
+		std::optional<std::string> program_description_;
+		std::string error_message_;
+		bool parsed_{false};
 	};
 }

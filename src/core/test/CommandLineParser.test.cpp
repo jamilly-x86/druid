@@ -13,28 +13,28 @@ namespace
 	public:
 		auto add(const std::string& arg) -> ArgvBuilder&
 		{
-			this->args.emplace_back(std::move(arg));
+			args_.emplace_back(std::move(arg));
 			return *this;
 		}
 
 		auto argc() const -> int
 		{
-			return static_cast<int>(this->args.size());
+			return static_cast<int>(args_.size());
 		}
 
 		auto argv() -> char**
 		{
-			this->ptrs.clear();
-			for(auto& arg : this->args)
+			ptrs_.clear();
+			for(auto& arg : args_)
 			{
-				this->ptrs.emplace_back(arg.data());
+				ptrs_.emplace_back(arg.data());
 			}
-			return this->ptrs.data();
+			return ptrs_.data();
 		}
 
 	private:
-		std::vector<std::string> args;
-		std::vector<char*> ptrs;
+		std::vector<std::string> args_;
+		std::vector<char*> ptrs_;
 	};
 }
 
