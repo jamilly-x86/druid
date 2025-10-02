@@ -27,35 +27,35 @@ export namespace druid::core
 
 		[[nodiscard]] constexpr auto test(T x) const noexcept -> bool
 		{
-			return (this->mask & static_cast<UnderlyingType>(x)) != 0x0;
+			return (mask_ & static_cast<UnderlyingType>(x)) != 0x0;
 		}
 
 		constexpr auto set(T x) noexcept -> void
 		{
-			this->mask |= static_cast<UnderlyingType>(x);
+			mask_ |= static_cast<UnderlyingType>(x);
 		}
 
 		[[nodiscard]] constexpr auto get() const noexcept -> UnderlyingType
 		{
-			return this->mask;
+			return mask_;
 		}
 
 		constexpr auto remove(T x) noexcept -> void
 		{
-			this->mask &= ~static_cast<UnderlyingType>(x);
+			mask_ &= ~static_cast<UnderlyingType>(x);
 		}
 
 		constexpr auto flip(T x) noexcept -> void
 		{
-			this->mask ^= static_cast<UnderlyingType>(x);
+			mask_ ^= static_cast<UnderlyingType>(x);
 		}
 
 		constexpr auto clear() noexcept -> void
 		{
-			this->mask = 0;
+			mask_ = 0;
 		}
 
 	private:
-		UnderlyingType mask{};
+		UnderlyingType mask_{};
 	};
 }

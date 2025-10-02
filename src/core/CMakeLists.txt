@@ -8,4 +8,11 @@ target_sources(${PROJECT_NAME} PUBLIC
         EnumMask.ixx
         File.ixx
         Object.ixx
+        Signal.ixx
+)
+
+find_package(PalSigslot CONFIG REQUIRED)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    Pal::Sigslot
 )

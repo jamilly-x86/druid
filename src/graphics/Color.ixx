@@ -39,58 +39,58 @@ namespace druid::graphics
 		static const Color Transparent;
 
 		constexpr Color() = default;
-		constexpr Color(const Rgba& x) : rgba{x}
+		constexpr Color(const Rgba& x) : rgba_{x}
 		{
 		}
 
 		[[nodiscard]] auto red() const -> uint8_t
 		{
-			return this->rgba.r;
+			return rgba_.r;
 		}
 
-		[[nodiscard]] auto redF() const -> float
+		[[nodiscard]] auto red_f() const -> float
 		{
-			return static_cast<float>(this->rgba.r) * Color::Scalar;
+			return static_cast<float>(rgba_.r) * Color::Scalar;
 		}
 
 		[[nodiscard]] auto green() const -> uint8_t
 		{
-			return this->rgba.g;
+			return rgba_.g;
 		}
 
-		[[nodiscard]] auto greenF() const -> float
+		[[nodiscard]] auto green_f() const -> float
 		{
-			return static_cast<float>(this->rgba.g) * Color::Scalar;
+			return static_cast<float>(rgba_.g) * Color::Scalar;
 		}
 
 		[[nodiscard]] auto blue() const -> uint8_t
 		{
-			return this->rgba.b;
+			return rgba_.b;
 		}
 
-		[[nodiscard]] auto blueF() const -> float
+		[[nodiscard]] auto blue_f() const -> float
 		{
-			return static_cast<float>(this->rgba.b) * Color::Scalar;
+			return static_cast<float>(rgba_.b) * Color::Scalar;
 		}
 
 		[[nodiscard]] auto alpha() const -> uint8_t
 		{
-			return this->rgba.a;
+			return rgba_.a;
 		}
 
-		[[nodiscard]] auto alphaF() const -> float
+		[[nodiscard]] auto alpha_f() const -> float
 		{
-			return static_cast<float>(this->rgba.a) * Color::Scalar;
+			return static_cast<float>(rgba_.a) * Color::Scalar;
 		}
 
-		[[nodiscard]] auto rgbaF() const -> RgbaF
+		[[nodiscard]] auto rgba_f() const -> RgbaF
 		{
-			return {.r = this->redF(), .g = this->greenF(), .b = this->blueF(), .a = this->alphaF()};
+			return {.r = this->red_f(), .g = this->green_f(), .b = this->blue_f(), .a = this->alpha_f()};
 		}
 
 	private:
 		static constexpr auto Scalar = 1.0F / Rgba::Max;
-		Rgba rgba{};
+		Rgba rgba_{};
 	};
 
 	constexpr Color Color::Druid{{.r = 53, .g = 39, .b = 39}};
