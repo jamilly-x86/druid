@@ -21,34 +21,34 @@ export namespace druid::core
 			this->optionsDescription.add_options()("help,h", "Display this help message");
 		}
 
-		CommandLineParser& addFlag(const std::string& name, const std::string& description)
+		auto addFlag(const std::string& name, const std::string& description) -> CommandLineParser&
 		{
 			this->optionsDescription.add_options()(name.c_str(), description.c_str());
 			return *this;
 		}
 
 		template <typename T>
-		CommandLineParser& addOption(const std::string& name, const std::string& description)
+		auto addOption(const std::string& name, const std::string& description) -> CommandLineParser&
 		{
 			this->optionsDescription.add_options()(name.c_str(), po::value<T>(), description.c_str());
 			return *this;
 		}
 
 		template <typename T>
-		CommandLineParser& addOption(const std::string& name, const T& defaultValue, const std::string& description)
+		auto addOption(const std::string& name, const T& defaultValue, const std::string& description) -> CommandLineParser&
 		{
 			this->optionsDescription.add_options()(name.c_str(), po::value<T>()->default_value(defaultValue), description.c_str());
 			return *this;
 		}
 
-		CommandLineParser& addPositional(const std::string& name, int maxCount = -1)
+		auto addPositional(const std::string& name, int maxCount = -1) -> CommandLineParser&
 		{
 			this->positionalDescription.add(name.c_str(), maxCount);
 			this->positionalNames.emplace_back(name);
 			return *this;
 		}
 
-		void setParsed(bool parsed)
+		auto setParsed(bool parsed) -> void
 		{
 			if(this->parsed != parsed)
 			{
@@ -56,12 +56,12 @@ export namespace druid::core
 			}
 		}
 
-		[[nodiscard]] bool getParsed() const
+		[[nodiscard]] auto getParsed() const -> bool
 		{
 			return this->parsed;
 		}
 
-		[[nodiscard]] bool parse(int argc, char* argv[])
+		[[nodiscard]] auto parse(int argc, char* argv[]) -> bool
 		{
 			try
 			{

@@ -11,18 +11,18 @@ namespace
 	class ArgvBuilder
 	{
 	public:
-		ArgvBuilder& add(const std::string& arg)
+		auto add(const std::string& arg) -> ArgvBuilder&
 		{
 			this->args.emplace_back(std::move(arg));
 			return *this;
 		}
 
-		int argc() const
+		auto argc() const -> int
 		{
 			return static_cast<int>(this->args.size());
 		}
 
-		char** argv()
+		auto argv() -> char**
 		{
 			this->ptrs.clear();
 			for(auto& arg : this->args)
