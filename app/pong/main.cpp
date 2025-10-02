@@ -41,9 +41,7 @@ try
 		BeginDrawing();
 		ClearBackground(BLACK);
 
-		paddle1.draw();
-		paddle2.draw();
-		ball.draw();
+		root.draw();
 		DrawText("DRUID PONG (C++26)", static_cast<int>(width * 0.4), 0, 24, LIGHTGRAY);
 
 		DrawFPS(0, 0);

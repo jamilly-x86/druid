@@ -17,9 +17,12 @@ TEST(Node, default_constructor)
 TEST(Node, create_node)
 {
 	Node root;
-	(void)root.create_node();
-	(void)root.create_node();
+	auto& node1 = root.create_node();
+	auto& node2 = root.create_node();
 
+	EXPECT_EQ(node1.parent(), &root);
+	EXPECT_EQ(node2.parent(), &root);
+	EXPECT_EQ(std::size(root.nodes()), std::size(root.children()));
 	EXPECT_EQ(std::size(root.children()), 2U);
 }
 

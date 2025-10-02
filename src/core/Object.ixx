@@ -155,17 +155,17 @@ export namespace druid::core
 
 		auto on_removed(auto x) -> void
 		{
-			on_added_.connect(std::forward<decltype(x)>(x));
+			on_removed_.connect(std::forward<decltype(x)>(x));
 		}
 
 		auto on_child_added(auto x) -> void
 		{
-			on_added_.connect(std::forward<decltype(x)>(x));
+			on_child_added_.connect(std::forward<decltype(x)>(x));
 		}
 
 		auto on_child_removed(auto x) -> void
 		{
-			on_added_.connect(std::forward<decltype(x)>(x));
+			on_child_removed_.connect(std::forward<decltype(x)>(x));
 		}
 
 	private:
