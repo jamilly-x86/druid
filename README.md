@@ -8,6 +8,8 @@
 
 [Druid](https://druidengine.org) is a 2D game engine written in modern C++ to explore contemporary C++ features and graphics programming techniques. Built with performance and educational value in mind, it demonstrates the use of C++20 modules, cross-platform development, and an opportunity to learn.
 
+![Druid Pong](app/pong/media/pong.png)
+
 ## Features
 
 - **Modern C++**: Utilizes C++20 modules and contemporary C++ patterns
