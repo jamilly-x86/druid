@@ -7,22 +7,22 @@ using druid::core::Object;
 TEST(Object, name)
 {
 	Object object;
-	object.setName("test");
-	EXPECT_EQ(object.getName(), "test");
+	object.set_name("test");
+	EXPECT_EQ(object.get_name(), "test");
 }
 
 TEST(Object, addChild)
 {
 	Object object;
-	EXPECT_NO_THROW(object.addChild(std::make_unique<Object>()));
+	EXPECT_NO_THROW(object.add_child(std::make_unique<Object>()));
 }
 
-TEST(Object, createChild)
+TEST(Object, create_child)
 {
 	Object object;
 
-	auto& child = object.createChild("test");
-	EXPECT_EQ(child.getName(), "test");
+	auto& child = object.create_child("test");
+	EXPECT_EQ(child.get_name(), "test");
 }
 
 TEST(Object, remove)
@@ -30,36 +30,36 @@ TEST(Object, remove)
 	Object object;
 	EXPECT_EQ(object.remove(), nullptr);
 
-	(void)object.createChild("one");
-	auto& two = object.createChild("two");
-	(void)object.createChild("three");
+	(void)object.create_child("one");
+	auto& two = object.create_child("two");
+	(void)object.create_child("three");
 
-	EXPECT_EQ(two.getName(), "two");
+	EXPECT_EQ(two.get_name(), "two");
 
 	EXPECT_EQ(object.children().size(), 3U);
 
 	auto child = two.remove();
-	EXPECT_EQ(child->getName(), "two");
+	EXPECT_EQ(child->get_name(), "two");
 
 	EXPECT_EQ(object.children().size(), 2U);
 }
 
-TEST(Object, findChild)
+TEST(Object, find_child)
 {
 	Object object;
-	auto& one = object.createChild("one");
-	auto& two = object.createChild("two");
-	auto& three = object.createChild("three");
+	auto& one = object.create_child("one");
+	auto& two = object.create_child("two");
+	auto& three = object.create_child("three");
 
-	auto* child = object.findChild("one");
+	auto* child = object.find_child("one");
 	ASSERT_NE(child, nullptr);
 	EXPECT_EQ(child, &one);
 
-	child = object.findChild("two");
+	child = object.find_child("two");
 	ASSERT_NE(child, nullptr);
 	EXPECT_EQ(child, &two);
 
-	child = object.findChild("three");
+	child = object.find_child("three");
 	ASSERT_NE(child, nullptr);
 	EXPECT_EQ(child, &three);
 }

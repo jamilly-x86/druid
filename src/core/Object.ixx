@@ -2,12 +2,12 @@ module;
 
 #include <algorithm>
 #include <memory>
-#include <sigslot/signal.hpp>
 #include <string>
 #include <string_view>
 #include <vector>
 
 export module druid.core.object;
+export import druid.core.signal;
 
 export namespace druid::core
 {
@@ -23,7 +23,7 @@ export namespace druid::core
 
 		virtual ~Object()
 		{
-			on_destroyed();
+			on_destroyed_();
 		}
 
 		Object(const Object&) = delete;
@@ -33,21 +33,21 @@ export namespace druid::core
 
 		/// @brief Assign an identifying name to this object.
 		/// @param x The given name to assign to this object.
-		auto setName(std::string_view x) -> void
+		auto set_name(std::string_view x) -> void
 		{
-			this->name = x;
+			this->name_ = x;
 		}
 
 		/// @brief Get the name assigned to this object.
 		/// @return The name assigned to this object.
-		[[nodiscard]] auto getName() const noexcept -> std::string_view
+		[[nodiscard]] auto get_name() const noexcept -> std::string_view
 		{
-			return this->name;
+			return this->name_;
 		}
 
 		/// @brief Add the given object as a child of this object.
 		/// @param x The given object to add as a child.
-		auto addChild(std::unique_ptr<Object> x) -> void
+		auto add_child(std::unique_ptr<Object> x) -> void
 		{
 			if(x == nullptr)
 			{
@@ -56,19 +56,19 @@ export namespace druid::core
 
 			x->parent_ = this;
 			auto& child = children_.emplace_back(std::move(x));
-			child->on_added(this);
-			on_child_added(child.get());
+			child->on_added_(this);
+			on_child_added_(child.get());
 		}
 
 		/// @brief Create an object as a child of this object and return a reference to it.
 		/// @param x The given name to assign to this object.
 		/// @return The reference to the created child.
-		[[nodiscard]] auto createChild(std::string_view x = {}) -> Object&
+		[[nodiscard]] auto create_child(std::string_view x = {}) -> Object&
 		{
 			auto child = std::make_unique<Object>();
-			child->setName(x);
+			child->set_name(x);
 			auto* ptr = child.get();
-			this->addChild(std::move(child));
+			add_child(std::move(child));
 			return *ptr;
 		}
 
@@ -78,11 +78,11 @@ export namespace druid::core
 		/// @param ...args The constructor arguments to forward to T's constructor.
 		/// @return The reference to the created child.
 		template <ObjectType T, typename... Args>
-		[[nodiscard]] auto createChild(Args&&... args) -> T&
+		[[nodiscard]] auto create_child(Args&&... args) -> T&
 		{
 			auto child = std::make_unique<T>(std::forward<Args>(args)...);
 			auto* ptr = child.get();
-			this->addChild(std::move(child));
+			add_child(std::move(child));
 			return *ptr;
 		}
 
@@ -103,11 +103,11 @@ export namespace druid::core
 			}
 
 			auto child = std::move(*it);
-			auto parent = parent_;
+			auto* parent = parent_;
 			parent_ = nullptr;
 			parent->children_.erase(it);
-			parent->on_child_removed(child.get());
-			on_removed(parent);
+			parent->on_child_removed_(child.get());
+			on_removed_(parent);
 			return child;
 		}
 
@@ -121,9 +121,9 @@ export namespace druid::core
 		/// @brief Find a child with the given name.
 		/// @param x The name to search this object's children for.
 		/// @return The object whose name matches the given name.
-		[[nodiscard]] auto findChild(std::string_view x) const -> Object*
+		[[nodiscard]] auto find_child(std::string_view x) const -> Object*
 		{
-			const auto it = std::ranges::find_if(children_, [x](auto& o) -> auto { return x == o->getName(); });
+			const auto it = std::ranges::find_if(children_, [x](auto& o) -> auto { return x == o->get_name(); });
 
 			if(it == std::end(children_))
 			{
@@ -140,15 +140,40 @@ export namespace druid::core
 			return parent_;
 		}
 
-		sigslot::signal<> on_destroyed;
-		sigslot::signal<Object*> on_added;
-		sigslot::signal<Object*> on_removed;
-		sigslot::signal<Object*> on_child_added;
-		sigslot::signal<Object*> on_child_removed;
+		auto on_destroyed(auto x) -> void
+		{
+			on_destroyed_.connect(std::forward<decltype(x)>(x));
+		}
+
+		auto on_added(auto x) -> void
+		{
+			on_added_.connect(std::forward<decltype(x)>(x));
+		}
+
+		auto on_removed(auto x) -> void
+		{
+			on_added_.connect(std::forward<decltype(x)>(x));
+		}
+
+		auto on_child_added(auto x) -> void
+		{
+			on_added_.connect(std::forward<decltype(x)>(x));
+		}
+
+		auto on_child_removed(auto x) -> void
+		{
+			on_added_.connect(std::forward<decltype(x)>(x));
+		}
 
 	private:
 		std::vector<std::unique_ptr<Object>> children_;
-		std::string name;
+		std::string name_;
 		Object* parent_{};
+
+		Signal<> on_destroyed_;
+		Signal<Object*> on_added_;
+		Signal<Object*> on_removed_;
+		Signal<Object*> on_child_added_;
+		Signal<Object*> on_child_removed_;
 	};
 }

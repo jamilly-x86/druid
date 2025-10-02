@@ -8,6 +8,7 @@ target_sources(${PROJECT_NAME} PUBLIC
         EnumMask.ixx
         File.ixx
         Object.ixx
+        Signal.ixx
 )
 
 find_package(PalSigslot CONFIG REQUIRED)

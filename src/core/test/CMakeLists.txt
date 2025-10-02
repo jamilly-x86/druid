@@ -5,6 +5,7 @@ project_add_executable(${PROJECT_NAME})
 target_sources(${PROJECT_NAME} PRIVATE
     Object.test.cpp
     EnumMask.test.cpp
+    Signal.test.cpp
 )
 
 enable_testing()

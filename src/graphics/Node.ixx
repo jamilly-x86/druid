@@ -6,12 +6,12 @@ module;
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/vec2.hpp>
-#include <sigslot/signal.hpp>
 #include <vector>
 
 export module druid.graphics.node;
-
 import druid.core.object;
+
+using druid::core::Signal;
 
 namespace druid::graphics
 {
@@ -24,14 +24,10 @@ namespace druid::graphics
 
 		Node()
 		{
-			on_added.connect([this](auto* parent) { parent_node_ = dynamic_cast<Node*>(parent); });
-			on_removed.connect([this](auto*) { parent_node_ = nullptr; });
-			on_child_added.connect([this](auto* child) { nodes_.emplace_back(dynamic_cast<Node*>(child)); });
-			on_child_removed.connect([this](auto* child) { std::erase(nodes_, child); });
-		}
-
-		~Node()
-		{
+			on_added([this](auto* parent) { parent_node_ = dynamic_cast<Node*>(parent); });
+			on_removed([this](auto*) { parent_node_ = nullptr; });
+			on_child_added([this](auto* child) { nodes_.emplace_back(dynamic_cast<Node*>(child)); });
+			on_child_removed([this](auto* child) { std::erase(nodes_, child); });
 		}
 
 		auto set_position(const glm::vec2& pos) -> void
@@ -48,6 +44,8 @@ namespace druid::graphics
 		[[nodiscard]] auto get_position_global() const -> glm::vec2
 		{
 			const auto pos = glm::vec3(transform_global()[3]);
+
+			// NOLINTNEXTLINE (cppcoreguidelines-pro-type-union-access,-warnings-as-errors)
 			return {pos.x, pos.y};
 		}
 
@@ -75,8 +73,7 @@ namespace druid::graphics
 
 		[[nodiscard]] auto create_node() -> Node&
 		{
-			auto& node = createChild<Node>();
-			return node;
+			return create_child<Node>();
 		}
 
 		auto transform() const -> glm::mat4
@@ -84,22 +81,25 @@ namespace druid::graphics
 			return transform_;
 		}
 
+		// NOLINTNEXTLINE (misc-no-recursion)
 		auto transform_global() const -> glm::mat4
 		{
 			if(parent() != nullptr)
 			{
+				// NOLINTNEXTLINE (cppcoreguidelines-pro-type-static-cast-downcast
 				return static_cast<Node*>(parent())->transform_global() * transform();
 			}
 
 			return transform();
 		}
 
+		// NOLINTNEXTLINE (misc-no-recursion)
 		auto draw() const -> void
 		{
 			rlPushMatrix();
 			rlMultMatrixf(glm::value_ptr(transform_));
 
-			on_draw();
+			on_draw_();
 
 			for(auto* node : nodes_)
 			{
@@ -109,22 +109,29 @@ namespace druid::graphics
 			rlPopMatrix();
 		}
 
-		sigslot::signal<> on_draw;
+		auto on_draw(auto x) -> void
+		{
+			on_draw_.connect(std::forward<decltype(x)>(x));
+		}
 
 	private:
-		// Hide Object::createChild to only allow Node creation.
-		using Object::createChild;
+		// Hide Object::create_child to only allow Node creation.
+		using Object::create_child;
 
 		auto update_transform() -> void
 		{
+			// NOLINTBEGIN
 			transform_ = glm::identity<glm::mat4>();
 			transform_ = glm::translate(transform_, {position_.x, position_.y, 0.0F});
 			transform_ = glm::rotate(transform_, glm::radians(rotation_), {0.0F, 0.0F, 1.0F});
 			transform_ = glm::scale(transform_, {scale_.x, scale_.y, 1.0F});
+			// NOLINTEND
 		}
 
 		std::vector<Node*> nodes_;
 		Node* parent_node_{nullptr};
+
+		Signal<> on_draw_;
 
 		glm::mat4 transform_{glm::identity<glm::mat4>()};
 		glm::vec2 position_{DefaultPosition};
