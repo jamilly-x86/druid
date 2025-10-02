@@ -80,6 +80,16 @@ namespace druid::graphics
 			return create_child<Node>();
 		}
 
+		[[nodiscard]] auto parent_node() const noexcept -> Node*
+		{
+			return parent_node_;
+		}
+
+		[[nodiscard]] auto nodes() const noexcept -> const std::vector<Node*>&
+		{
+			return nodes_;
+		}
+
 		auto transform() const -> glm::mat4
 		{
 			return transform_;
