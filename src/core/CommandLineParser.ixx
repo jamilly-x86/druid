@@ -2,6 +2,7 @@ module;
 
 #include <boost/program_options.hpp>
 #include <optional>
+#include <span>
 #include <string>
 #include <vector>
 
@@ -61,15 +62,15 @@ export namespace druid::core
 			return this->parsed;
 		}
 
-		[[nodiscard]] auto parse(int argc, char* argv[]) -> bool
+		[[nodiscard]] auto parse(int argc, std::span<char*> argv) -> bool
 		{
 			try
 			{
-				po::store(po::command_line_parser(argc, argv).options(this->optionsDescription).positional(this->positionalDescription).run(),
+				po::store(po::command_line_parser(argc, argv.data()).options(this->optionsDescription).positional(this->positionalDescription).run(),
 						  this->variablesMap);
 				po::notify(this->variablesMap);
 
-				if(this->variablesMap.count("help") == true)
+				if(this->variablesMap.contains("help") == true)
 				{
 					// this->printHelp();
 					return this->getParsed();
