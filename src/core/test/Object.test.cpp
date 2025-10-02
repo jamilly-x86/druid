@@ -36,12 +36,12 @@ TEST(Object, remove)
 
 	EXPECT_EQ(two.getName(), "two");
 
-	EXPECT_EQ(object.getChildren().size(), 3U);
+	EXPECT_EQ(object.children().size(), 3U);
 
 	auto child = two.remove();
 	EXPECT_EQ(child->getName(), "two");
 
-	EXPECT_EQ(object.getChildren().size(), 2U);
+	EXPECT_EQ(object.children().size(), 2U);
 }
 
 TEST(Object, findChild)

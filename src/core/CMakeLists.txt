@@ -9,3 +9,9 @@ target_sources(${PROJECT_NAME} PUBLIC
         File.ixx
         Object.ixx
 )
+
+find_package(PalSigslot CONFIG REQUIRED)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    Pal::Sigslot
+)

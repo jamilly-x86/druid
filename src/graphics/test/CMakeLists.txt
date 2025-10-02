@@ -1,10 +1,9 @@
-project(druid-core-test)
+project(druid-graphics-test)
 
 project_add_executable(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
-    Object.test.cpp
-    EnumMask.test.cpp
+    Node.test.cpp
 )
 
 enable_testing()
@@ -12,7 +11,7 @@ enable_testing()
 find_package(GTest CONFIG REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    druid-core
+    druid-graphics
     GTest::gtest
     GTest::gtest_main
 )
