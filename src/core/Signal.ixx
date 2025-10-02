@@ -1,5 +1,8 @@
 module;
 
+// Don't remove. Required to fix gcc compiler error.
+#include <typeinfo>
+
 #include <sigslot/signal.hpp>
 
 export module druid.core.signal;
