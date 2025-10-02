@@ -15,8 +15,8 @@ export namespace druid::core
 	class CommandLineParser
 	{
 	public:
-		explicit CommandLineParser(std::string programName, std::optional<std::string> programDescription)
-			: options_description_("Options"), program_name_(std::move(programName)), program_description_(std::move(programDescription))
+		explicit CommandLineParser(std::string program_name, std::optional<std::string> program_description)
+			: options_description_("Options"), program_name_(std::move(program_name)), program_description_(std::move(program_description))
 		{
 			// should always have help option
 			options_description_.add_options()("help,h", "Display this help message");
@@ -36,15 +36,15 @@ export namespace druid::core
 		}
 
 		template <typename T>
-		auto add_option(const std::string& name, const T& defaultValue, const std::string& description) -> CommandLineParser&
+		auto add_option(const std::string& name, const T& default_value, const std::string& description) -> CommandLineParser&
 		{
-			options_description_.add_options()(name.c_str(), po::value<T>()->default_value(defaultValue), description.c_str());
+			options_description_.add_options()(name.c_str(), po::value<T>()->default_value(default_value), description.c_str());
 			return *this;
 		}
 
-		auto add_positional(const std::string& name, int maxCount = -1) -> CommandLineParser&
+		auto add_positional(const std::string& name, int max_count = -1) -> CommandLineParser&
 		{
-			positional_description_.add(name.c_str(), maxCount);
+			positional_description_.add(name.c_str(), max_count);
 			positional_names_.emplace_back(name);
 			return *this;
 		}
