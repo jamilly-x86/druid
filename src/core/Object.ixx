@@ -2,17 +2,16 @@ module;
 
 #include <algorithm>
 #include <memory>
+#include <sigslot/signal.hpp>
 #include <string>
 #include <string_view>
 #include <vector>
 
 export module druid.core.object;
-export import <sigslot/signal.hpp>;
 
 export namespace druid::core
 {
 	class Object;
-
 	template <typename T>
 	concept ObjectType = std::is_base_of_v<Object, T>;
 
@@ -146,7 +145,6 @@ export namespace druid::core
 		sigslot::signal<Object*> on_removed;
 		sigslot::signal<Object*> on_child_added;
 		sigslot::signal<Object*> on_child_removed;
-
 
 	private:
 		std::vector<std::unique_ptr<Object>> children_;

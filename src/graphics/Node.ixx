@@ -4,11 +4,12 @@ module;
 #include <rlgl.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/vec2.hpp>
+#include <sigslot/signal.hpp>
 #include <vector>
 
 export module druid.graphics.node;
-export import <glm/vec2.hpp>;
-export import <glm/mat4x4.hpp>;
 
 import druid.core.object;
 
