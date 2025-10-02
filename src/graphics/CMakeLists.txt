@@ -15,8 +15,8 @@ find_package(glfw3 CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC
     druid-core
     glm::glm
-    glfw
     raylib
+    glfw
 )
 
 if(WIN32)
