@@ -19,7 +19,7 @@ export namespace druid::core
 
 		constexpr explicit EnumMask(std::initializer_list<T> x)
 		{
-			for(auto e : x)
+			for (auto e : x)
 			{
 				this->set(e);
 			}

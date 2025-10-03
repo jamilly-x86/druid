@@ -36,7 +36,7 @@ try
 	ball.set_position({width * 0.5, height * 0.5});
 	ball.on_draw([] { DrawRectangle(-12, -12, 24, 24, RAYWHITE); });
 
-	while(!WindowShouldClose())
+	while (!WindowShouldClose())
 	{
 		BeginDrawing();
 		ClearBackground(BLACK);
@@ -53,7 +53,7 @@ try
 
 	return EXIT_SUCCESS;
 }
-catch(const std::exception& e)
+catch (const std::exception& e)
 {
 	std::cerr << "Exception: " << e.what() << "\n";
 	return EXIT_FAILURE;

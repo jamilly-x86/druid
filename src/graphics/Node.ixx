@@ -95,10 +95,9 @@ namespace druid::graphics
 			return transform_;
 		}
 
-		// NOLINTNEXTLINE (misc-no-recursion)
 		auto transform_global() const -> glm::mat4
 		{
-			if(parent() != nullptr)
+			if (parent() != nullptr)
 			{
 				// NOLINTNEXTLINE (cppcoreguidelines-pro-type-static-cast-downcast
 				return static_cast<Node*>(parent())->transform_global() * transform();
@@ -107,7 +106,6 @@ namespace druid::graphics
 			return transform();
 		}
 
-		// NOLINTNEXTLINE (misc-no-recursion)
 		auto draw() const -> void
 		{
 			rlPushMatrix();
@@ -115,7 +113,7 @@ namespace druid::graphics
 
 			on_draw_();
 
-			for(auto* node : nodes_)
+			for (auto* node : nodes_)
 			{
 				node->draw();
 			}
