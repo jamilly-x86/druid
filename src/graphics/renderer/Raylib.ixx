@@ -16,7 +16,7 @@ namespace druid::graphics::renderer
 		auto operator=(const Raylib&) -> Raylib& = delete;
 		auto operator=(Raylib&&) noexcept -> Raylib& = delete;
 
-		auto begin(Color clear) -> void override
+		auto begin(druid::graphics::Color clear) -> void override
 		{
 			::Color rl_color{clear.red(), clear.green(), clear.blue(), clear.alpha()};
 			ClearBackground(rl_color);
@@ -28,7 +28,7 @@ namespace druid::graphics::renderer
 			EndDrawing();
 		}
 
-		auto draw_rectangle(int x, int y, int width, int height, Color color) -> void override
+		auto draw_rectangle(int x, int y, int width, int height, druid::graphics::Color color) -> void override
 		{
 			::Color rl_color{color.red(), color.green(), color.blue(), color.alpha()};
 			DrawRectangle(x, y, width, height, rl_color);
