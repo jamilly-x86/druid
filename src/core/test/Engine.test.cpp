@@ -6,20 +6,20 @@ using druid::core::Engine;
 
 TEST(Engine, default_constructor)
 {
-	const druid::core::Engine engine;
-	EXPECT_EQ(engine.get_interval_fixed(), druid::core::Engine::DefaultIntervalFixed);
+	const Engine engine;
+	EXPECT_EQ(engine.get_interval_fixed(), Engine::DefaultIntervalFixed);
 }
 
 TEST(Engine, set_interval_fixed)
 {
-	druid::core::Engine engine;
+	Engine engine;
 	engine.set_interval_fixed(std::numeric_limits<std::chrono::milliseconds>::max());
 	EXPECT_EQ(engine.get_interval_fixed(), std::numeric_limits<std::chrono::milliseconds>::max());
 }
 
 TEST(Engine, update_count)
 {
-	druid::core::Engine engine;
+	Engine engine;
 	EXPECT_EQ(engine.update_fixed_count(), 0U);
 
 	// Use 99 instead of 100 as we want the 100th update to trigger the exit.

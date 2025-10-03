@@ -177,6 +177,16 @@ export namespace druid::core
 			update_fixed_count_++;
 		}
 
+		auto update_end() -> void
+		{
+			on_update_end_();
+
+			for (auto& child : children_)
+			{
+				child->update_end();
+			}
+		}
+
 		auto on_destroyed(auto x) -> void
 		{
 			on_destroyed_.connect(std::forward<decltype(x)>(x));
@@ -190,6 +200,11 @@ export namespace druid::core
 		auto on_update_fixed(auto x) -> void
 		{
 			on_update_fixed_.connect(std::forward<decltype(x)>(x));
+		}
+
+		auto on_update_end(auto x) -> void
+		{
+			on_update_end_.connect(std::forward<decltype(x)>(x));
 		}
 
 		auto on_added(auto x) -> void
@@ -220,6 +235,7 @@ export namespace druid::core
 		Signal<> on_destroyed_;
 		Signal<std::chrono::steady_clock::duration> on_update_;
 		Signal<std::chrono::steady_clock::duration> on_update_fixed_;
+		Signal<> on_update_end_;
 		Signal<Object*> on_added_;
 		Signal<Object*> on_removed_;
 		Signal<Object*> on_child_added_;
