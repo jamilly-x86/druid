@@ -13,8 +13,8 @@ TEST(Engine, default_constructor)
 TEST(Engine, set_interval_fixed)
 {
 	druid::core::Engine engine;
-	engine.set_interval_fixed(std::chrono::milliseconds{20});
-	EXPECT_EQ(engine.get_interval_fixed(), std::chrono::milliseconds{20});
+	engine.set_interval_fixed(std::numeric_limits<std::chrono::milliseconds>::max());
+	EXPECT_EQ(engine.get_interval_fixed(), std::numeric_limits<std::chrono::milliseconds>::max());
 }
 
 TEST(Engine, update_count)
