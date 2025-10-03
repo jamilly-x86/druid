@@ -4,25 +4,24 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/matrix.hpp>
 #include <iostream>
-#include <memory>
-#include <vector>
 
 #include <raylib.h>
-#include <rlgl.h>
 
+import druid.core.engine;
 import druid.graphics.node;
+import druid.graphics.window;
 
 auto main() -> int
 try
 {
+	druid::core::Engine engine;
+	auto& window = engine.create_child<druid::graphics::Window>();
 	// NOLINTBEGIN
 
 	constexpr auto width{1280};
 	constexpr auto height{720};
 
-	InitWindow(width, height, "Hello Raylib with C++23");
-
-	druid::graphics::Node root;
+	auto& root = window.root_node();
 
 	auto& paddle1 = root.create_node();
 	paddle1.set_position({width * 0.1, height * 0.5});
@@ -36,22 +35,9 @@ try
 	ball.set_position({width * 0.5, height * 0.5});
 	ball.on_draw([] { DrawRectangle(-12, -12, 24, 24, RAYWHITE); });
 
-	while (!WindowShouldClose())
-	{
-		BeginDrawing();
-		ClearBackground(BLACK);
-
-		root.draw();
-		DrawText("DRUID PONG (C++26)", static_cast<int>(width * 0.4), 0, 24, LIGHTGRAY);
-
-		DrawFPS(0, 0);
-		EndDrawing();
-	}
-	CloseWindow();
-
 	// NOLINTEND
 
-	return EXIT_SUCCESS;
+	return engine.run();
 }
 catch (const std::exception& e)
 {

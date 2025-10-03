@@ -4,6 +4,7 @@ module;
 
 export module druid.core.engine;
 
+import druid.core.event;
 import druid.core.object;
 
 namespace druid::core
@@ -45,9 +46,10 @@ namespace druid::core
 					start_ = now;
 					accumulate_ += delta;
 
+					update(delta);
+
 					auto count = 0;
 
-					// This implements a maximum
 					while (accumulate_ >= interval_fixed_ && count < update_fixed_limit_)
 					{
 						accumulate_ -= interval_fixed_;
@@ -56,8 +58,7 @@ namespace druid::core
 						update_fixed(interval_fixed_);
 					}
 
-					// Update logic here.
-					update(delta);
+					update_end();
 				}
 
 				return EXIT_SUCCESS;
@@ -79,6 +80,18 @@ namespace druid::core
 		[[nodiscard]] auto running() const noexcept -> bool
 		{
 			return running_;
+		}
+
+		auto event(Event::Type x) -> void
+		{
+			switch (x)
+			{
+				case Event::Type::Close:
+					quit();
+					break;
+				default:
+					break;
+			}
 		}
 
 	private:
