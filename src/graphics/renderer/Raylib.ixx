@@ -18,7 +18,7 @@ namespace druid::graphics::renderer
 
 		auto begin(druid::graphics::Color clear) -> void override
 		{
-			::Color rl_color{clear.red(), clear.green(), clear.blue(), clear.alpha()};
+			const ::Color rl_color{.r = clear.red(), .g = clear.green(), .b = clear.blue(), .a = clear.alpha()};
 			ClearBackground(rl_color);
 			BeginDrawing();
 		}
@@ -30,7 +30,7 @@ namespace druid::graphics::renderer
 
 		auto draw_rectangle(int x, int y, int width, int height, druid::graphics::Color color) -> void override
 		{
-			::Color rl_color{color.red(), color.green(), color.blue(), color.alpha()};
+			const ::Color rl_color{.r = color.red(), .g = color.green(), .b = color.blue(), .a = color.alpha()};
 			DrawRectangle(x, y, width, height, rl_color);
 		}
 	};
