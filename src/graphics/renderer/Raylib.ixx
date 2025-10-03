@@ -11,6 +11,7 @@ namespace druid::graphics::renderer
 	{
 	public:
 		Raylib() = default;
+		~Raylib() override = default;
 		Raylib(const Raylib&) = delete;
 		Raylib(Raylib&&) noexcept = delete;
 		auto operator=(const Raylib&) -> Raylib& = delete;
