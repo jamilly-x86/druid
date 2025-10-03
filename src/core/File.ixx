@@ -14,7 +14,7 @@ namespace druid::core
 		std::vector<std::byte> v;
 		std::ifstream ifs{x, std::ios::binary | std::ios::ate};
 
-		if(ifs.is_open() == false)
+		if (ifs.is_open() == false)
 		{
 			return v;
 		}
