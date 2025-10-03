@@ -50,6 +50,7 @@ namespace druid::graphics
 					BeginDrawing();
 
 					root_node_.draw();
+					DrawFPS(0, 0);
 
 					EndDrawing();
 				});
