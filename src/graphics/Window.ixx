@@ -3,6 +3,7 @@ module;
 #include <raylib.h>
 #include <string>
 #include <string_view>
+#include <memory>
 
 // Don't remove. Required to fix gcc compiler error.
 #include <typeinfo>
@@ -12,6 +13,8 @@ import druid.core.object;
 import druid.core.engine;
 import druid.core.event;
 import druid.graphics.node;
+import druid.graphics.renderer;
+import druid.graphics.renderer.raylib;
 
 namespace druid::graphics
 {
@@ -24,8 +27,8 @@ namespace druid::graphics
 
 		Window()
 		{
-			SetWindowState(FLAG_WINDOW_RESIZABLE);
 			InitWindow(width_, height_, title_.c_str());
+			SetWindowState(FLAG_WINDOW_RESIZABLE);
 
 			on_added([this](auto* parent) { engine_ = dynamic_cast<core::Engine*>(parent); });
 
@@ -46,13 +49,9 @@ namespace druid::graphics
 			on_update_end(
 				[this]
 				{
-					ClearBackground(BLACK);
-					BeginDrawing();
-
-					root_node_.draw();
-					DrawFPS(0, 0);
-
-					EndDrawing();
+					renderer_->begin(Color::Druid);
+					root_node_.draw(*renderer_);
+					renderer_->end();
 				});
 		}
 
@@ -124,5 +123,6 @@ namespace druid::graphics
 		int height_{DefaultHeight};
 		Node root_node_;
 		core::Engine* engine_{};
+		std::unique_ptr<Renderer> renderer_{std::make_unique<renderer::Raylib>()};
 	};
 }
