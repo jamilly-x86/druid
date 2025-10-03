@@ -13,6 +13,7 @@ module;
 
 export module druid.graphics.node;
 import druid.core.object;
+import druid.graphics.renderer;
 
 using druid::core::Signal;
 
@@ -106,16 +107,16 @@ namespace druid::graphics
 			return transform();
 		}
 
-		auto draw() const -> void
+		auto draw(Renderer& x) const -> void
 		{
 			rlPushMatrix();
 			rlMultMatrixf(glm::value_ptr(transform_));
 
-			on_draw_();
+			on_draw_(x);
 
 			for (auto* node : nodes_)
 			{
-				node->draw();
+				node->draw(x);
 			}
 
 			rlPopMatrix();
@@ -143,7 +144,7 @@ namespace druid::graphics
 		std::vector<Node*> nodes_;
 		Node* parent_node_{nullptr};
 
-		Signal<> on_draw_;
+		Signal<Renderer&> on_draw_;
 
 		glm::mat4 transform_{glm::identity<glm::mat4>()};
 		glm::vec2 position_{DefaultPosition};
