@@ -27,7 +27,7 @@ TEST(Engine, update_count)
 
 	std::uint64_t count{};
 	engine.on_update_fixed(
-		[&engine, &count, exit_condition](auto)
+		[&engine, &count](auto)
 		{
 			if (count == exit_condition)
 			{
