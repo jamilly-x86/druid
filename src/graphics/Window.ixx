@@ -4,6 +4,9 @@ module;
 #include <string>
 #include <string_view>
 
+// Don't remove. Required to fix gcc compiler error.
+#include <typeinfo>
+
 export module druid.graphics.window;
 import druid.core.object;
 import druid.core.engine;
