@@ -85,7 +85,7 @@ namespace druid::core
 		std::chrono::steady_clock::time_point start_;
 		std::chrono::steady_clock::duration accumulate_{};
 		std::chrono::steady_clock::duration interval_fixed_{DefaultIntervalFixed};
-		int update_fixed_limit_{5};
+		int update_fixed_limit_{DefaultUpdateFixedLimit};
 		bool running_{false};
 	};
 }

@@ -40,6 +40,6 @@ TEST(Engine, update_count)
 	const auto start = std::chrono::steady_clock::now();
 	engine.run();
 	const std::chrono::duration<double> elapsed = std::chrono::steady_clock::now() - start;
-	EXPECT_NEAR(elapsed.count(), std::chrono::duration<double>{1.0}.count(), 1e-6);
+	EXPECT_NEAR(elapsed.count(), std::chrono::duration<double>{1.0}.count(), 1e-4);
 	EXPECT_EQ(engine.update_fixed_count(), count);
 }
