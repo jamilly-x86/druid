@@ -17,14 +17,14 @@ import druid.graphics.renderer;
 
 using druid::core::Signal;
 
-namespace druid::graphics
+export namespace druid::graphics
 {
 	class Node;
 
 	template <typename T>
 	concept NodeType = std::is_base_of_v<Node, T>;
 
-	export class Node : public druid::core::Object
+	class Node : public druid::core::Object
 	{
 	public:
 		static constexpr auto DefaultPosition = glm::vec2{0.0F, 0.0F};
