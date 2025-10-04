@@ -32,7 +32,7 @@ namespace druid::graphics::renderer
 		auto draw_rectangle(float x, float y, float width, float height, druid::graphics::Color color) -> void override
 		{
 			const ::Color rl_color{.r = color.red(), .g = color.green(), .b = color.blue(), .a = color.alpha()};
-			const Rectangle rect{x, y, width, height};
+			const Rectangle rect{.x = x, .y = y, .width = width, .height = height};
 			DrawRectangleRec(rect, rl_color);
 		}
 	};
