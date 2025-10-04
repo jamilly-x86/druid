@@ -29,10 +29,11 @@ namespace druid::graphics::renderer
 			EndDrawing();
 		}
 
-		auto draw_rectangle(int x, int y, int width, int height, druid::graphics::Color color) -> void override
+		auto draw_rectangle(float x, float y, float width, float height, druid::graphics::Color color) -> void override
 		{
 			const ::Color rl_color{.r = color.red(), .g = color.green(), .b = color.blue(), .a = color.alpha()};
-			DrawRectangle(x, y, width, height, rl_color);
+			const Rectangle rect{x, y, width, height};
+			DrawRectangleRec(rect, rl_color);
 		}
 	};
 }

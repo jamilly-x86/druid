@@ -18,6 +18,6 @@ namespace druid::graphics
 
 		virtual auto begin(druid::graphics::Color) -> void = 0;
 		virtual auto end() -> void = 0;
-		virtual auto draw_rectangle(int x, int y, int width, int height, druid::graphics::Color) -> void = 0;
+		virtual auto draw_rectangle(float x, float y, float width, float height, druid::graphics::Color) -> void = 0;
 	};
 }

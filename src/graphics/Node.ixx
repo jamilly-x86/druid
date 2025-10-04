@@ -19,6 +19,11 @@ using druid::core::Signal;
 
 namespace druid::graphics
 {
+	class Node;
+
+	template <typename T>
+	concept NodeType = std::is_base_of_v<Node, T>;
+
 	export class Node : public druid::core::Object
 	{
 	public:
@@ -79,6 +84,12 @@ namespace druid::graphics
 		[[nodiscard]] auto create_node() -> Node&
 		{
 			return create_child<Node>();
+		}
+
+		template <NodeType T, typename... Args>
+		[[nodiscard]] auto create_node(auto&&... args) -> T&
+		{
+			return create_child<T>(std::forward<Args>(args)...);
 		}
 
 		[[nodiscard]] auto parent_node() const noexcept -> Node*
