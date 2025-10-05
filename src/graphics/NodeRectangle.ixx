@@ -54,7 +54,7 @@ namespace druid::graphics
 
 		auto top_left() const -> glm::vec2
 		{
-			return {-size_.x * 0.5F, -size_.y * 0.5F};
+			return {-size_.x * Half, -size_.y * Half};
 		}
 
 		auto bottom_right() const -> glm::vec2
@@ -63,7 +63,8 @@ namespace druid::graphics
 		}
 
 	private:
-		glm::vec2 size_;
+		static constexpr auto Half{0.5};
+		glm::vec2 size_{};
 		Color color_{Color::White};
 	};
 }
