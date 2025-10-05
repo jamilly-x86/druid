@@ -28,17 +28,17 @@ try
 
 	auto& paddle1 = root.create_node<druid::graphics::NodeRectangle>();
 	paddle1.set_position({width * 0.1, height * 0.5});
-	paddle1.set_size(25, 100);
+	paddle1.set_size({25, 100});
 	paddle1.set_color(Color::Green);
 
 	auto& paddle2 = root.create_node<druid::graphics::NodeRectangle>();
 	paddle2.set_position({width * 0.9, height * 0.5});
-	paddle2.set_size(25, 100);
+	paddle2.set_size({25, 100});
 	paddle2.set_color(Color::Red);
 
 	auto& ball = root.create_node<druid::graphics::NodeRectangle>();
 	ball.set_position({width * 0.5, height * 0.5});
-	ball.set_size(24, 24);
+	ball.set_size({24, 24});
 	ball.set_color(Color::White);
 
 	auto velocity_ball = glm::vec2{50.0F, 0.0F};
@@ -71,14 +71,12 @@ try
 			}
 
 			// Check Collisions with paddles
-			if (ball_top_left.x < paddle1_bottom_right.x && ball_bottom_right.y > paddle1_top_left.y
-				&& ball_top_left.y < paddle1_bottom_right.y)
+			if (ball_top_left.x < paddle1_bottom_right.x && ball_bottom_right.y > paddle1_top_left.y && ball_top_left.y < paddle1_bottom_right.y)
 			{
 				velocity_ball.x = -velocity_ball.x;
 			}
 
-			if (ball_bottom_right.x > paddle2_top_left.x && ball_bottom_right.y > paddle2_top_left.y
-				&& ball_top_left.y < paddle2_bottom_right.y)
+			if (ball_bottom_right.x > paddle2_top_left.x && ball_bottom_right.y > paddle2_top_left.y && ball_top_left.y < paddle2_bottom_right.y)
 			{
 				velocity_ball.x = -velocity_ball.x;
 			}

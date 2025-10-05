@@ -32,15 +32,14 @@ namespace druid::graphics
 		NodeRectangle(NodeRectangle&&) noexcept = delete;
 		auto operator=(NodeRectangle&&) noexcept -> NodeRectangle& = delete;
 
-		auto set_size(float width, float height) -> void
+		auto set_size(glm::vec2 x) -> void
 		{
-			width_ = width;
-			height_ = height;
+			size_ = x;
 		}
 
 		auto get_size() const -> glm::vec2
 		{
-			return {width_, height_};
+			return size_;
 		}
 
 		auto set_color(const Color& color) -> void
@@ -55,17 +54,16 @@ namespace druid::graphics
 
 		auto top_left() const -> glm::vec2
 		{
-			return {-width_ * 0.5F, -height_ * 0.5F};
+			return {-size_.x * 0.5F, -size_.y * 0.5F};
 		}
 
 		auto bottom_right() const -> glm::vec2
 		{
-			return {width_, height_};
+			return size_;
 		}
 
 	private:
-		float width_{};
-		float height_{};
+		glm::vec2 size_;
 		Color color_{Color::White};
 	};
 }
