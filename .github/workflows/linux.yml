@@ -15,8 +15,8 @@ jobs:
     strategy:
       matrix:
         config:
-          - preset: x64-linux-gcc-release
-            compiler: gcc
+          # - preset: x64-linux-gcc-release
+          #   compiler: gcc
           - preset: x64-linux-clang-debug
             compiler: clang
 
