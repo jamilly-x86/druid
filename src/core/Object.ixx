@@ -1,14 +1,10 @@
 module;
 
 #include <algorithm>
-#include <chrono>
 #include <memory>
 #include <string>
 #include <string_view>
 #include <vector>
-
-// Don't remove. Required to fix gcc compiler error.
-#include <typeinfo>
 
 export module druid.core.object;
 export import druid.core.signal;
@@ -144,67 +140,9 @@ export namespace druid::core
 			return parent_;
 		}
 
-		/// @brief Returns the number of times the fixed update function has been called.
-		/// @return The number of times the fixed update function has been called.
-		[[nodiscard]] auto update_fixed_count() const noexcept -> std::uint64_t
-		{
-			return update_fixed_count_;
-		}
-
-		/// @brief The update function called every frame. This will also call update on all children.
-		/// @param x The time duration since the last update call.
-		auto update(std::chrono::steady_clock::duration x) -> void
-		{
-			on_update_(x);
-
-			for (auto& child : children_)
-			{
-				child->update(x);
-			}
-		}
-
-		/// @brief The fixed update function called at a fixed interval. This will also call update_fixed on all children.
-		/// @param x The fixed time duration interval.
-		auto update_fixed(std::chrono::steady_clock::duration x) -> void
-		{
-			on_update_fixed_(x);
-
-			for (auto& child : children_)
-			{
-				child->update_fixed(x);
-			}
-
-			update_fixed_count_++;
-		}
-
-		auto update_end() -> void
-		{
-			on_update_end_();
-
-			for (auto& child : children_)
-			{
-				child->update_end();
-			}
-		}
-
 		auto on_destroyed(auto x) -> void
 		{
 			on_destroyed_.connect(std::forward<decltype(x)>(x));
-		}
-
-		auto on_update(auto x) -> void
-		{
-			on_update_.connect(std::forward<decltype(x)>(x));
-		}
-
-		auto on_update_fixed(auto x) -> void
-		{
-			on_update_fixed_.connect(std::forward<decltype(x)>(x));
-		}
-
-		auto on_update_end(auto x) -> void
-		{
-			on_update_end_.connect(std::forward<decltype(x)>(x));
 		}
 
 		auto on_added(auto x) -> void
@@ -233,14 +171,9 @@ export namespace druid::core
 		Object* parent_{};
 
 		Signal<> on_destroyed_;
-		Signal<std::chrono::steady_clock::duration> on_update_;
-		Signal<std::chrono::steady_clock::duration> on_update_fixed_;
-		Signal<> on_update_end_;
 		Signal<Object*> on_added_;
 		Signal<Object*> on_removed_;
 		Signal<Object*> on_child_added_;
 		Signal<Object*> on_child_removed_;
-
-		std::uint64_t update_fixed_count_{};
 	};
 }

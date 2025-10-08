@@ -1,15 +1,15 @@
 module;
 
 #include <raylib.h>
+#include <chrono>
+#include <memory>
 #include <string>
 #include <string_view>
-#include <memory>
 
 // Don't remove. Required to fix gcc compiler error.
 #include <typeinfo>
 
 export module druid.graphics.window;
-import druid.core.object;
 import druid.core.engine;
 import druid.core.event;
 import druid.graphics.node;
@@ -18,41 +18,17 @@ import druid.graphics.renderer.raylib;
 
 namespace druid::graphics
 {
-	export class Window : public druid::core::Object
+	export class Window : public druid::core::Service
 	{
 	public:
 		static constexpr auto DefaultTitle{"Druid"};
 		static constexpr auto DefaultWidth{1280};
 		static constexpr auto DefaultHeight{720};
 
-		Window()
+		Window(druid::core::Engine& x) : Service{x}
 		{
 			InitWindow(width_, height_, title_.c_str());
 			SetWindowState(FLAG_WINDOW_RESIZABLE);
-
-			on_added([this](auto* parent) { engine_ = dynamic_cast<core::Engine*>(parent); });
-
-			on_update(
-				[this](auto)
-				{
-					if (!engine_)
-					{
-						return;
-					}
-
-					if (WindowShouldClose())
-					{
-						engine_->event(core::Event::Type::Close);
-					}
-				});
-
-			on_update_end(
-				[this]
-				{
-					renderer_->begin(Color::Druid);
-					root_node_.draw(*renderer_);
-					renderer_->end();
-				});
 		}
 
 		~Window() override
@@ -64,6 +40,21 @@ namespace druid::graphics
 		Window(Window&&) noexcept = delete;
 		auto operator=(const Window&) -> Window& = delete;
 		auto operator=(Window&&) noexcept -> Window& = delete;
+
+		auto update(std::chrono::steady_clock::duration /*x*/) -> void override
+		{
+			if (WindowShouldClose())
+			{
+				engine().event(core::Event::Type::Close);
+			}
+		}
+
+		auto update_end() -> void override
+		{
+			renderer_->begin(Color::Druid);
+			root_node_.draw(*renderer_);
+			renderer_->end();
+		}
 
 		[[nodiscard]] auto root_node() -> Node&
 		{
@@ -122,7 +113,6 @@ namespace druid::graphics
 		int width_{DefaultWidth};
 		int height_{DefaultHeight};
 		Node root_node_;
-		core::Engine* engine_{};
 		std::unique_ptr<Renderer> renderer_{std::make_unique<renderer::Raylib>()};
 	};
 }
