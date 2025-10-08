@@ -112,7 +112,7 @@ export namespace druid::graphics
 			if (parent() != nullptr)
 			{
 				// NOLINTNEXTLINE (cppcoreguidelines-pro-type-static-cast-downcast
-				return static_cast<Node*>(parent())->transform_global() * transform();
+				return parent_node_->transform_global() * transform();
 			}
 
 			return transform();
@@ -147,7 +147,7 @@ export namespace druid::graphics
 			// NOLINTBEGIN
 			transform_ = glm::identity<glm::mat4>();
 			transform_ = glm::translate(transform_, {position_.x, position_.y, 0.0F});
-			transform_ = glm::rotate(transform_, glm::radians(rotation_), {0.0F, 0.0F, 1.0F});
+			transform_ = glm::rotate(transform_, glm::radians(rotation_), {1.0F, 0.0F, 0.0F});
 			transform_ = glm::scale(transform_, {scale_.x, scale_.y, 1.0F});
 			// NOLINTEND
 		}

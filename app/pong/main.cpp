@@ -9,6 +9,7 @@
 import druid.core.engine;
 import druid.graphics.node;
 import druid.graphics.node.rectangle;
+import druid.graphics.node.text;
 import druid.graphics.window;
 import druid.graphics.color;
 
@@ -25,6 +26,18 @@ try
 	constexpr auto height{720};
 
 	auto& root = window.root_node();
+
+	auto& scoreLeft = root.create_node<druid::graphics::NodeText>();
+	scoreLeft.set_position({width * 0.3F, height * 0.1F});
+	scoreLeft.set_text("0");
+	scoreLeft.set_font_size(40);
+	scoreLeft.set_color(Color::White);
+
+	auto& scoreRight = root.create_node<druid::graphics::NodeText>();
+	scoreRight.set_position({width * 0.7F, height * 0.1F});
+	scoreRight.set_text("0");
+	scoreRight.set_font_size(40);
+	scoreRight.set_color(Color::White);
 
 	auto& paddle1 = root.create_node<druid::graphics::NodeRectangle>();
 	paddle1.set_position({width * 0.1, height * 0.5});

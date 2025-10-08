@@ -1,6 +1,7 @@
 module;
 
 #include <chrono>
+#include <thread>
 
 export module druid.core.engine;
 
@@ -59,6 +60,9 @@ namespace druid::core
 					}
 
 					update_end();
+
+					// Sleep for a short duration to prevent high CPU usage.
+					std::this_thread::sleep_for(std::chrono::milliseconds{1});
 				}
 
 				return EXIT_SUCCESS;
