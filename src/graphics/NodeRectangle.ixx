@@ -2,9 +2,6 @@ module;
 
 #include <glm/vec2.hpp>
 
-// Don't remove. Required to fix gcc compiler error.
-#include <typeinfo>
-
 export module druid.graphics.node.rectangle;
 
 import druid.graphics.node;
@@ -28,8 +25,8 @@ namespace druid::graphics
 
 		~NodeRectangle() override = default;
 		NodeRectangle(const NodeRectangle&) = delete;
-		auto operator=(const NodeRectangle&) -> NodeRectangle& = delete;
 		NodeRectangle(NodeRectangle&&) noexcept = delete;
+		auto operator=(const NodeRectangle&) -> NodeRectangle& = delete;
 		auto operator=(NodeRectangle&&) noexcept -> NodeRectangle& = delete;
 
 		auto set_size(glm::vec2 x) -> void

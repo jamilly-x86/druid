@@ -1,6 +1,7 @@
 module;
 
 #include <chrono>
+#include <thread>
 
 export module druid.core.engine;
 
