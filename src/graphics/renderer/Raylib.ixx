@@ -37,7 +37,7 @@ namespace druid::graphics::renderer
 			DrawRectangleRec(rect, rl_color);
 		}
 
-		auto draw_text(float x, float y, const std::string& text, int font_size, druid::graphics::Color color) -> void
+		auto draw_text(float x, float y, const std::string& text, int font_size, druid::graphics::Color color) -> void override
 		{
 			const ::Color rl_color{.r = color.red(), .g = color.green(), .b = color.blue(), .a = color.alpha()};
 			DrawText(text.c_str(), static_cast<int>(x), static_cast<int>(y), font_size, rl_color);
