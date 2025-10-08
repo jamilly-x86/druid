@@ -12,6 +12,8 @@ namespace druid::graphics
 	export class NodeText : public Node
 	{
 	public:
+		static constexpr auto DefaultFontSize{20};
+
 		NodeText()
 		{
 			on_draw(
@@ -59,7 +61,7 @@ namespace druid::graphics
 
 	private:
 		std::string text_;
-		int font_size_{20};
+		int font_size_{DefaultFontSize};
 		Color color_{Color::White};
 	};
 }
