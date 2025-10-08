@@ -1,20 +1,87 @@
 module;
 
 #include <chrono>
-#include <thread>
+#include <vector>
 
 export module druid.core.engine;
 
 import druid.core.event;
-import druid.core.object;
+import druid.core.signal;
 
-namespace druid::core
+export namespace druid::core
 {
-	export class Engine : public druid::core::Object
+	class Engine;
+	class Service
+	{
+	public:
+		Service(Engine& x) : engine_{x}
+		{
+		}
+
+		virtual ~Service() = default;
+
+		Service(const Service&) = delete;
+		Service(Service&&) noexcept = delete;
+		auto operator=(const Service&) -> Service& = delete;
+		auto operator=(Service&&) noexcept -> Service& = delete;
+
+		virtual auto update(std::chrono::steady_clock::duration /*x*/) -> void
+		{
+		}
+
+		virtual auto update_fixed(std::chrono::steady_clock::duration /*x*/) -> void
+		{
+		}
+
+		virtual auto update_end() -> void
+		{
+		}
+
+		[[nodiscard]] auto engine() -> Engine&
+		{
+			return engine_;
+		}
+
+	private:
+		Engine& engine_;
+	};
+	template <typename T>
+	concept ServiceType = std::is_base_of_v<Service, T>;
+	class Engine
 	{
 	public:
 		static constexpr auto DefaultIntervalFixed{std::chrono::milliseconds{10}};
 		static constexpr auto DefaultUpdateFixedLimit{5};
+
+		Engine()
+		{
+			on_update(
+				[this](auto x)
+				{
+					for (auto& service : services_)
+					{
+						service->update(x);
+					}
+				});
+
+			on_update_fixed(
+				[this](auto x)
+				{
+					for (auto& service : services_)
+					{
+						service->update_fixed(x);
+					}
+				});
+
+			on_update_end(
+				[this]
+				{
+					for (auto& service : services_)
+					{
+						service->update_end();
+					}
+				});
+		}
 
 		/// @brief Set the interval at which the fixed update function is called.
 		/// @param x The new fixed update interval.
@@ -47,7 +114,7 @@ namespace druid::core
 					start_ = now;
 					accumulate_ += delta;
 
-					update(delta);
+					on_update_(delta);
 
 					auto count = 0;
 
@@ -56,10 +123,10 @@ namespace druid::core
 						accumulate_ -= interval_fixed_;
 						count++;
 
-						update_fixed(interval_fixed_);
+						on_update_fixed_(interval_fixed_);
 					}
 
-					update_end();
+					on_update_end_();
 				}
 
 				return EXIT_SUCCESS;
@@ -83,6 +150,15 @@ namespace druid::core
 			return running_;
 		}
 
+		template <ServiceType T>
+		[[nodiscard]] auto create_service() -> T&
+		{
+			auto service = std::make_unique<T>(*this);
+			auto* ptr = service.get();
+			services_.emplace_back(std::move(service));
+			return *ptr;
+		}
+
 		auto event(Event::Type x) -> void
 		{
 			switch (x)
@@ -95,7 +171,28 @@ namespace druid::core
 			}
 		}
 
+		auto on_update(auto x) -> void
+		{
+			on_update_.connect(std::forward<decltype(x)>(x));
+		}
+
+		auto on_update_fixed(auto x) -> void
+		{
+			on_update_fixed_.connect(std::forward<decltype(x)>(x));
+		}
+
+		auto on_update_end(auto x) -> void
+		{
+			on_update_end_.connect(std::forward<decltype(x)>(x));
+		}
+
 	private:
+		std::vector<std::unique_ptr<Service>> services_;
+
+		Signal<std::chrono::steady_clock::duration> on_update_;
+		Signal<std::chrono::steady_clock::duration> on_update_fixed_;
+		Signal<> on_update_end_;
+
 		std::chrono::steady_clock::time_point start_;
 		std::chrono::steady_clock::duration accumulate_{};
 		std::chrono::steady_clock::duration interval_fixed_{DefaultIntervalFixed};

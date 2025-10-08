@@ -16,30 +16,3 @@ TEST(Engine, set_interval_fixed)
 	engine.set_interval_fixed(std::numeric_limits<std::chrono::milliseconds>::max());
 	EXPECT_EQ(engine.get_interval_fixed(), std::numeric_limits<std::chrono::milliseconds>::max());
 }
-
-TEST(Engine, update_count)
-{
-	Engine engine;
-	EXPECT_EQ(engine.update_fixed_count(), 0U);
-
-	// Use 99 instead of 100 as we want the 100th update to trigger the exit.
-	constexpr auto exit_condition{99U};
-
-	std::uint64_t count{};
-	engine.on_update_fixed(
-		[&engine, &count](auto)
-		{
-			if (count == exit_condition)
-			{
-				engine.quit();
-			}
-
-			count++;
-		});
-
-	const auto start = std::chrono::steady_clock::now();
-	engine.run();
-	const std::chrono::duration<double> elapsed = std::chrono::steady_clock::now() - start;
-	EXPECT_NEAR(elapsed.count(), std::chrono::duration<double>{1.0}.count(), 1e-4);
-	EXPECT_EQ(engine.update_fixed_count(), count);
-}

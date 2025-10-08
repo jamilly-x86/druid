@@ -19,7 +19,7 @@ auto main() -> int
 try
 {
 	druid::core::Engine engine;
-	auto& window = engine.create_child<druid::graphics::Window>();
+	auto& window = engine.create_service<druid::graphics::Window>();
 	// NOLINTBEGIN
 
 	constexpr auto width{1280};

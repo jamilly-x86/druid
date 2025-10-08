@@ -8,9 +8,6 @@ module;
 #include <glm/vec2.hpp>
 #include <vector>
 
-// Don't remove. Required to fix gcc compiler error.
-#include <typeinfo>
-
 export module druid.graphics.node;
 import druid.core.object;
 import druid.graphics.renderer;
