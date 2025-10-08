@@ -17,7 +17,7 @@ namespace druid::graphics
 			on_draw(
 				[this](auto& renderer)
 				{
-					renderer.draw_text(0, 0, text, font_size_, color_);
+					renderer.draw_text(0, 0, text_, font_size_, color_);
 				});
 		}
 
@@ -29,12 +29,12 @@ namespace druid::graphics
 
 		auto set_text(std::string_view x) -> void
 		{
-			text = x;
+			text_ = x;
 		}
 
 		[[nodiscard]] auto get_text() const -> std::string_view
 		{
-			return text;
+			return text_;
 		}
 
 		auto set_font_size(int x) -> void
@@ -58,7 +58,7 @@ namespace druid::graphics
 		}
 
 	private:
-		std::string text;
+		std::string text_;
 		int font_size_{20};
 		Color color_{Color::White};
 	};
