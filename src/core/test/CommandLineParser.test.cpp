@@ -1,58 +1,94 @@
 #include <gtest/gtest.h>
-#include <string>
-#include <vector>
 
 import druid.core.commandlineparser;
 
-namespace dc = druid::core;
-
 namespace
 {
-	class ArgvBuilder
-	{
-	public:
-		auto add(const std::string& arg) -> ArgvBuilder&
-		{
-			args_.emplace_back(std::move(arg));
-			return *this;
-		}
-
-		auto argc() const -> int
-		{
-			return static_cast<int>(args_.size());
-		}
-
-		auto argv() -> char**
-		{
-			ptrs_.clear();
-			for(auto& arg : args_)
-			{
-				ptrs_.emplace_back(arg.data());
-			}
-			return ptrs_.data();
-		}
-
-	private:
-		std::vector<std::string> args_;
-		std::vector<char*> ptrs_;
-	};
+	constexpr auto Name = "help";
+	constexpr auto ShortName = "h";
+	constexpr auto Description = "Test Help Command for CommandLineOption Class";
+	constexpr auto DefaultValue = "Input.txt";
+	constexpr auto ValueName = "FILE";
+	constexpr auto Required = true;
+	constexpr auto ValueRequired = true;
+	constexpr auto DefaultApplicationDescription{"Command line parser"};
 }
 
-TEST(CommandLineParser, constructorNoDescription)
+// CommandLineOption Unit tests
+TEST(CommandLineOption, constructorWithNoShortName)
 {
-	const dc::CommandLineParser parser("test", std::nullopt);
+	const druid::core::CommandLineOption option(Name);
+
+	EXPECT_EQ(option.get_name(), Name);
+	EXPECT_EQ(option.get_short_name(), "");
 }
 
-TEST(CommandLineParser, constructorWithDescription)
+TEST(CommandLineOption, constructorWithShortName)
 {
-	const dc::CommandLineParser parser("test", "test application");
+	const druid::core::CommandLineOption option(Name, ShortName);
+
+	EXPECT_EQ(option.get_name(), Name);
+	EXPECT_EQ(option.get_short_name(), ShortName);
 }
 
-// TEST(CommandLineParser, flagsAreFalseByDefault)
-// {
-// 	dc::CommandLineParser parser("test", std::nullopt);
-// 	parser.addFlag("verbose,v", "Verbose Output").addFlag("debug,d", "Debug mode");
-//
-// 	ArgvBuilder args;
-// 	args.add("test");
-// }
+TEST(CommandLineOption, setDescription)
+{
+	druid::core::CommandLineOption option(Name, ShortName);
+	option.set_description(Description);
+
+	EXPECT_EQ(option.get_description(), Description);
+}
+
+TEST(CommandLineOption, setDefaultValue)
+{
+	druid::core::CommandLineOption option(Name, ShortName);
+	option.set_default_value(DefaultValue);
+
+	EXPECT_EQ(option.get_default_value(), DefaultValue);
+}
+
+TEST(CommandLineOption, setValueName)
+{
+	druid::core::CommandLineOption option(Name, ShortName);
+	option.set_value_name(ValueName);
+
+	EXPECT_EQ(option.get_value_name(), ValueName);
+}
+
+TEST(CommandLineOption, setRequired)
+{
+	druid::core::CommandLineOption option(Name, ShortName);
+	option.set_required(Required);
+
+	EXPECT_EQ(option.get_required(), Required);
+}
+
+TEST(CommandLineOption, setValueRequired)
+{
+	druid::core::CommandLineOption option(Name, ShortName);
+	option.set_valued_required(ValueRequired);
+
+	EXPECT_EQ(option.get_valued_required(), ValueRequired);
+}
+
+// CommandLineParser Unit Tests
+TEST(CommandLineParser, parserConstructorWithDescription)
+{
+	druid::core::CommandLineParser parser(DefaultApplicationDescription);
+
+	const auto help = parser.help_text();
+	EXPECT_TRUE(help.find(DefaultApplicationDescription) != std::string::npos);
+}
+
+TEST(CommandLineParser, addSingleOption)
+{
+	druid::core::CommandLineParser parser(DefaultApplicationDescription);
+	parser.add_option(druid::core::CommandLineOption(Name, ShortName));
+
+	EXPECT_FALSE(parser.has_error());
+}
+
+
+
+
+
