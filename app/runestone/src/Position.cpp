@@ -1,5 +1,4 @@
 #include <Position.h>
-
 #include <BitBoard.h>
 #include <Utils.h>
 
@@ -43,6 +42,10 @@ auto Position::set_from_fen(std::string_view fen_string) -> void
 				{
 				}
 			}
+		}
+		else
+		{
+			current_fen_string_field_ = static_cast<FenStringFields>(static_cast<int>(current_fen_string_field_) + 1);
 		}
 	}
 }
