@@ -78,6 +78,7 @@ namespace runestone
 	/// This namespace contains high-performance functions for extracting piece
 	/// information using bitwise operations instead of slow switch statements.
 	/// All functions are constexpr and will be inlined for optimal performance.
+	/// @relates Piece
 	namespace piece_encoding
 	{
 		/// @brief Bit mask for extracting piece type (bits 0-2)
@@ -91,6 +92,7 @@ namespace runestone
 		/// @return The piece type
 		///
 		/// @note this approach avoids branching
+		/// @relates Piece
 		constexpr auto GetPieceType(Piece piece) noexcept -> PieceType
 		{
 			return static_cast<PieceType>(static_cast<std::uint8_t>(piece) & HexSeven);
@@ -101,6 +103,7 @@ namespace runestone
 		/// @return The piece color
 		///
 		/// @note this approach avoids branching
+		/// @relates Piece
 		constexpr auto GetPieceColor(Piece piece) noexcept -> Color
 		{
 			return static_cast<Color>(static_cast<std::uint8_t>(piece) & HexEight);
@@ -110,6 +113,7 @@ namespace runestone
 		/// @param type The piece type
 		/// @param color The piece color
 		/// @return The combined piece
+		/// @relates Piece
 		constexpr auto MakePiece(PieceType type, Color color) noexcept -> Piece
 		{
 			return static_cast<Piece>(static_cast<std::uint8_t>(type) | static_cast<std::uint8_t>(color));
@@ -118,6 +122,7 @@ namespace runestone
 		/// @brief Check if piece is white (bit 3 == 0)
 		/// @param piece The piece
 		/// @return True if white
+		/// @relates Piece
 		constexpr auto IsWhite(Piece piece) noexcept -> bool
 		{
 			return (static_cast<std::uint8_t>(piece) & HexEight) == 0 && piece != Piece::Empty;
@@ -126,6 +131,7 @@ namespace runestone
 		/// @brief Check if piece is black (bit 3 == 1)
 		/// @param piece The piece
 		/// @return True if black
+		/// @relates Piece
 		constexpr auto IsBlack(Piece piece) noexcept -> bool
 		{
 			return (static_cast<std::uint8_t>(piece) & HexEight) != 0;

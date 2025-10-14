@@ -2,6 +2,8 @@
 #include <BitBoard.h>
 #include <Utils.h>
 
+#include <cctype>
+
 using runestone::Position;
 
 auto Position::set_from_fen(std::string_view fen_string) -> void

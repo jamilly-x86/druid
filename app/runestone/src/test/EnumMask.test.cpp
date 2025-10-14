@@ -7,10 +7,15 @@
 
 namespace
 {
+	// clang is correct but is definitely contextually wrong for the EnumMask styling
+	// the operators are being used in this translation unit but these friend functions
+	// calls bind to inline definition and thus are not found by clang
+	// NOLINTBEGIN (clang-diagnostic-unused-using-decl)
 	using runestone::operator|;
 	using runestone::operator&;
 	using runestone::operator^;
 	using runestone::operator~;
+	// NOLINTEND
 
 	enum class Permissions : uint8_t
 	{

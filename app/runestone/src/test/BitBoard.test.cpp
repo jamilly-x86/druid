@@ -13,12 +13,12 @@ namespace
 	///
 	/// @note The value was generated using the provided link https://gekomad.github.io/Cinnamon/BitboardCalculator/.
 	/// After opening link, select layout 2 and check the square, A1, to generate hex value
-	constexpr auto SingleSetBitBB = 1ULL;
+	constexpr auto SingleSetBitBB = runestone::BitBoard{1};
 	/// @brief Multiple bits set inside a bitboard
 	///
 	/// @note The value was generated using the provided link https://gekomad.github.io/Cinnamon/BitboardCalculator/.
 	/// After opening link, select layout 2 and check the squares, A1, E6, and F7 to generate hex value
-	constexpr auto MultipleSetBitsBB = 0x20100000000001ULL;
+	constexpr auto MultipleSetBitsBB = runestone::BitBoard{0x20100000000001};
 
 	constexpr auto Files = {runestone::bitboard::AFile, runestone::bitboard::BFile, runestone::bitboard::CFile, runestone::bitboard::DFile,
 							runestone::bitboard::EFile, runestone::bitboard::FFile, runestone::bitboard::GFile, runestone::bitboard::HFile};
@@ -139,6 +139,11 @@ TEST(BitBoard, squareIsSetForSingleBit)
 	}
 }
 
+// when expanding from the macro TEST from GTEST the cognitive complexity
+// greatly increase (35 > 25...project max). this check is suppressed as
+// the code is readable and the actual cognitive complexity of this test is 9
+// loop (+1), switch (+1), case (5 * +1), nested switch (+1), control flow - continue (+1)
+// NOLINTBEGIN (readability-function-cognitive-complexity,-warnings-as-errors)
 TEST(BitBoard, squareIsSetForMultipleBits)
 {
 	for (const auto square : magic_enum::enum_values<runestone::Square>())
@@ -173,6 +178,7 @@ TEST(BitBoard, squareIsSetForMultipleBits)
 		}
 	}
 }
+// NOLINTEND
 
 TEST(BitBoard, setSquareForEmptyBitBoard)
 {

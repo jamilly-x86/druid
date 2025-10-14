@@ -2,6 +2,8 @@
 
 #include <Types.h>
 
+#include <bit>
+
 namespace runestone::bitboard
 {
 	// Constant (file, rank, edge, special) bitboards for testing and manipulating
@@ -49,6 +51,7 @@ namespace runestone::bitboard
 	///
 	/// @note For more information, see link https://www.chessprogramming.org/General_Setwise_Operations
 	/// section Bit By Square
+	/// @relates BitBoard
 	constexpr auto SquareBitBoard(Square square) -> BitBoard
 	{
 		return 1ULL << static_cast<BitBoard>(square);
@@ -61,6 +64,7 @@ namespace runestone::bitboard
 	///
 	/// @note For more information, see link https://www.chessprogramming.org/General_Setwise_Operations
 	/// section Bit By Square
+	/// @relates BitBoard
 	constexpr auto SquareIsSet(BitBoard bitboard, Square square) -> bool
 	{
 		return (bitboard & SquareBitBoard(square)) != 0;
@@ -72,6 +76,7 @@ namespace runestone::bitboard
 	///
 	/// @note For more information, see link https://www.chessprogramming.org/General_Setwise_Operations
 	/// section Bit By Square
+	/// @relates BitBoard
 	constexpr auto SetSquare(BitBoard& bitboard, Square square) -> void
 	{
 		bitboard |= SquareBitBoard(square);
@@ -83,6 +88,7 @@ namespace runestone::bitboard
 	///
 	/// @note For more information, see link https://www.chessprogramming.org/General_Setwise_Operations
 	/// section Bit By Square
+	/// @relates BitBoard
 	constexpr auto ClearSquare(BitBoard& bitboard, Square square) -> void
 	{
 		bitboard &= ~SquareBitBoard(square);
@@ -91,6 +97,8 @@ namespace runestone::bitboard
 	/// @brief Get the file of a square (0-7,A-H)
 	/// @param square The square
 	/// @return File index (0=A, 1=B, ..., 7=H)
+	///
+	/// @relates BitBoard
 	constexpr auto FileOf(Square square) -> std::uint8_t
 	{
 		constexpr auto file_of_seven = 7U;
@@ -101,6 +109,8 @@ namespace runestone::bitboard
 	/// @brief Get the rank of a square (0-7,1-8)
 	/// @param square The square
 	/// @return Rank index (0=1, 1=2, ..., 7=8)
+	///
+	/// @relates BitBoard
 	constexpr auto RankOf(Square square) -> std::uint8_t
 	{
 		constexpr auto rank_of_three = 3U;
@@ -112,6 +122,8 @@ namespace runestone::bitboard
 	/// @param file File (0-7)
 	/// @param rank Rank (0-7)
 	/// @return The square
+	///
+	/// @relates BitBoard
 	constexpr auto MakeSquare(const int file, const int rank) -> Square
 	{
 		constexpr auto make_square_eight = 8U;
@@ -122,31 +134,40 @@ namespace runestone::bitboard
 	/// @brief Count the number of sets bits in a bitboard (population count)
 	/// @param bitboard The bitboard
 	/// @return Number of sets bits
-	inline auto PopCount(BitBoard bitboard) -> int
+	///
+	/// @relates BitBoard
+	constexpr auto PopCount(BitBoard bitboard) -> int
 	{
-		return __builtin_popcountll(bitboard);
+		return std::popcount(bitboard);
 	}
 
 	/// @brief Finds the least significant bit (LSB) position
 	/// @param bitboard The bitboard (must not be zero)
 	/// @return Square of the LSB
-	inline auto LSB(BitBoard bitboard) -> Square
+	///
+	/// @relates BitBoard
+	constexpr auto LSB(BitBoard bitboard) -> Square
 	{
-		return static_cast<Square>(__builtin_ctzll(bitboard));
+		return static_cast<Square>(std::countr_zero(bitboard));
 	}
 
 	/// @brief Find the most significant bit (MSB) position
 	/// @param bitboard The bitboard (must not be zero)
 	/// @return Square of the MSB
-	inline auto MSB(BitBoard bitboard) -> Square
+	///
+	/// @relates BitBoard
+	constexpr auto MSB(BitBoard bitboard) -> Square
 	{
-		return static_cast<Square>((static_cast<int>(Square::Size) - 1) - __builtin_clzll(bitboard));
+		constexpr auto bits = static_cast<int>(Square::Size);
+		return static_cast<Square>(bits - 1 - std::countl_zero(bitboard));
 	}
 
 	/// @brief Pop (remove and return) the LSB from a bitboard
 	/// @param bitboard Reference to bitboard to modify
 	/// @return Square that was removed
-	inline auto PopLSB(BitBoard& bitboard) -> Square
+	///
+	/// @relates BitBoard
+	constexpr auto PopLSB(BitBoard& bitboard) -> Square
 	{
 		const Square square = LSB(bitboard);
 		// clear the LSB
