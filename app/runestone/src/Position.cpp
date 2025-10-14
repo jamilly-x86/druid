@@ -180,8 +180,8 @@ auto Position::set_en_passant_square(const std::string& file_rank) -> void
 		return;
 	}
 
-	const auto file = file_rank[0] - 'a';
-	const auto rank = file_rank[1] - '1';
+	const auto file = file_rank.at(0) - 'a';
+	const auto rank = file_rank.at(1) - '1';
 	constexpr auto eight = 8;
 	enpassant_square_ = static_cast<Square>((rank * eight) + file);
 }
