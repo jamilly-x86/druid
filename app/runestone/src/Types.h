@@ -75,7 +75,7 @@ namespace runestone
 
 	/// @brief Piece encoding utilities for fast bitwise operations
 	///
-	/// This namespace contains high-performance functions for extracting piece
+	/// @note This namespace contains high-performance functions for extracting piece
 	/// information using bitwise operations instead of slow switch statements.
 	/// All functions are constexpr and will be inlined for optimal performance.
 	/// @relates Piece

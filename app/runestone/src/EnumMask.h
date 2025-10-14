@@ -29,6 +29,7 @@ namespace runestone
 	/// It supports all standard bitwise operations (OR, AND, XOR, NOT) and their compound
 	/// assignment variants. All operations are constexpr and noexcept.
 	///
+	/// @par Example
 	/// @code
 	/// enum class Permissions
 	/// {
