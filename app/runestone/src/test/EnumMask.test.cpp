@@ -1,7 +1,9 @@
 #include <EnumMask.h>
 
 #include <gtest/gtest.h>
+
 #include <magic_enum/magic_enum.hpp>
+#include <ranges>
 
 namespace
 {
@@ -190,15 +192,15 @@ TEST(EnumMask, compoundAndAssignmentEnum)
 	EXPECT_FALSE(mask.test(Permissions::Write));
 }
 
-// TEST(EnumMask, bitwiseAndRemoveFlag)
-// {
-// 	auto mask = Permissions::Read | Permissions::Write;
-// 	mask &= ~Permissions::Write;
-//
-// 	EXPECT_EQ(mask.raw(), 1);
-// 	EXPECT_TRUE(mask.test(Permissions::Read));
-// 	EXPECT_FALSE(mask.test(Permissions::Write));
-// }
+TEST(EnumMask, bitwiseAndRemoveFlag)
+{
+	auto mask = Permissions::Read | Permissions::Write;
+	mask &= ~Permissions::Write;
+
+	EXPECT_EQ(mask.raw(), 1);
+	EXPECT_TRUE(mask.test(Permissions::Read));
+	EXPECT_FALSE(mask.test(Permissions::Write));
+}
 
 TEST(EnumMask, bitwiseXorWithEnum)
 {
@@ -316,4 +318,117 @@ TEST(EnumMask, testAllFlags)
 	EXPECT_TRUE(mask.test(Permissions::Write));
 	EXPECT_TRUE(mask.test(Permissions::Execute));
 	EXPECT_TRUE(mask.test(Permissions::Delete));
+}
+
+TEST(EnumMask, rawValue)
+{
+	constexpr auto mask = Permissions::Read | Permissions::Execute;
+	EXPECT_EQ(mask.raw(), ReadExecute);
+}
+
+TEST(EnumMask, rawValueRoundTrip)
+{
+	constexpr auto original = Permissions::Read | Permissions::Write;
+	constexpr auto raw_value = original.raw();
+	constexpr runestone::EnumMask<Permissions> restored(raw_value);
+
+	EXPECT_EQ(original.raw(), restored.raw());
+	EXPECT_TRUE(restored.test(Permissions::Read));
+	EXPECT_TRUE(restored.test(Permissions::Write));
+}
+
+TEST(EnumMask, byteEnumType)
+{
+	constexpr auto mask = ByteEnum::Flag1 | ByteEnum::Flag2;
+
+	EXPECT_EQ(sizeof(mask.raw()), sizeof(uint8_t));
+	EXPECT_TRUE(mask.test(ByteEnum::Flag1));
+	EXPECT_TRUE(mask.test(ByteEnum::Flag2));
+	EXPECT_FALSE(mask.test(ByteEnum::Flag3));
+}
+
+TEST(EnumMask, longEnumType)
+{
+	constexpr auto mask = LongEnum::Flag1 | LongEnum::Flag2;
+
+	EXPECT_EQ(sizeof(mask.raw()), sizeof(uint64_t));
+	EXPECT_TRUE(mask.test(LongEnum::Flag1));
+	EXPECT_TRUE(mask.test(LongEnum::Flag2));
+	EXPECT_FALSE(mask.test(LongEnum::Flag3));
+}
+
+TEST(EnumMask, LongEnumHighBit)
+{
+	constexpr runestone::EnumMask mask(LongEnum::Flag3);
+
+	EXPECT_FALSE(mask.test(LongEnum::Flag1));
+	EXPECT_FALSE(mask.test(LongEnum::Flag2));
+	EXPECT_TRUE(mask.test(LongEnum::Flag3));
+}
+
+// edge cases and complex scenarios
+TEST(EnumMask, emptyMaskOperations)
+{
+	constexpr runestone::EnumMask<Permissions> empty;
+	constexpr runestone::EnumMask mask(Permissions::Read);
+
+	constexpr auto result1 = empty | mask;
+	EXPECT_EQ(result1.raw(), mask.raw());
+
+	constexpr auto result2 = empty & mask;
+	EXPECT_EQ(result2.raw(), 0);
+
+	constexpr auto result3 = empty ^ mask;
+	EXPECT_EQ(result3.raw(), mask.raw());
+}
+
+TEST(EnumMask, selfOperations)
+{
+	constexpr runestone::EnumMask mask(Permissions::Read);
+
+	constexpr auto or_result = mask | mask;
+	EXPECT_EQ(or_result.raw(), mask.raw());
+
+	constexpr auto and_result = mask & mask;
+	EXPECT_EQ(and_result.raw(), mask.raw());
+
+	constexpr auto xor_result = mask ^ mask;
+	EXPECT_EQ(xor_result.raw(), 0);
+}
+
+TEST(EnumMask, complexChainedOperations)
+{
+	constexpr auto result = (Permissions::Read | Permissions::Write) & (Permissions::Write | Permissions::Execute);
+
+	EXPECT_FALSE(result.test(Permissions::Read));
+	EXPECT_TRUE(result.test(Permissions::Write));
+	EXPECT_FALSE(result.test(Permissions::Execute));
+}
+
+TEST(EnumMask, mixedOperations)
+{
+	runestone::EnumMask mask(Permissions::Read);
+	mask |= Permissions::Write;
+	mask &= ~Permissions::Read;
+	mask ^= Permissions::Execute;
+
+	EXPECT_FALSE(mask.test(Permissions::Read));
+	EXPECT_TRUE(mask.test(Permissions::Write));
+	EXPECT_TRUE(mask.test(Permissions::Execute));
+}
+
+TEST(EnumMask, allFlagsCombined)
+{
+	runestone::EnumMask<Permissions> all_permissions;
+
+	for (const auto e : magic_enum::enum_values<Permissions>())
+	{
+		all_permissions |= e;
+	}
+
+	EXPECT_EQ(all_permissions.raw(), 15); // 1111 in binary
+	EXPECT_TRUE(all_permissions.test(Permissions::Read));
+	EXPECT_TRUE(all_permissions.test(Permissions::Write));
+	EXPECT_TRUE(all_permissions.test(Permissions::Execute));
+	EXPECT_TRUE(all_permissions.test(Permissions::Delete));
 }

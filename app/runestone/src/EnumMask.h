@@ -131,6 +131,15 @@ namespace runestone
 			return *this;
 		}
 
+		/// @brief Compound bitwise OR assignment with EnumMask
+		/// @param rhs The EnumMask to OR with
+		/// @return Reference to this EnumMask
+		constexpr auto operator|=(EnumMask rhs) noexcept -> EnumMask&
+		{
+			value_ |= rhs.value_;
+			return *this;
+		}
+
 		/// @brief Compound bitwise AND assignment with enum value
 		/// @param rhs The enum value to AND with
 		/// @return Reference to this EnumMask
@@ -140,12 +149,30 @@ namespace runestone
 			return *this;
 		}
 
+		/// @brief Compound bitwise AND assignment with EnumMask
+		/// @param rhs The EnumMask to AND with
+		/// @return Reference to this EnumMask
+		constexpr auto operator&=(EnumMask rhs) noexcept -> EnumMask&
+		{
+			value_ &= rhs.value_;
+			return *this;
+		}
+
 		/// @brief Compound bitwise XOR assignment with enum value
 		/// @param rhs The enum value to XOR with
 		/// @return Reference to this EnumMask
 		constexpr auto operator^=(Enum rhs) noexcept -> EnumMask&
 		{
 			value_ ^= static_cast<UnderlyingType>(rhs);
+			return *this;
+		}
+
+		/// @brief Compound bitwise XOR assignment with EnumMask
+		/// @param rhs The EnumMask to XOR with
+		/// @return Reference to this EnumMask
+		constexpr auto operator^=(EnumMask rhs) noexcept -> EnumMask&
+		{
+			value_ ^= rhs.value_;
 			return *this;
 		}
 
