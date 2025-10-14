@@ -54,13 +54,13 @@ auto Position::set_from_fen(std::string_view fen_string) -> void
 				case FenStringFields::HalfmoveClock:
 				{
 					half_move_counter += c;
-					set_half_move_clock(c);
+					set_half_move_clock(half_move_counter);
 					break;
 				}
 				case FenStringFields::FullmoveCounter:
 				{
 					full_move_counter += c;
-					set_full_move_counter(c);
+					set_full_move_counter(full_move_counter);
 					break;
 				}
 				default:
