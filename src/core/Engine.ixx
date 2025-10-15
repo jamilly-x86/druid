@@ -1,7 +1,7 @@
 module;
 
-#include <chrono>
 #include <core/Signal.h>
+#include <chrono>
 
 export module druid.core.engine;
 
@@ -188,9 +188,9 @@ export namespace druid::core
 	private:
 		std::vector<std::unique_ptr<Service>> services_;
 
-		Signal<std::chrono::steady_clock::duration> on_update_;
-		Signal<std::chrono::steady_clock::duration> on_update_fixed_;
-		Signal<> on_update_end_;
+		Signal<void(std::chrono::steady_clock::duration)> on_update_;
+		Signal<void(std::chrono::steady_clock::duration)> on_update_fixed_;
+		Signal<void()> on_update_end_;
 
 		std::chrono::steady_clock::time_point start_;
 		std::chrono::steady_clock::duration accumulate_{};

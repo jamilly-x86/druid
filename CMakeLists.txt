@@ -50,3 +50,13 @@ add_subdirectory(src)
 # install(EXPORT ${PROJECT_ROOT_NAME}-config DESTINATION ${CMAKE_INSTALL_DATAROOTDIR})
 # install(DIRECTORY include/${PROJECT_ROOT_NAME} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 # install(FILES ${PROJECT_CONFIG_VERSION} DESTINATION ${CMAKE_INSTALL_DATAROOTDIR})
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    include(ProcessorCount)
+    ProcessorCount(NPROC)
+    add_custom_target(clang-tidy
+        COMMAND run-clang-tidy -p ${CMAKE_BINARY_DIR} -j ${NPROC} -source-filter="^${CMAKE_SOURCE_DIR}/\(app|src|module\)/.*"
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Running clang-tidy on all files"
+    )
+endif()

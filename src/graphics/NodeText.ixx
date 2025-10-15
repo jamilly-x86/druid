@@ -1,5 +1,6 @@
 module;
 
+#include <core/Signal.h>
 #include <string>
 
 export module druid.graphics.node.text;
@@ -16,11 +17,7 @@ namespace druid::graphics
 
 		NodeText()
 		{
-			on_draw(
-				[this](auto& renderer)
-				{
-					renderer.draw_text(0, 0, text_, font_size_, color_);
-				});
+			on_draw([this](auto& renderer) { renderer.draw_text(0, 0, text_, font_size_, color_); });
 		}
 
 		~NodeText() override = default;

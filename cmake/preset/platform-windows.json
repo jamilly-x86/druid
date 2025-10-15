@@ -129,9 +129,6 @@
             "configurePreset": "x64-windows-msvc-debug",
             "output": {
                 "outputOnFailure": true
-            },
-            "execution": {
-                "jobs": 2
             }
         },
         {
@@ -139,9 +136,6 @@
             "configurePreset": "x64-windows-msvc-release",
             "output": {
                 "outputOnFailure": true
-            },
-            "execution": {
-                "jobs": 2
             }
         }
     ]
