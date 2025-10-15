@@ -92,11 +92,7 @@
         {
             "name": "x64-linux-clang-debug",
             "configurePreset": "x64-linux-clang-debug",
-            "jobs": 8,
-            "targets": [
-                "all",
-                "clang-tidy"
-            ]
+            "jobs": 8
         },
         {
             "name": "x64-linux-clang-release",

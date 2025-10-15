@@ -66,26 +66,22 @@
         {
             "name": "arm64-osx-clang-debug",
             "configurePreset": "arm64-osx-clang-debug",
-            "targets": [
-                "all",
-                "clang-tidy"
-            ]
+            "jobs": 8
         },
         {
             "name": "arm64-osx-clang-release",
-            "configurePreset": "arm64-osx-clang-release"
+            "configurePreset": "arm64-osx-clang-release",
+            "jobs": 8
         },
         {
             "name": "x64-osx-clang-debug",
             "configurePreset": "x64-osx-clang-debug",
-            "targets": [
-                "all",
-                "clang-tidy"
-            ]
+            "jobs": 8
         },
         {
             "name": "x64-osx-clang-release",
-            "configurePreset": "x64-osx-clang-release"
+            "configurePreset": "x64-osx-clang-release",
+            "jobs": 8
         }
     ],
     "testPresets": [

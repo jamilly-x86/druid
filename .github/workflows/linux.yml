@@ -17,11 +17,13 @@ jobs:
         config:
           - preset: x64-linux-gcc-release
             compiler: gcc
+            clang-tidy: false
           - preset: x64-linux-clang-debug
             compiler: clang
+            clang-tidy: true
 
     runs-on: ubuntu-latest
-    container: 
+    container:
       image: ghcr.io/druidengine/images/ubuntu-dev:main
       credentials:
         username: ${{ github.actor }}
@@ -54,3 +56,7 @@ jobs:
 
       - name: cmake-test
         run: ctest --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
+
+      - name: clang-tidy
+        if: ${{ matrix.config.clang-tidy }}
+        run: cmake --build --preset ${{ matrix.config.preset }} --target clang-tidy
