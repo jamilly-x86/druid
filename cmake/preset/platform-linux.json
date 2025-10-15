@@ -25,10 +25,7 @@
                 "use-clang",
                 "use-ninja",
                 "use-vcpkg"
-            ],
-            "cacheVariables": {
-                "CMAKE_CXX_CLANG_TIDY": "clang-tidy"
-            }
+            ]
         },
         {
             "name": "x64-linux-clang-release",
@@ -94,27 +91,33 @@
     "buildPresets": [
         {
             "name": "x64-linux-clang-debug",
-            "configurePreset": "x64-linux-clang-debug"
+            "configurePreset": "x64-linux-clang-debug",
+            "jobs": 8
         },
         {
             "name": "x64-linux-clang-release",
-            "configurePreset": "x64-linux-clang-release"
+            "configurePreset": "x64-linux-clang-release",
+            "jobs": 8
         },
         {
             "name": "x64-linux-gcc-debug",
-            "configurePreset": "x64-linux-gcc-debug"
+            "configurePreset": "x64-linux-gcc-debug",
+            "jobs": 8
         },
         {
             "name": "x64-linux-gcc-release",
-            "configurePreset": "x64-linux-gcc-release"
+            "configurePreset": "x64-linux-gcc-release",
+            "jobs": 8
         },
         {
             "name": "arm64-linux-gcc-debug",
-            "configurePreset": "arm64-linux-gcc-debug"
+            "configurePreset": "arm64-linux-gcc-debug",
+            "jobs": 8
         },
         {
             "name": "arm64-linux-gcc-release",
-            "configurePreset": "arm64-linux-gcc-release"
+            "configurePreset": "arm64-linux-gcc-release",
+            "jobs": 8
         }
     ],
     "testPresets": [
@@ -123,9 +126,6 @@
             "configurePreset": "x64-linux-clang-debug",
             "output": {
                 "outputOnFailure": true
-            },
-            "execution": {
-                "jobs": 2
             }
         },
         {
@@ -133,9 +133,6 @@
             "configurePreset": "x64-linux-clang-release",
             "output": {
                 "outputOnFailure": true
-            },
-            "execution": {
-                "jobs": 2
             }
         },
         {
@@ -143,9 +140,6 @@
             "configurePreset": "x64-linux-gcc-debug",
             "output": {
                 "outputOnFailure": true
-            },
-            "execution": {
-                "jobs": 2
             }
         },
         {
@@ -153,9 +147,6 @@
             "configurePreset": "x64-linux-gcc-release",
             "output": {
                 "outputOnFailure": true
-            },
-            "execution": {
-                "jobs": 2
             }
         }
     ]

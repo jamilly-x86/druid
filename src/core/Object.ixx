@@ -1,5 +1,6 @@
 module;
 
+#include <core/Signal.h>
 #include <algorithm>
 #include <memory>
 #include <string>
@@ -7,7 +8,6 @@ module;
 #include <vector>
 
 export module druid.core.object;
-export import druid.core.signal;
 
 export namespace druid::core
 {
@@ -170,10 +170,10 @@ export namespace druid::core
 		std::string name_;
 		Object* parent_{};
 
-		Signal<> on_destroyed_;
-		Signal<Object*> on_added_;
-		Signal<Object*> on_removed_;
-		Signal<Object*> on_child_added_;
-		Signal<Object*> on_child_removed_;
+		Signal<void()> on_destroyed_;
+		Signal<void(Object*)> on_added_;
+		Signal<void(Object*)> on_removed_;
+		Signal<void(Object*)> on_child_added_;
+		Signal<void(Object*)> on_child_removed_;
 	};
 }

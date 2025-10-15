@@ -1,5 +1,6 @@
 module;
 
+#include <core/Signal.h>
 #include <glm/vec2.hpp>
 
 export module druid.graphics.node.rectangle;

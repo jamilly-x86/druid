@@ -49,9 +49,9 @@ jobs:
               shell: bash
 
             - name: cmake-build
-              run: cmake --build --preset ${{ matrix.config.preset }}
+              run: cmake --build --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
               shell: bash
 
             - name: cmake-test
-              run: ctest --preset ${{ matrix.config.preset }}
+              run: ctest --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
               shell: bash

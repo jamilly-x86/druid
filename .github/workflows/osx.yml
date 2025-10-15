@@ -42,7 +42,7 @@ jobs:
         run: cmake --preset ${{ matrix.config.preset }}
 
       - name: cmake-build
-        run: cmake --build --preset ${{ matrix.config.preset }}
+        run: cmake --build --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
 
       - name: cmake-test
-        run: ctest --preset ${{ matrix.config.preset }}
+        run: ctest --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))

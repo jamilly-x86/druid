@@ -1,12 +1,11 @@
+#include <core/Signal.h>
 #include <gtest/gtest.h>
-
-import druid.core.signal;
 
 using druid::core::Signal;
 
 TEST(Signal, connect)
 {
-	Signal<int> signal;
+	Signal<void(int)> signal;
 
 	signal.connect([](int) {});
 }

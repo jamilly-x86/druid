@@ -1,12 +1,12 @@
 module;
 
+#include <core/Signal.h>
 #include <raylib.h>
 #include <rlgl.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/vec2.hpp>
-#include <vector>
 
 export module druid.graphics.node;
 import druid.core.object;
@@ -152,7 +152,7 @@ export namespace druid::graphics
 		std::vector<Node*> nodes_;
 		Node* parent_node_{nullptr};
 
-		Signal<Renderer&> on_draw_;
+		Signal<void(Renderer&)> on_draw_;
 
 		glm::mat4 transform_{glm::identity<glm::mat4>()};
 		glm::vec2 position_{DefaultPosition};
