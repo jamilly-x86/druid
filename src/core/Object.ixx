@@ -5,9 +5,9 @@ module;
 #include <string>
 #include <string_view>
 #include <vector>
+#include <core/Signal.h>
 
 export module druid.core.object;
-export import druid.core.signal;
 
 export namespace druid::core
 {

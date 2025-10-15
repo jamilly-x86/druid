@@ -6,7 +6,7 @@ module;
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/vec2.hpp>
-#include <vector>
+#include <core/Signal.h>
 
 export module druid.graphics.node;
 import druid.core.object;

@@ -1,12 +1,11 @@
 module;
 
 #include <chrono>
-#include <vector>
+#include <core/Signal.h>
 
 export module druid.core.engine;
 
 import druid.core.event;
-import druid.core.signal;
 
 export namespace druid::core
 {
