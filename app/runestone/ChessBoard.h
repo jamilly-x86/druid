@@ -6,10 +6,30 @@
 
 namespace runestone::chessboard
 {
+	/// @brief Represents a square on a chess board.
+	///
+	/// Squares are numbered 0-63 using little-endian rank-file mapping:
+	/// A1 = 0, B1 = 1, ..., H1 = 7, A2 = 8, ..., H2 = 15, ..., A8 = 56, ..., H8 = 63.
+	/// Lower ranks use lower bit numbers (standard chess programming layout).
+	enum class Square : std::uint8_t
+	{
+		// clang-format off
+		A1, B1, C1, D1, E1, F1, G1, H1,
+		A2, B2, C2, D2, E2, F2, G2, H2,
+		A3, B3, C3, D3, E3, F3, G3, H3,
+		A4, B4, C4, D4, E4, F4, G4, H4,
+		A5, B5, C5, D5, E5, F5, G5, H5,
+		A6, B6, C6, D6, E6, F6, G6, H6,
+		A7, B7, C7, D7, E7, F7, G7, H7,
+		A8, B8, C8, D8, E8, F8, G8, H8,
+		Size
+		// clang-format on
+	};
+
 	/// @class ChessBoard
 	/// @brief ChessBoard is a 64-bit bitboard (unsigned long long) for chessboard manipulation.
 	///
-	/// A bitboard is a compact 64-bit representation of a chessboard where each bit corresponds
+	/// A bitboard is a compact 64-bit representation of a chess board where each bit corresponds
 	/// to one square (0–63). Bitboards allow extremely fast move generation and attack computations
 	/// through low-level bitwise operations.
 	///
@@ -25,26 +45,26 @@ namespace runestone::chessboard
 	class ChessBoard
 	{
 	public:
-		/// @brief value_type represents the underlying unsigned 64-bit integer type.
-		using value_type = std::uint64_t;
+		/// @brief bitboard represents the underlying unsigned 64-bit integer type.
+		using bitboard = std::uint64_t;
 
 		/// @brief Default-construct an empty (all-zero) bitboard.
 		constexpr ChessBoard() noexcept = default;
 
-		/// @brief Construct a chess board with a raw 64-bit value.
+		/// @brief Construct a chessboard with a raw 64-bit value.
 		/// @param value The 64-bit value representing the bit pattern.
-		constexpr explicit ChessBoard(value_type value) noexcept : value_(value)
+		constexpr explicit ChessBoard(bitboard value) noexcept : value_(value)
 		{
 		}
 
 		/// @brief Get the raw underlying bit pattern.
 		/// @return The internal 64-bit unsigned value.
-		[[nodiscard]] constexpr auto raw() const noexcept -> value_type
+		[[nodiscard]] constexpr auto raw() const noexcept -> bitboard
 		{
 			return value_;
 		}
 
-		/// @brief Check whether this bitboard is empty (no bits set).
+		/// @brief Check whether this chessboard is empty (no bits set).
 		/// @return True if no bits are set, false otherwise.
 		[[nodiscard]] constexpr auto is_empty() const noexcept -> bool
 		{
@@ -52,7 +72,7 @@ namespace runestone::chessboard
 		}
 
 		/// @brief Count the number of set bits (population count).
-		/// @return Number of 1-bits in the bitboard.
+		/// @return Number of 1-bits in the chessboard.
 		[[nodiscard]] constexpr auto pop_count() const noexcept -> int
 		{
 			return std::popcount(value_);
@@ -60,31 +80,31 @@ namespace runestone::chessboard
 
 		/// @brief Set the bit corresponding to the given square.
 		/// @param square The square index (0–63).
-		constexpr auto set_square(int square) noexcept -> void
+		constexpr auto set_square(Square square) noexcept -> void
 		{
-			value_ |= (1ULL << square);
+			value_ |= square_mask(square);
 		}
 
 		/// @brief Clear the bit corresponding to the given square.
 		/// @param square The square index (0–63).
-		constexpr auto clear_square(int square) noexcept -> void
+		constexpr auto clear_square(Square square) noexcept -> void
 		{
-			value_ &= ~(1ULL << square);
+			value_ &= ~(square_mask(square));
 		}
 
 		/// @brief Toggle (invert) the bit at a given square.
 		/// @param square The square index (0–63).
-		constexpr auto toggle_square(int square) noexcept -> void
+		constexpr auto toggle_square(Square square) noexcept -> void
 		{
-			value_ ^= (1ULL << square);
+			value_ ^= square_mask(square);
 		}
 
 		/// @brief Test whether the bit corresponding to a square is set.
 		/// @param square The square index (0–63).
 		/// @return True if the bit is set, false otherwise.
-		[[nodiscard]] constexpr auto test(int square) const noexcept -> bool
+		[[nodiscard]] constexpr auto test(Square square) const noexcept -> bool
 		{
-			return ((value_ >> square) & 1ULL) != 0ULL;
+			return ((value_ >> static_cast<bitboard>(square)) & 1ULL) != 0ULL;
 		}
 
 		/// @brief Find index of least significant set bit (LSB).
@@ -108,7 +128,7 @@ namespace runestone::chessboard
 			{
 				std::unreachable();
 			}
-			return 63 - std::countl_zero(value_);
+			return static_cast<int>(Square::Size) - 1 - std::countl_zero(value_);
 		}
 
 		/// @brief Pop (remove and return) the least significant bit (LSB).
@@ -250,10 +270,18 @@ namespace runestone::chessboard
 		}
 
 	private:
-		value_type value_{0ULL};
+		/// @brief Return a chessboard mask with a single bit set at the given square.
+		/// @param square The square index (0–63).
+		/// @return A 64-bit chessboard with only the bit at `square` set.
+		[[nodiscard]] static constexpr auto square_mask(Square square) noexcept-> bitboard
+		{
+			return 1ULL << static_cast<bitboard>(square);
+		}
+
+		bitboard value_{0ULL};
 	};
 
-	/// @namespace bitmask
+	/// @namespace squaremask
 	/// @brief Common chessboard (bitboard) masks.
 	///
 	/// These constants define frequently used bitboard masks for files, ranks,
@@ -263,7 +291,7 @@ namespace runestone::chessboard
 	/// For more information see:
 	/// - https://www.chessprogramming.org/Bitboards
 	/// - https://www.chessprogramming.org/Board_Representation
-	namespace bitmask
+	namespace squaremask
 	{
 		// File chessboards
 		constexpr ChessBoard AFile(0x0101010101010101ULL);
@@ -298,46 +326,5 @@ namespace runestone::chessboard
 		constexpr ChessBoard DarkSquares(0xAA55AA55AA55AA55ULL);
 		constexpr ChessBoard DiagonalA1H8(0x8040201008040201ULL);
 		constexpr ChessBoard AntiDiagonalH1A8(0x0102040810204080ULL);
-	}
-
-	/// @namespace runestone::chessboard::square
-	/// @brief Defines square indices (0–63) corresponding to each square on a chessboard.
-	///
-	/// Each constant represents a single square in the little-endian rank-file mapping used
-	/// throughout the bitboard system:
-	/// - Bit 0 = A1, Bit 7 = H1
-	/// - Bit 56 = A8, Bit 63 = H8
-	///
-	/// These indices are used with functions such as `ChessBoard::set_square()`,
-	/// `ChessBoard::clear_square()`, `ChessBoard::toggle_square()`, and `ChessBoard::test()`
-	/// to reference individual board squares by name rather than numeric index.
-	///
-	/// @par Example
-	/// @code
-	/// using namespace runestone::chessboard::square;
-	///
-	/// ChessBoard board;
-	/// board.set_square(E4);
-	/// board.set_square(A2);
-	///
-	/// EXPECT_TRUE(board.test(E4));
-	/// EXPECT_EQ(board.pop_count(), 2);
-	/// @endcode
-	///
-	/// @see runestone::chessboard::ChessBoard
-	/// @see runestone::chessboard::bitmask
-	namespace square
-	{
-		// clang-format off
-		constexpr auto
-			A1 = 0,  B1 = 1,  C1 = 2,  D1 = 3,  E1 = 4,  F1 = 5,  G1 = 6,  H1 = 7,
-			A2 = 8,  B2 = 9,  C2 = 10, D2 = 11, E2 = 12, F2 = 13, G2 = 14, H2 = 15,
-			A3 = 16, B3 = 17, C3 = 18, D3 = 19, E3 = 20, F3 = 21, G3 = 22, H3 = 23,
-			A4 = 24, B4 = 25, C4 = 26, D4 = 27, E4 = 28, F4 = 29, G4 = 30, H4 = 31,
-			A5 = 32, B5 = 33, C5 = 34, D5 = 35, E5 = 36, F5 = 37, G5 = 38, H5 = 39,
-			A6 = 40, B6 = 41, C6 = 42, D6 = 43, E6 = 44, F6 = 45, G6 = 46, H6 = 47,
-			A7 = 48, B7 = 49, C7 = 50, D7 = 51, E7 = 52, F7 = 53, G7 = 54, H7 = 55,
-			A8 = 56, B8 = 57, C8 = 58, D8 = 59, E8 = 60, F8 = 61, G8 = 62, H8 = 63;
-		// clang-format on
 	}
 }
