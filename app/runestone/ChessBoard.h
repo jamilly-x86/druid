@@ -266,38 +266,38 @@ namespace runestone::chessboard
 	namespace bitmask
 	{
 		// File chessboards
-		inline constexpr ChessBoard AFile(0x0101010101010101ULL);
-		inline constexpr ChessBoard BFile(AFile.raw() << 1U);
-		inline constexpr ChessBoard CFile(AFile.raw() << 2U);
-		inline constexpr ChessBoard DFile(AFile.raw() << 3U);
-		inline constexpr ChessBoard EFile(AFile.raw() << 4U);
-		inline constexpr ChessBoard FFile(AFile.raw() << 5U);
-		inline constexpr ChessBoard GFile(AFile.raw() << 6U);
-		inline constexpr ChessBoard HFile(AFile.raw() << 7U);
+		constexpr ChessBoard AFile(0x0101010101010101ULL);
+		constexpr ChessBoard BFile(AFile.raw() << 1U);
+		constexpr ChessBoard CFile(AFile.raw() << 2U);
+		constexpr ChessBoard DFile(AFile.raw() << 3U);
+		constexpr ChessBoard EFile(AFile.raw() << 4U);
+		constexpr ChessBoard FFile(AFile.raw() << 5U);
+		constexpr ChessBoard GFile(AFile.raw() << 6U);
+		constexpr ChessBoard HFile(AFile.raw() << 7U);
 
 		// Rank chessboards
-		inline constexpr ChessBoard Rank1(0xFFULL);
-		inline constexpr ChessBoard Rank2(Rank1.raw() << (8 * 1U));
-		inline constexpr ChessBoard Rank3(Rank1.raw() << (8 * 2U));
-		inline constexpr ChessBoard Rank4(Rank1.raw() << (8 * 3U));
-		inline constexpr ChessBoard Rank5(Rank1.raw() << (8 * 4U));
-		inline constexpr ChessBoard Rank6(Rank1.raw() << (8 * 5U));
-		inline constexpr ChessBoard Rank7(Rank1.raw() << (8 * 6U));
-		inline constexpr ChessBoard Rank8(Rank1.raw() << (8 * 7U));
+		constexpr ChessBoard Rank1(0xFFULL);
+		constexpr ChessBoard Rank2(Rank1.raw() << (8 * 1U));
+		constexpr ChessBoard Rank3(Rank1.raw() << (8 * 2U));
+		constexpr ChessBoard Rank4(Rank1.raw() << (8 * 3U));
+		constexpr ChessBoard Rank5(Rank1.raw() << (8 * 4U));
+		constexpr ChessBoard Rank6(Rank1.raw() << (8 * 5U));
+		constexpr ChessBoard Rank7(Rank1.raw() << (8 * 6U));
+		constexpr ChessBoard Rank8(Rank1.raw() << (8 * 7U));
 
 		// Edge chessboards
-		inline constexpr ChessBoard NotAFile(~AFile.raw());
-		inline constexpr ChessBoard NotHFile(~HFile.raw());
-		inline constexpr ChessBoard NotRank1(~Rank1.raw());
-		inline constexpr ChessBoard NotRank8(~Rank8.raw());
+		constexpr ChessBoard NotAFile(~AFile.raw());
+		constexpr ChessBoard NotHFile(~HFile.raw());
+		constexpr ChessBoard NotRank1(~Rank1.raw());
+		constexpr ChessBoard NotRank8(~Rank8.raw());
 
 		// Special chessboards
-		inline constexpr ChessBoard Empty(0x0000000000000000ULL);
-		inline constexpr ChessBoard Full(0xFFFFFFFFFFFFFFFFULL);
-		inline constexpr ChessBoard LightSquares(0x55AA55AA55AA55AAULL);
-		inline constexpr ChessBoard DarkSquares(0xAA55AA55AA55AA55ULL);
-		inline constexpr ChessBoard DiagonalA1H8(0x8040201008040201ULL);
-		inline constexpr ChessBoard AntiDiagonalH1A8(0x0102040810204080ULL);
+		constexpr ChessBoard Empty(0x0000000000000000ULL);
+		constexpr ChessBoard Full(0xFFFFFFFFFFFFFFFFULL);
+		constexpr ChessBoard LightSquares(0x55AA55AA55AA55AAULL);
+		constexpr ChessBoard DarkSquares(0xAA55AA55AA55AA55ULL);
+		constexpr ChessBoard DiagonalA1H8(0x8040201008040201ULL);
+		constexpr ChessBoard AntiDiagonalH1A8(0x0102040810204080ULL);
 	}
 
 	/// @namespace runestone::chessboard::square
