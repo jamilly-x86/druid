@@ -107,7 +107,7 @@ namespace runestone::chessboard
 			return ((value_ >> static_cast<bitboard>(square)) & 1ULL) != 0ULL;
 		}
 
-		/// @brief Find index of least significant set bit (LSB).
+		/// @brief Find index of the least significant set bit (LSB).
 		/// @return Square index [0–63] of the least significant 1-bit.
 		/// @pre Bitboard must not be empty (undefined if `value_ == 0`).
 		[[nodiscard]] constexpr auto least_significant_bit() const noexcept -> int
@@ -119,7 +119,7 @@ namespace runestone::chessboard
 			return std::countr_zero(value_);
 		}
 
-		/// @brief Find index of most significant set bit (MSB).
+		/// @brief Find index of the most significant set bit (MSB).
 		/// @return Square index [0–63] of the most significant 1-bit.
 		/// @pre Bitboard must not be empty (undefined if `value_ == 0`).
 		[[nodiscard]] constexpr auto most_significant_bit() const noexcept -> int
