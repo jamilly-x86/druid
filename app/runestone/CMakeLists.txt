@@ -1,6 +1,9 @@
 project(runestone)
 
-include(GoogleTest)
-include(CTest)
+project_add_executable(${PROJECT_NAME})
 
-add_subdirectory(src)
+target_sources(${PROJECT_NAME} PRIVATE
+        ChessBoard.h
+        main.cpp
+        Types.h
+)
