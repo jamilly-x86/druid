@@ -4,8 +4,24 @@
 #include <cstdint>
 #include <utility>
 
+/// @namespace runestone::chessboard
+/// @brief Core chessboard representation utilities for the Runestone engine.
+///
+/// The `chessboard` namespace defines the fundamental types and constants
+/// used for representing and manipulating a chessboard at the bit level.
+/// It provides:
+/// - The `Square` enum, representing individual board coordinates (0–63)
+///   using little-endian rank-file mapping.
+/// - The `ChessBoard` class, a lightweight 64-bit wrapper for efficient
+///   board operations and bit manipulation.
+/// - Predefined constants in `squaremask`, representing file, rank, and
+///   diagonal bitboard patterns.
+///
+/// These primitives form the foundation for higher-level board structures
+/// such as `Position`, move generation, and attack computation.
 namespace runestone::chessboard
 {
+	/// @enum Square
 	/// @brief Represents a square on a chess board.
 	///
 	/// Squares are numbered 0-63 using little-endian rank-file mapping:
