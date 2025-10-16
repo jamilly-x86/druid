@@ -1,7 +1,6 @@
-#include <Position.h>
 #include <BitBoard.h>
+#include <Position.h>
 #include <Utils.h>
-
 #include <cctype>
 #include <string>
 
@@ -130,7 +129,7 @@ auto Position::get_side_to_move() const noexcept -> Color
 
 auto Position::set_castling_rights(char c) -> void
 {
-	switch(c)
+	switch (c)
 	{
 		case 'K':
 		{
@@ -210,5 +209,3 @@ auto Position::set_full_move_counter(const std::string& counter) -> void
 {
 	return full_move_number_;
 }
-
-

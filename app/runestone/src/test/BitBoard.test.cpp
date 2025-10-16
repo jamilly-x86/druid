@@ -1,5 +1,4 @@
 #include <BitBoard.h>
-
 #include <gtest/gtest.h>
 #include <magic_enum/magic_enum.hpp>
 
@@ -363,7 +362,6 @@ TEST(BitBoard, popCountForMultipleBits)
 
 	EXPECT_EQ(runestone::bitboard::PopCount(bitboard), number_of_set_bits);
 }
-
 
 TEST(BitBoard, lsbForSingleBit)
 {

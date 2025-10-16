@@ -2,7 +2,6 @@
 
 #include <EnumMask.h>
 #include <Types.h>
-
 #include <array>
 #include <string>
 #include <string_view>

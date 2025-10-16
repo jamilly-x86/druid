@@ -1,7 +1,5 @@
 #include <EnumMask.h>
-
 #include <gtest/gtest.h>
-
 #include <magic_enum/magic_enum.hpp>
 #include <ranges>
 
@@ -31,13 +29,6 @@ namespace
 	constexpr auto ReadExecute = magic_enum::enum_integer(Permissions::Read) + magic_enum::enum_integer(Permissions::Execute);
 	constexpr auto ReadWriteExecute =
 		magic_enum::enum_integer(Permissions::Read) + magic_enum::enum_integer(Permissions::Write) + magic_enum::enum_integer(Permissions::Execute);
-
-	enum class FileFlags : uint8_t
-	{
-		Hidden = 1 << 0,
-		ReadOnly = 1 << 1,
-		System = 1 << 2
-	};
 
 	// For testing with different underlying types
 	enum class ByteEnum : uint8_t
