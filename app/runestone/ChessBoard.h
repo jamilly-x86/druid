@@ -4,7 +4,7 @@
 #include <cassert>
 #include <cstdint>
 
-namespace runestone
+namespace runestone::chessboard
 {
 	/// @class ChessBoard
 	/// @brief ChessBoard is a 64-bit bitboard (unsigned long long) for chessboard manipulation.
@@ -247,7 +247,8 @@ namespace runestone
 		value_type value_{0ULL};
 	};
 
-	/// @brief Common chessboard bitboard masks.
+	/// @namespace bitmask
+	/// @brief Common chessboard (bitboard) masks.
 	///
 	/// These constants define frequently used bitboard masks for files, ranks,
 	/// board edges, diagonals, and color squares. They are used during move
@@ -291,5 +292,46 @@ namespace runestone
 		inline constexpr ChessBoard DarkSquares(0xAA55AA55AA55AA55ULL);
 		inline constexpr ChessBoard DiagonalA1H8(0x8040201008040201ULL);
 		inline constexpr ChessBoard AntiDiagonalH1A8(0x0102040810204080ULL);
+	}
+
+	/// @namespace runestone::chessboard::square
+	/// @brief Defines square indices (0–63) corresponding to each square on a chessboard.
+	///
+	/// Each constant represents a single square in the little-endian rank-file mapping used
+	/// throughout the bitboard system:
+	/// - Bit 0 = A1, Bit 7 = H1
+	/// - Bit 56 = A8, Bit 63 = H8
+	///
+	/// These indices are used with functions such as `ChessBoard::set_square()`,
+	/// `ChessBoard::clear_square()`, `ChessBoard::toggle_square()`, and `ChessBoard::test()`
+	/// to reference individual board squares by name rather than numeric index.
+	///
+	/// @par Example
+	/// @code
+	/// using namespace runestone::chessboard::square;
+	///
+	/// ChessBoard board;
+	/// board.set_square(E4);
+	/// board.set_square(A2);
+	///
+	/// EXPECT_TRUE(board.test(E4));
+	/// EXPECT_EQ(board.pop_count(), 2);
+	/// @endcode
+	///
+	/// @see runestone::chessboard::ChessBoard
+	/// @see runestone::chessboard::bitmask
+	namespace square
+	{
+		// clang-format off
+		constexpr auto
+			A1 = 0,  B1 = 1,  C1 = 2,  D1 = 3,  E1 = 4,  F1 = 5,  G1 = 6,  H1 = 7,
+			A2 = 8,  B2 = 9,  C2 = 10, D2 = 11, E2 = 12, F2 = 13, G2 = 14, H2 = 15,
+			A3 = 16, B3 = 17, C3 = 18, D3 = 19, E3 = 20, F3 = 21, G3 = 22, H3 = 23,
+			A4 = 24, B4 = 25, C4 = 26, D4 = 27, E4 = 28, F4 = 29, G4 = 30, H4 = 31,
+			A5 = 32, B5 = 33, C5 = 34, D5 = 35, E5 = 36, F5 = 37, G5 = 38, H5 = 39,
+			A6 = 40, B6 = 41, C6 = 42, D6 = 43, E6 = 44, F6 = 45, G6 = 46, H6 = 47,
+			A7 = 48, B7 = 49, C7 = 50, D7 = 51, E7 = 52, F7 = 53, G7 = 54, H7 = 55,
+			A8 = 56, B8 = 57, C8 = 58, D8 = 59, E8 = 60, F8 = 61, G8 = 62, H8 = 63;
+		// clang-format on
 	}
 }
