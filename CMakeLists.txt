@@ -35,7 +35,10 @@ include(GoogleTest)
 option(BUILD_ENABLE_HARDENED "Enable hardened compiler options" OFF)
 option(BUILD_TESTING "Enable building ${PROJECT_NAME} test applications." ON)
 
-set(PROJECT_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(PROJECT_INCLUDE_DIR
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/runestone
+)
 include_directories(${PROJECT_INCLUDE_DIR})
 
 # Define build directory includes as system to avoid tools like clang-tidy from scanning them.
