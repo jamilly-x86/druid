@@ -1,8 +1,8 @@
 #pragma once
 
 #include <bit>
-#include <cassert>
 #include <cstdint>
+#include <utility>
 
 namespace runestone::chessboard
 {
@@ -92,7 +92,10 @@ namespace runestone::chessboard
 		/// @pre Bitboard must not be empty (undefined if `value_ == 0`).
 		[[nodiscard]] constexpr auto least_significant_bit() const noexcept -> int
 		{
-			assert(value_ != 0ULL && "ChessBoard::least_significant_bit() called on empty bitboard");
+			if (value_ == 0ULL)
+			{
+				std::unreachable();
+			}
 			return std::countr_zero(value_);
 		}
 
@@ -101,7 +104,10 @@ namespace runestone::chessboard
 		/// @pre Bitboard must not be empty (undefined if `value_ == 0`).
 		[[nodiscard]] constexpr auto most_significant_bit() const noexcept -> int
 		{
-			assert(value_ != 0ULL && "ChessBoard::most_significant_bit() called on empty bitboard");
+			if (value_ == 0ULL)
+			{
+				std::unreachable();
+			}
 			return 63 - std::countl_zero(value_);
 		}
 
