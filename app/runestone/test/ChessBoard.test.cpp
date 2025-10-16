@@ -135,6 +135,7 @@ TEST(ChessBoard, notInvertsBits)
     constexpr ChessBoard result = afile.not_();
 
     EXPECT_EQ(result.raw(), ~runestone::chessboard::bitmask::AFile.raw());
+	// afile should be unchanged.
 	EXPECT_EQ(afile.raw(), runestone::chessboard::bitmask::AFile.raw());
 }
 
@@ -145,6 +146,7 @@ TEST(ChessBoard, orAssign)
     afile.or_assign(bfile);
 
     EXPECT_EQ(afile.raw(), runestone::chessboard::bitmask::AFile.raw() | runestone::chessboard::bitmask::BFile.raw());
+	// bfile should be unchanged.
 	EXPECT_EQ(bfile.raw(), runestone::chessboard::bitmask::BFile.raw());
 }
 
@@ -155,6 +157,7 @@ TEST(ChessBoard, andAssign)
 	afile.and_assign(bfile);
 
 	EXPECT_EQ(afile.raw(), runestone::chessboard::bitmask::AFile.raw() & runestone::chessboard::bitmask::BFile.raw());
+	// bfile should be unchanged.
 	EXPECT_EQ(bfile.raw(), runestone::chessboard::bitmask::BFile.raw());
 }
 
@@ -165,15 +168,16 @@ TEST(ChessBoard, xorAssign)
 	afile.xor_assign(bfile);
 
 	EXPECT_EQ(afile.raw(), runestone::chessboard::bitmask::AFile.raw() ^ runestone::chessboard::bitmask::BFile.raw());
+	// bfile should be unchanged.
 	EXPECT_EQ(bfile.raw(), runestone::chessboard::bitmask::BFile.raw());
 }
 
 TEST(ChessBoard, equalityAndInequalityOperators)
 {
-    constexpr ChessBoard afile(runestone::chessboard::bitmask::AFile);
-	constexpr ChessBoard afile2(runestone::chessboard::bitmask::AFile);
-    constexpr ChessBoard bfile(runestone::chessboard::bitmask::BFile);
-    constexpr ChessBoard cfile(runestone::chessboard::bitmask::CFile);
+    constexpr ChessBoard afile(runestone::chessboard::bitmask::AFile.raw());
+	constexpr ChessBoard afile2(runestone::chessboard::bitmask::AFile.raw());
+    constexpr ChessBoard bfile(runestone::chessboard::bitmask::BFile.raw());
+    constexpr ChessBoard cfile(runestone::chessboard::bitmask::CFile.raw());
 
     EXPECT_TRUE(afile.equals(afile2));
     EXPECT_TRUE(afile.not_equals(bfile));
