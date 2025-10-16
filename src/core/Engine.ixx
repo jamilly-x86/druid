@@ -2,6 +2,8 @@ module;
 
 #include <core/Signal.h>
 #include <chrono>
+#include <utility>
+#include <variant>
 
 export module druid.core.engine;
 
@@ -158,16 +160,37 @@ export namespace druid::core
 			return *ptr;
 		}
 
-		auto event(Event::Type x) -> void
+		template <typename... Ts>
+		struct Overloaded : Ts...
 		{
-			switch (x)
-			{
-				case Event::Type::Close:
-					quit();
-					break;
-				default:
-					break;
-			}
+			using Ts::operator()...;
+		};
+
+		auto event(const Event& x) -> void
+		{
+			std::visit(
+				Overloaded{
+					[this](const EventWindow& x) { on_event_window_(x); },
+					[this](const EventKeyboard& x) { on_event_keyboard_(x); },
+					[this](const EventMouse& x) { on_event_mouse_(x); },
+					[](auto) {},
+				},
+				x);
+		}
+
+		auto on_event_window(auto x) -> void
+		{
+			on_event_window_.connect(std::forward<decltype(x)>(x));
+		}
+
+		auto on_event_keyboard(auto x) -> void
+		{
+			on_event_keyboard_.connect(std::forward<decltype(x)>(x));
+		}
+
+		auto on_event_mouse(auto x) -> void
+		{
+			on_event_mouse_.connect(std::forward<decltype(x)>(x));
 		}
 
 		auto on_update(auto x) -> void
@@ -191,6 +214,9 @@ export namespace druid::core
 		Signal<void(std::chrono::steady_clock::duration)> on_update_;
 		Signal<void(std::chrono::steady_clock::duration)> on_update_fixed_;
 		Signal<void()> on_update_end_;
+		Signal<void(const druid::core::EventWindow&)> on_event_window_;
+		Signal<void(const druid::core::EventKeyboard&)> on_event_keyboard_;
+		Signal<void(const druid::core::EventMouse&)> on_event_mouse_;
 
 		std::chrono::steady_clock::time_point start_;
 		std::chrono::steady_clock::duration accumulate_{};

@@ -1,12 +1,15 @@
 #include <chrono>
 #include <exception>
+#include <glm/ext/vector_float2.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/matrix.hpp>
 #include <iostream>
+#include <magic_enum/magic_enum.hpp>
 
 import druid.core.engine;
+import druid.core.event;
 import druid.graphics.node;
 import druid.graphics.node.rectangle;
 import druid.graphics.node.text;
@@ -20,6 +23,7 @@ try
 {
 	druid::core::Engine engine;
 	auto& window = engine.create_service<druid::graphics::Window>();
+
 	// NOLINTBEGIN
 
 	constexpr auto width{1280};
@@ -43,23 +47,6 @@ try
 	paddle1.set_position({width * 0.1, height * 0.5});
 	paddle1.set_size({25, 100});
 	paddle1.set_color(Color::Green);
-	// auto& key = paddle1.create_child<KeyHandler>();
-
-	// auto& action_map = engine.create_child<ActionMap>();
-	// auto& move_up = action_map["move_up"];
-	// move_up.set_type(KeyBoard::KeyPressed);
-	// move_up.set_key(ArrowUp);
-	// move_up.set_joystickId(0);
-	// move_up.set_axis(Axis::X);
-	// move_up.set_range(0, 1);
-	// move_up.on_trigger([] {});
-
-	// paddle1.on_update([&move_up] {
-	//.  paddle1.set_velocity(0, 0);
-	//   if(move_up.is_pressed()) {
-	//.    paddle1.set_velocity(0, 1);
-	//   }
-	// });
 
 	auto& paddle2 = root.create_node<druid::graphics::NodeRectangle>();
 	paddle2.set_position({width * 0.9, height * 0.5});
@@ -71,16 +58,44 @@ try
 	ball.set_size({24, 24});
 	ball.set_color(Color::White);
 
-	auto velocity_ball = glm::vec2{50.0F, 0.0F};
+	engine.on_event_window([&engine](auto) { engine.quit(); });
+
+	auto paddle1_move_up = false;
+	auto paddle1_move_down = false;
+	engine.on_event_keyboard(
+		[&paddle1_move_up, &paddle1_move_down](auto& x)
+		{
+			std::cout << "State: " << magic_enum::enum_name(x.type) << " Key: " << magic_enum::enum_name(x.key) << "\n";
+
+			using druid::core::EventKeyboard;
+			using Key = EventKeyboard::Key;
+
+			if (x.type != EventKeyboard::Type::KeyPressed)
+			{
+				return;
+			}
+
+			paddle1_move_up = x.key == Key::Up;
+			paddle1_move_down = x.key == Key::Down;
+		});
 
 	engine.on_update_fixed(
-		[&paddle1, &paddle2, &ball, &velocity_ball](std::chrono::steady_clock::duration dt)
+		[&paddle1, &paddle2, &ball, &paddle1_move_up, &paddle1_move_down](std::chrono::steady_clock::duration dt)
 		{
+			auto velocity_ball = glm::vec2{50.0F, 0.0F};
+			auto velocity_paddle = glm::vec2{0.0F, 50.0F};
+
 			// Move Ball
 			using seconds = std::chrono::duration<double>;
 			const auto dt_seconds = std::chrono::duration_cast<seconds>(dt).count();
-			const auto position = glm::vec2{velocity_ball.x * dt_seconds, velocity_ball.y * dt_seconds};
+			auto position = glm::vec2{velocity_ball.x * dt_seconds, velocity_ball.y * dt_seconds};
 			ball.set_position(position + ball.get_position());
+
+			// Move Paddle
+			position = glm::vec2{velocity_paddle.x * dt_seconds, velocity_paddle.y * dt_seconds};
+			position.y *= paddle1_move_up ? -1 : 0;
+			position.y *= paddle1_move_down ? 1 : 0;
+			paddle1.set_position(paddle1.get_position() + position);
 
 			const auto ball_top_left = ball.top_left() + ball.get_position();
 			const auto ball_bottom_right = ball.bottom_right() + ball.get_position();
