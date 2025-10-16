@@ -2,15 +2,18 @@ module;
 
 #include <raylib.h>
 #include <chrono>
-
-// Need to define a large max range for magic_enum
-// to support all of the raylib keys.
-#define MAGIC_ENUM_RANGE_MIN 0
-#define MAGIC_ENUM_RANGE_MAX 400
-#include <magic_enum/magic_enum.hpp>
 #include <memory>
 #include <string>
 #include <string_view>
+
+// Need to define a large max range for magic_enum
+// to support all of the raylib keys.
+// NOLINTNEXTLINE (cppcoreguidelines-macro-usage)
+#define MAGIC_ENUM_RANGE_MIN 0
+
+// NOLINTNEXTLINE (cppcoreguidelines-macro-usage)
+#define MAGIC_ENUM_RANGE_MAX 400
+#include <magic_enum/magic_enum.hpp>
 
 export module druid.graphics.window;
 import druid.core.engine;
