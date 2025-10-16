@@ -289,7 +289,7 @@ namespace runestone::chessboard
 		/// @brief Return a chessboard mask with a single bit set at the given square.
 		/// @param square The square index (0–63).
 		/// @return A 64-bit chessboard with only the bit at `square` set.
-		[[nodiscard]] static constexpr auto square_mask(Square square) noexcept-> bitboard
+		[[nodiscard]] static constexpr auto square_mask(Square square) noexcept -> bitboard
 		{
 			return 1ULL << static_cast<bitboard>(square);
 		}
