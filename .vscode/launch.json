@@ -1,0 +1,26 @@
+// File: .vscode/launch.json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run druid-pong (Debug)",
+            "type": "lldb", // requires CodeLLDB extension on macOS/Linux/Windows
+            "request": "launch",
+            "program": "${workspaceFolder}/build/app/pong/druid-pong",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopOnEntry": false,
+            "sourceLanguages": [
+                "cpp"
+            ]
+        },
+        {
+            "name": "Run druid-pong (Terminal)",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/.vscode/launch_cpp_runner.js",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        }
+    ]
+}

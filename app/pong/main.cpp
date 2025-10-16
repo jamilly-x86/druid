@@ -31,6 +31,12 @@ try
 
 	auto& root = window.root_node();
 
+	auto& title = root.create_node<druid::graphics::NodeText>();
+	title.set_position({width * 0.42F, 0.0F});
+	title.set_text("DRUID PONG (C++26)");
+	title.set_font_size(24);
+	title.set_color(Color::White);
+
 	auto& scoreLeft = root.create_node<druid::graphics::NodeText>();
 	scoreLeft.set_position({width * 0.3F, height * 0.1F});
 	scoreLeft.set_text("0");
@@ -70,31 +76,25 @@ try
 			using druid::core::EventKeyboard;
 			using Key = EventKeyboard::Key;
 
-			if (x.type != EventKeyboard::Type::KeyPressed)
-			{
-				return;
-			}
-
-			paddle1_move_up = x.key == Key::Up;
-			paddle1_move_down = x.key == Key::Down;
+			paddle1_move_up = x.type == EventKeyboard::Type::KeyPressed and x.key == Key::Up;
+			paddle1_move_down = x.type == EventKeyboard::Type::KeyPressed and x.key == Key::Down;
 		});
 
 	engine.on_update_fixed(
 		[&paddle1, &paddle2, &ball, &paddle1_move_up, &paddle1_move_down](std::chrono::steady_clock::duration dt)
 		{
 			auto velocity_ball = glm::vec2{50.0F, 0.0F};
-			auto velocity_paddle = glm::vec2{0.0F, 50.0F};
+			auto velocity_paddle = glm::vec2{0.0F, 150.0F};
 
 			// Move Ball
-			using seconds = std::chrono::duration<double>;
+			using seconds = std::chrono::duration<float>;
 			const auto dt_seconds = std::chrono::duration_cast<seconds>(dt).count();
 			auto position = glm::vec2{velocity_ball.x * dt_seconds, velocity_ball.y * dt_seconds};
 			ball.set_position(position + ball.get_position());
 
 			// Move Paddle
-			position = glm::vec2{velocity_paddle.x * dt_seconds, velocity_paddle.y * dt_seconds};
-			position.y *= paddle1_move_up ? -1 : 0;
-			position.y *= paddle1_move_down ? 1 : 0;
+			velocity_paddle.y *= paddle1_move_up ? -1 : paddle1_move_down ? 1 : 0;
+			position = velocity_paddle * dt_seconds;
 			paddle1.set_position(paddle1.get_position() + position);
 
 			const auto ball_top_left = ball.top_left() + ball.get_position();
