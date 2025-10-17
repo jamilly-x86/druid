@@ -6,7 +6,6 @@ target_sources(${PROJECT_NAME} PRIVATE
     main.cpp
 )
 
-target_sources(${PROJECT_NAME} PRIVATE
-    FILE_SET cxx_modules TYPE CXX_MODULES FILES
-        ChessBoard.ixx
-)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}-modules)
+
+add_subdirectory(src)
