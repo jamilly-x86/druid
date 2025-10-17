@@ -1,9 +1,6 @@
-module;
-
-#include <entt/entity/entity.hpp>
-#include <entt/entity/registry.hpp>
-
 export module druid.core.entity;
+export import <entt/entity/entity.hpp>;
+export import <entt/entity/registry.hpp>;
 
 export namespace druid::core
 {
@@ -23,8 +20,7 @@ export namespace druid::core
 		template <typename T>
 		auto remove_component() -> void
 		{
-			// registry_->erase<T>();
-			registry_->clear<T>();
+			registry_->erase<T>(id_);
 		}
 
 		template <typename... Args>
