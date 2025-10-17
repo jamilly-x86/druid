@@ -1,183 +1,182 @@
 #include <gtest/gtest.h>
-#include <ChessBoard.h>
 
-using runestone::chessboard::ChessBoard;
+import runestone.chessboard;
 
 TEST(ChessBoard, defaultConstructsToEmpty)
 {
-    constexpr ChessBoard board;
+    constexpr runestone::ChessBoard board;
 
-    EXPECT_TRUE(board.is_empty());
-    EXPECT_EQ(board.raw(), 0ULL);
-    EXPECT_EQ(board.pop_count(), 0);
+    EXPECT_TRUE(board.empty());
+    EXPECT_EQ(board.occupancies(), 0ULL);
+    EXPECT_EQ(board.size(), 0);
 }
 
 TEST(ChessBoard, constructsFromRawValue)
 {
 	constexpr auto set_bits = 8;
-    constexpr ChessBoard board(runestone::chessboard::squaremask::AFile.raw());
+    constexpr runestone::ChessBoard board(runestone::ChessBoard::AFile);
 
-    EXPECT_EQ(board.raw(), runestone::chessboard::squaremask::AFile.raw());
-    EXPECT_FALSE(board.is_empty());
-    EXPECT_EQ(board.pop_count(), set_bits);
+    EXPECT_EQ(board.occupancies(), runestone::ChessBoard::AFile);
+    EXPECT_FALSE(board.empty());
+    EXPECT_EQ(board.size(), set_bits);
 }
 
-TEST(ChessBoard, setIndividualBits)
+TEST(ChessBoard, occupySquare)
 {
-	ChessBoard board;
-	board.set_square(runestone::chessboard::Square::A1);
+	runestone::ChessBoard board;
+	board.occupy_square(runestone::ChessBoard::Square::A1);
 
-	EXPECT_TRUE(board.test(runestone::chessboard::Square::A1));
-	EXPECT_FALSE(board.is_empty());
-	EXPECT_EQ(board.pop_count(), 1);
+	EXPECT_TRUE(board.occupied(runestone::ChessBoard::Square::A1));
+	EXPECT_FALSE(board.empty());
+	EXPECT_EQ(board.size(), 1);
 
-	board.set_square(runestone::chessboard::Square::H8);
-	EXPECT_TRUE(board.test(runestone::chessboard::Square::H8));
+	board.occupy_square(runestone::ChessBoard::Square::H8);
+	EXPECT_TRUE(board.occupied(runestone::ChessBoard::Square::H8));
 
 	constexpr auto count = 2;
-	EXPECT_EQ(board.pop_count(), count);
+	EXPECT_EQ(board.size(), count);
 }
 
-TEST(ChessBoard, clearIndividualBits)
+TEST(ChessBoard, vacateSquare)
 {
-	ChessBoard board(runestone::chessboard::squaremask::AFile.and_(runestone::chessboard::squaremask::Rank1).raw());
-	board.clear_square(runestone::chessboard::Square::A1);
+	runestone::ChessBoard board(runestone::ChessBoard::AFile & runestone::ChessBoard::Rank1);
+	board.vacate_square(runestone::ChessBoard::Square::A1);
 
-	EXPECT_FALSE(board.test(runestone::chessboard::Square::A1));
-	EXPECT_EQ(board.pop_count(), 0);
+	EXPECT_FALSE(board.occupied(runestone::ChessBoard::Square::A1));
+	EXPECT_EQ(board.size(), 0);
 }
 
-TEST(ChessBoard, toggleIndividualBits)
+TEST(ChessBoard, flipSquareOccupancy)
 {
-	ChessBoard board;
-    board.toggle_square(runestone::chessboard::Square::A2);
-	board.toggle_square(runestone::chessboard::Square::A3);
+	runestone::ChessBoard board;
+    board.flip_square_occupancy(runestone::ChessBoard::Square::A2);
+	board.flip_square_occupancy(runestone::ChessBoard::Square::A3);
 
-    EXPECT_TRUE(board.test(runestone::chessboard::Square::A2));
-    EXPECT_TRUE(board.test(runestone::chessboard::Square::A3));
+    EXPECT_TRUE(board.occupied(runestone::ChessBoard::Square::A2));
+    EXPECT_TRUE(board.occupied(runestone::ChessBoard::Square::A3));
 
 	constexpr auto count = 2;
-    EXPECT_EQ(board.pop_count(), count);
+    EXPECT_EQ(board.size(), count);
 }
 
-TEST(ChessBoard, leastSignificantBitIndex)
+TEST(ChessBoard, findFirstOccupancy)
 {
-    constexpr ChessBoard board(runestone::chessboard::squaremask::AFile.raw());
-    EXPECT_EQ(board.least_significant_bit(), 0);
+    constexpr runestone::ChessBoard board(runestone::ChessBoard::AFile);
+    EXPECT_EQ(board.find_first_occupancy(), 0);
 }
 
-TEST(ChessBoard, mostSignificantBitIndex)
+TEST(ChessBoard, findLastOccupancy)
 {
-    constexpr ChessBoard board(runestone::chessboard::squaremask::AFile.raw());
+    constexpr runestone::ChessBoard board(runestone::ChessBoard::AFile);
 	constexpr auto set_bit_index = 56;
 
-    EXPECT_EQ(board.most_significant_bit(), set_bit_index);
+    EXPECT_EQ(board.find_last_occupancy(), set_bit_index);
 }
 
-TEST(ChessBoard, popLSBRemovesBitsInOrder)
+TEST(ChessBoard, popFirstOccupancy)
 {
 	constexpr auto bits_set2 = 0b10010000ULL;
 	constexpr auto bit_index2 = 4;
 	constexpr auto bits_set1 = 0b10000000ULL;
 	constexpr auto bit_index1 = 7;
 
-    ChessBoard board(bits_set2);
+    runestone::ChessBoard board(bits_set2);
 
-    EXPECT_EQ(board.pop_lsb(), bit_index2);
-    EXPECT_EQ(board.raw(), bits_set1);
+    EXPECT_EQ(board.pop_first_occupancy(), bit_index2);
+    EXPECT_EQ(board.occupancies(), bits_set1);
 
-    EXPECT_EQ(board.pop_lsb(), bit_index1);
-    EXPECT_TRUE(board.is_empty());
+    EXPECT_EQ(board.pop_first_occupancy(), bit_index1);
+    EXPECT_TRUE(board.empty());
 }
 
-TEST(ChessBoard, orCombinesDisjointBits)
+TEST(ChessBoard, unionOccupancies)
 {
-    constexpr ChessBoard afile(runestone::chessboard::squaremask::AFile.raw());
-    constexpr ChessBoard bfile(runestone::chessboard::squaremask::BFile.raw());
-    constexpr ChessBoard result = afile.or_(bfile);
+    constexpr runestone::ChessBoard afile(runestone::ChessBoard::AFile);
+    constexpr runestone::ChessBoard bfile(runestone::ChessBoard::BFile);
+    constexpr runestone::ChessBoard result = afile.union_occupancies(bfile);
 
-    EXPECT_EQ(result.raw(), runestone::chessboard::squaremask::AFile.raw() | runestone::chessboard::squaremask::BFile.raw());
+    EXPECT_EQ(result.occupancies(), runestone::ChessBoard::AFile | runestone::ChessBoard::BFile);
 	// afile should be unchanged.
-    EXPECT_EQ(afile.raw(), runestone::chessboard::squaremask::AFile.raw());
+    EXPECT_EQ(afile.occupancies(), runestone::ChessBoard::AFile);
 	// bfile should be unchanged.
-    EXPECT_EQ(bfile.raw(), runestone::chessboard::squaremask::BFile.raw());
+    EXPECT_EQ(bfile.occupancies(), runestone::ChessBoard::BFile);
 }
 
-TEST(ChessBoard, andKeepsCommonBits)
+TEST(ChessBoard, intersectionOccupancies)
 {
-	constexpr ChessBoard afile(runestone::chessboard::squaremask::AFile.raw());
-	constexpr ChessBoard bfile(runestone::chessboard::squaremask::BFile.raw());
-	constexpr ChessBoard result = afile.and_(bfile);
+	constexpr runestone::ChessBoard afile(runestone::ChessBoard::AFile);
+	constexpr runestone::ChessBoard bfile(runestone::ChessBoard::BFile);
+	constexpr runestone::ChessBoard result = afile.intersect_occupancies(bfile);
 
-	EXPECT_EQ(result.raw(), runestone::chessboard::squaremask::AFile.raw() & runestone::chessboard::squaremask::BFile.raw());
+	EXPECT_EQ(result.occupancies(), runestone::ChessBoard::AFile & runestone::ChessBoard::BFile);
 	// afile should be unchanged.
-	EXPECT_EQ(afile.raw(), runestone::chessboard::squaremask::AFile.raw());
+	EXPECT_EQ(afile.occupancies(), runestone::ChessBoard::AFile);
 	// bfile should be unchanged.
-	EXPECT_EQ(bfile.raw(), runestone::chessboard::squaremask::BFile.raw());
+	EXPECT_EQ(bfile.occupancies(), runestone::ChessBoard::BFile);
 }
 
-TEST(ChessBoard, xorTogglesBits)
+TEST(ChessBoard, sdiffOccupancies)
 {
-	constexpr ChessBoard afile(runestone::chessboard::squaremask::AFile.raw());
-	constexpr ChessBoard bfile(runestone::chessboard::squaremask::BFile.raw());
-	constexpr ChessBoard result = afile.xor_(bfile);
+	constexpr runestone::ChessBoard afile(runestone::ChessBoard::AFile);
+	constexpr runestone::ChessBoard bfile(runestone::ChessBoard::BFile);
+	constexpr runestone::ChessBoard result = afile.sdiff_occupancies(bfile);
 
-	EXPECT_EQ(result.raw(), runestone::chessboard::squaremask::AFile.raw() ^ runestone::chessboard::squaremask::BFile.raw());
+	EXPECT_EQ(result.occupancies(), runestone::ChessBoard::AFile ^ runestone::ChessBoard::BFile);
 	// afile should be unchanged.
-	EXPECT_EQ(afile.raw(), runestone::chessboard::squaremask::AFile.raw());
+	EXPECT_EQ(afile.occupancies(), runestone::ChessBoard::AFile);
 	// bfile should be unchanged.
-	EXPECT_EQ(bfile.raw(), runestone::chessboard::squaremask::BFile.raw());
+	EXPECT_EQ(bfile.occupancies(), runestone::ChessBoard::BFile);
 }
 
-TEST(ChessBoard, notInvertsBits)
+TEST(ChessBoard, flipOccupancies)
 {
-    constexpr ChessBoard afile(runestone::chessboard::squaremask::AFile.raw());
-    constexpr ChessBoard result = afile.not_();
+    constexpr runestone::ChessBoard afile(runestone::ChessBoard::AFile);
+    constexpr runestone::ChessBoard result = afile.flip_occupancies();
 
-    EXPECT_EQ(result.raw(), ~runestone::chessboard::squaremask::AFile.raw());
+    EXPECT_EQ(result.occupancies(), ~runestone::ChessBoard::AFile);
 	// afile should be unchanged.
-	EXPECT_EQ(afile.raw(), runestone::chessboard::squaremask::AFile.raw());
+	EXPECT_EQ(afile.occupancies(), runestone::ChessBoard::AFile);
 }
 
-TEST(ChessBoard, orAssign)
+TEST(ChessBoard, unionAssign)
 {
-    ChessBoard afile(runestone::chessboard::squaremask::AFile.raw());
-    constexpr ChessBoard bfile(runestone::chessboard::squaremask::BFile.raw());
-    afile.or_assign(bfile);
+    runestone::ChessBoard afile(runestone::ChessBoard::AFile);
+    constexpr runestone::ChessBoard bfile(runestone::ChessBoard::BFile);
+    afile.union_assign(bfile);
 
-    EXPECT_EQ(afile.raw(), runestone::chessboard::squaremask::AFile.raw() | runestone::chessboard::squaremask::BFile.raw());
+    EXPECT_EQ(afile.occupancies(), runestone::ChessBoard::AFile | runestone::ChessBoard::BFile);
 	// bfile should be unchanged.
-	EXPECT_EQ(bfile.raw(), runestone::chessboard::squaremask::BFile.raw());
+	EXPECT_EQ(bfile.occupancies(), runestone::ChessBoard::BFile);
 }
 
-TEST(ChessBoard, andAssign)
+TEST(ChessBoard, intersectionAssign)
 {
-	ChessBoard afile(runestone::chessboard::squaremask::AFile.raw());
-	constexpr ChessBoard bfile(runestone::chessboard::squaremask::BFile.raw());
-	afile.and_assign(bfile);
+	runestone::ChessBoard afile(runestone::ChessBoard::AFile);
+	constexpr runestone::ChessBoard bfile(runestone::ChessBoard::BFile);
+	afile.intersection_assign(bfile);
 
-	EXPECT_EQ(afile.raw(), runestone::chessboard::squaremask::AFile.raw() & runestone::chessboard::squaremask::BFile.raw());
+	EXPECT_EQ(afile.occupancies(), runestone::ChessBoard::AFile & runestone::ChessBoard::BFile);
 	// bfile should be unchanged.
-	EXPECT_EQ(bfile.raw(), runestone::chessboard::squaremask::BFile.raw());
+	EXPECT_EQ(bfile.occupancies(), runestone::ChessBoard::BFile);
 }
 
-TEST(ChessBoard, xorAssign)
+TEST(ChessBoard, sdiffAssign)
 {
-	ChessBoard afile(runestone::chessboard::squaremask::AFile.raw());
-	constexpr ChessBoard bfile(runestone::chessboard::squaremask::BFile.raw());
-	afile.xor_assign(bfile);
+	runestone::ChessBoard afile(runestone::ChessBoard::AFile);
+	constexpr runestone::ChessBoard bfile(runestone::ChessBoard::BFile);
+	afile.sdiff_assign(bfile);
 
-	EXPECT_EQ(afile.raw(), runestone::chessboard::squaremask::AFile.raw() ^ runestone::chessboard::squaremask::BFile.raw());
+	EXPECT_EQ(afile.occupancies(), runestone::ChessBoard::AFile ^ runestone::ChessBoard::BFile);
 	// bfile should be unchanged.
-	EXPECT_EQ(bfile.raw(), runestone::chessboard::squaremask::BFile.raw());
+	EXPECT_EQ(bfile.occupancies(), runestone::ChessBoard::BFile);
 }
 
 TEST(ChessBoard, equalityAndInequalityOperators)
 {
-    constexpr ChessBoard afile(runestone::chessboard::squaremask::AFile.raw());
-	constexpr ChessBoard afile2(runestone::chessboard::squaremask::AFile.raw());
-    constexpr ChessBoard bfile(runestone::chessboard::squaremask::BFile.raw());
-    constexpr ChessBoard cfile(runestone::chessboard::squaremask::CFile.raw());
+    constexpr runestone::ChessBoard afile(runestone::ChessBoard::AFile);
+	constexpr runestone::ChessBoard afile2(runestone::ChessBoard::AFile);
+    constexpr runestone::ChessBoard bfile(runestone::ChessBoard::BFile);
+    constexpr runestone::ChessBoard cfile(runestone::ChessBoard::CFile);
 
     EXPECT_TRUE(afile.equals(afile2));
     EXPECT_TRUE(afile.not_equals(bfile));
