@@ -1,8 +1,7 @@
 module;
 
 #include <entt/entity/entity.hpp>
-#include <entt/entity/fwd.hpp>
-#include <entt/entt.hpp>
+#include <entt/entity/registry.hpp>
 
 export module druid.core.entity;
 

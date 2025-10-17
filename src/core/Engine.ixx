@@ -2,7 +2,8 @@ module;
 
 #include <core/Signal.h>
 #include <chrono>
-#include <entt/entity/fwd.hpp>
+#include <entt/entity/entity.hpp>
+#include <entt/entity/registry.hpp>
 #include <utility>
 #include <variant>
 
