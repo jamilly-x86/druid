@@ -90,6 +90,11 @@ TEST(PieceFactory, pieceColor)
 	}
 }
 
+// When expanding from the macro TEST from GTEST the cognitive complexity
+// greatly increase (48 > 25...project max). This check is suppressed as
+// the code is readable and the actual cognitive complexity of this test is 8
+// 2x for loops (+2), 2x if nested (+4), 2x control flow - continue (+2)
+// NOLINTBEGIN (readability-function-cognitive-complexity,-warnings-as-errors)
 TEST(PieceFactory, isWhite)
 {
 	for (const auto piece : WhitePieces)
@@ -116,7 +121,13 @@ TEST(PieceFactory, isWhite)
 		EXPECT_FALSE(runestone::PieceFactory::white(piece).value());
 	}
 }
+// NOLINTEND
 
+// When expanding from the macro TEST from GTEST the cognitive complexity
+// greatly increase (48 > 25...project max). This check is suppressed as
+// the code is readable and the actual cognitive complexity of this test is 8
+// 2x for loops (+2), 2x if nested (+4), 2x control flow - continue (+2)
+// NOLINTBEGIN (readability-function-cognitive-complexity,-warnings-as-errors)
 TEST(PieceFactory, isBlack)
 {
 	for (const auto piece : BlackPieces)
@@ -143,6 +154,7 @@ TEST(PieceFactory, isBlack)
 		EXPECT_FALSE(runestone::PieceFactory::black(piece).value());
 	}
 }
+// NOLINTEND
 
 TEST(PieceFactory, charToPieceWhitePieces)
 {
