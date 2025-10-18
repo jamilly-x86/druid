@@ -1,6 +1,9 @@
+module;
+
+#include <entt/entity/entity.hpp>
+#include <entt/entity/registry.hpp>
+
 export module druid.core.entity;
-export import <entt/entity/entity.hpp>;
-export import <entt/entity/registry.hpp>;
 
 export namespace druid::core
 {
