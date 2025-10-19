@@ -86,6 +86,8 @@ export namespace runestone
 			// clang-format on
 		};
 
+		/// @enum Error
+		/// @brief Represents a specific error thrown when calling piece factory utility functions
 		enum class Error : std::uint8_t
 		{
 			InvalidCharacter,
