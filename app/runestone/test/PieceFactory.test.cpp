@@ -15,6 +15,11 @@ namespace
 		runestone::PieceFactory::Piece::BlackRook, runestone::PieceFactory::Piece::BlackQueen,	runestone::PieceFactory::Piece::BlackQueen};
 }
 
+// When expanding from the macro TEST from GTEST the cognitive complexity
+// greatly increase (48 > 25...project max). This check is suppressed as
+// the code is readable and the actual cognitive complexity of this test is 8
+// 2x for loops (+2), 2x if nested (+4), 2x control flow - continue (+2)
+// NOLINTBEGIN (readability-function-cognitive-complexity,-warnings-as-errors)
 TEST(PieceFactory, makePiece)
 {
 	std::set<runestone::PieceFactory::Piece> pieces;
@@ -47,6 +52,7 @@ TEST(PieceFactory, makePiece)
 	EXPECT_EQ(pieces.size(), runestone::PieceFactory::to_index<runestone::PieceFactory::Type>()
 								 * runestone::PieceFactory::to_index<runestone::PieceFactory::Color>());
 }
+// NOLINTEND
 
 TEST(PieceFactory, pieceType)
 {
@@ -69,6 +75,7 @@ TEST(PieceFactory, pieceType)
 	}
 }
 
+// NOLINTBEGIN (readability-function-cognitive-complexity,-warnings-as-errors)
 TEST(PieceFactory, pieceColor)
 {
 	std::set<runestone::PieceFactory::Color> colors;
@@ -89,11 +96,8 @@ TEST(PieceFactory, pieceColor)
 		EXPECT_TRUE(colors.contains(runestone::PieceFactory::piece_color(piece).value()));
 	}
 }
+// NOLINTEND
 
-// When expanding from the macro TEST from GTEST the cognitive complexity
-// greatly increase (48 > 25...project max). This check is suppressed as
-// the code is readable and the actual cognitive complexity of this test is 8
-// 2x for loops (+2), 2x if nested (+4), 2x control flow - continue (+2)
 // NOLINTBEGIN (readability-function-cognitive-complexity,-warnings-as-errors)
 TEST(PieceFactory, isWhite)
 {
@@ -123,10 +127,6 @@ TEST(PieceFactory, isWhite)
 }
 // NOLINTEND
 
-// When expanding from the macro TEST from GTEST the cognitive complexity
-// greatly increase (48 > 25...project max). This check is suppressed as
-// the code is readable and the actual cognitive complexity of this test is 8
-// 2x for loops (+2), 2x if nested (+4), 2x control flow - continue (+2)
 // NOLINTBEGIN (readability-function-cognitive-complexity,-warnings-as-errors)
 TEST(PieceFactory, isBlack)
 {
