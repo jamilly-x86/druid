@@ -64,7 +64,7 @@ jobs:
       - name: clang-code-coverage
         if: ${{ matrix.config.compiler == 'clang' }}
         run: |
-          apt-get update && apt-get install -y llvm-22 llvm-tools-22
+          apt-get update && apt-get install -y llvm-22
           export LLVM_PROFILE_FILE="coverage/raw.profraw"
           
           cmake --preset ${{ matrix.config.preset }} \
