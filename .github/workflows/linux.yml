@@ -67,10 +67,7 @@ jobs:
           apt-get update && apt-get install -y llvm-22
           export LLVM_PROFILE_FILE="coverage/raw.profraw"
           export PATH="/usr/lib/llvm-22/bin:$PATH"
-          
-          cmake --preset ${{ matrix.config.preset }} \
-            -DCMAKE_CXX_FLAGS="--coverage -fprofile-instr-generate -fcoverage-mapping"
-          
+            
           cmake --build --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
           ctest --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
           
