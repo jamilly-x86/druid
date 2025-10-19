@@ -82,7 +82,7 @@ jobs:
           llvm-cov show \
             -instr-profile=coverage/indexed.profdata \
             --show-line-counts-or-regions \
-            --ignore-filename-regex="build/.*|.*external/.*|.*vcpkg/.*|.*third_party/.*" \
+            --ignore-filename-regex="build/.*|.*external/.*|.*vcpkg/.*|.*third_party/.*|.*/test/.*|.*\.test\.cpp" \
             $(find build/ -type f -executable -path "*/test/*" -o -path "*/bin/*") \
             -format=html -output-dir=coverage-report
 
