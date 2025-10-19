@@ -60,3 +60,37 @@ jobs:
       - name: clang-tidy
         if: ${{ matrix.config.clang-tidy }}
         run: cmake --build --preset ${{ matrix.config.preset }} --target clang-tidy
+
+      - name: clang-code-coverage
+        if: ${{ matrix.config.compiler == 'clang' }}
+        run: |
+          export LLVM_PROFILE_FILE="coverage/raw.profraw"
+          
+          cmake --preset ${{ matrix.config.preset }} \
+            -DCMAKE_CXX_FLAGS="--coverage -fprofile-instr-generate -fcoverage-mapping"
+          
+          cmake --build --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
+          ctest --preset ${{ matrix.config.preset }}
+          
+          mkdir -p coverage
+          find build/ -name "*.profraw" -exec cp {} coverage/ \;
+          
+          llvm-profdata merge -sparse coverage/*.profraw -o coverage/indexed.profdata
+          
+          echo "Test executables found for coverage: "
+          find build/ -type f -executable -path "*/tests/*" -o -path "*/bin/*"
+          
+          llvm-cov show \
+            -instr-profile=coverage/indexed.profdata \
+            --show-line-counts-or-regions \
+            --ignore-filename-regex="build/.*|.*external/.*|.*vcpkg/.*|.*third_party/.*" \
+            $(find build/ -type f -executable -path "*/tests/*" -o -path "*/bin/*") \
+            -format=html -output-dir=coverage-report
+
+      - name: upload-code-coverage-artifact
+        if: ${{ matrix.config.compiler == 'clang' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage-report
+          
