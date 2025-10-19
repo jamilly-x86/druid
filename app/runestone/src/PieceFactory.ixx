@@ -33,8 +33,8 @@ export namespace runestone
 	{
 	public:
 		/// @enum Type
-		/// @brief Represents the type of chess piece (color-agnostic)
-		/// @note Piece type stored in bits 0-2 (0x7)
+		/// @brief Represents the type of chess piece (color-agnostic).
+		/// @note Piece type stored in bits 0-2 (0x7).
 		enum class Type : std::uint8_t
 		{
 			// clang-format off
@@ -50,8 +50,8 @@ export namespace runestone
 		};
 
 		/// @enum Color
-		/// @brief Represents the color of a chess piece or player
-		/// @note Color is stored in bit 3 (0x8)
+		/// @brief Represents the color of a chess piece or player.
+		/// @note Color is stored in bit 3 (0x8).
 		enum class Color : std::uint8_t
 		{
 			// clang-format off
@@ -62,8 +62,8 @@ export namespace runestone
 		};
 
 		/// @enum Piece
-		/// @brief Represents a specific chess piece (combines color and type)
-		/// @note Piece = Color (bit 3) | PieceType (bits 0-2)
+		/// @brief Represents a specific chess piece (combines color and type).
+		/// @note Piece = Color (bit 3) | PieceType (bits 0-2).
 		enum class Piece : std::uint8_t
 		{
 			// clang-format off
@@ -87,7 +87,7 @@ export namespace runestone
 		};
 
 		/// @enum Error
-		/// @brief Represents a specific error thrown when calling piece factory utility functions
+		/// @brief Represents a specific error thrown when calling piece factory utility functions.
 		enum class Error : std::uint8_t
 		{
 			InvalidCharacter,
@@ -127,7 +127,7 @@ export namespace runestone
 		/// @param type The type to make the piece.
 		/// @param color The color to make the piece.
 		/// @return The chess piece created from the given color and type.
-		/// If the input type or color is ::Size then return Error::InvalidTypeOrColor
+		/// If the input type or color is ::Size then return Error::InvalidTypeOrColor.
 		static constexpr auto make_piece(Type type, Color color) noexcept -> std::expected<Piece, Error>
 		{
 			if (type == Type::Size || color == Color::Size)
@@ -249,8 +249,8 @@ export namespace runestone
 			}
 		}
 
-		/// @brief Convert piece enum to FEN character
-		/// @param piece Piece enum value to convert
+		/// @brief Convert piece enum to FEN character.
+		/// @param piece Piece enum value to convert.
 		/// @return Corresponding FEN character ('K', 'k', 'P', 'p', etc.) or Error::InvalidPiece.
 		static constexpr auto piece_to_char(Piece piece) noexcept -> std::expected<char, Error>
 		{
@@ -312,9 +312,9 @@ export namespace runestone
 		}
 
 	private:
-		/// @brief Bit mask for extracting piece type (bits 0-2)
+		/// @brief Bit mask for extracting piece type (bits 0-2).
 		static constexpr auto HexSeven = 0x7U;
-		/// @brief Bit mask for extracting color (bit 3)
+		/// @brief Bit mask for extracting color (bit 3).
 		static constexpr auto HexEight = 0x8U;
 	};
 }
