@@ -64,13 +64,14 @@ jobs:
       - name: clang-code-coverage
         if: ${{ matrix.config.compiler == 'clang' }}
         run: |
+          apt-get update && apt-get install -y llvm-22 llvm-tools-22
           export LLVM_PROFILE_FILE="coverage/raw.profraw"
           
           cmake --preset ${{ matrix.config.preset }} \
             -DCMAKE_CXX_FLAGS="--coverage -fprofile-instr-generate -fcoverage-mapping"
           
           cmake --build --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
-          ctest --preset ${{ matrix.config.preset }}
+          ctest --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
           
           mkdir -p coverage
           find build/ -name "*.profraw" -exec cp {} coverage/ \;
