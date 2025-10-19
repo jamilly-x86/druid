@@ -3,14 +3,15 @@
 #include <set>
 
 import runestone.piecefactory;
+import runestone.utils;
 
 namespace
 {
-	constexpr std::array<runestone::PieceFactory::Piece, runestone::PieceFactory::to_index<runestone::PieceFactory::Piece>()> WhitePieces = {
+	constexpr std::array<runestone::PieceFactory::Piece, runestone::utils::ToIndex<runestone::PieceFactory::Piece>()> WhitePieces = {
 		runestone::PieceFactory::Piece::WhitePawn, runestone::PieceFactory::Piece::WhiteKnight, runestone::PieceFactory::Piece::WhiteBishop,
 		runestone::PieceFactory::Piece::WhiteRook, runestone::PieceFactory::Piece::WhiteQueen,	runestone::PieceFactory::Piece::WhiteKing};
 
-	constexpr std::array<runestone::PieceFactory::Piece, runestone::PieceFactory::to_index<runestone::PieceFactory::Piece>()> BlackPieces = {
+	constexpr std::array<runestone::PieceFactory::Piece, runestone::utils::ToIndex<runestone::PieceFactory::Piece>()> BlackPieces = {
 		runestone::PieceFactory::Piece::BlackPawn, runestone::PieceFactory::Piece::BlackKnight, runestone::PieceFactory::Piece::BlackBishop,
 		runestone::PieceFactory::Piece::BlackRook, runestone::PieceFactory::Piece::BlackQueen,	runestone::PieceFactory::Piece::BlackQueen};
 }
@@ -49,8 +50,8 @@ TEST(PieceFactory, makePiece)
 		EXPECT_TRUE(pieces.contains(piece)) << "Could not find piece: " << magic_enum::enum_name(piece);
 	}
 
-	EXPECT_EQ(pieces.size(), runestone::PieceFactory::to_index<runestone::PieceFactory::Type>()
-								 * runestone::PieceFactory::to_index<runestone::PieceFactory::Color>());
+	EXPECT_EQ(pieces.size(), runestone::utils::ToIndex<runestone::PieceFactory::Type>()
+								 * runestone::utils::ToIndex<runestone::PieceFactory::Color>());
 }
 // NOLINTEND
 
