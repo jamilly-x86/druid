@@ -93,12 +93,20 @@ jobs:
           name: coverage-report
           path: coverage-report
 
+      - name: export-llvm-coverage-to-json
+        if: ${{ matrix.config.compiler == 'clang' }}
+        run: |
+          llvm-cov export \
+            --instr-profile=coverage/indexed.profdata \
+            $(find build/ -type f -executable -path "*/test/*" -o -path "*/bin/*") \
+            > coverage/coverage.json
+
       - name: upload-coverage-to-codecov
+        if: ${{ matrix.config.compiler == 'clang' }}
         uses: codecov/codecov-action@v4
         with:
-          files: coverage/indexed.profdata
+          files: coverage/coverage.json
           flags: clang
           fail_ci_if_error: true
-          token: ${{ secrets.CODECOV_TOKEN }}
 
           
