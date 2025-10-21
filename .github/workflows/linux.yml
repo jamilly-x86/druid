@@ -71,7 +71,7 @@ jobs:
         if: ${{ matrix.config.compiler == 'clang' }}
         run: |
           export LLVM_PROFILE_FILE="coverage/raw.profraw"
-            
+          
           cmake --build --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
           ctest --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
           
