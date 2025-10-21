@@ -77,7 +77,7 @@ jobs:
           llvm-profdata merge -sparse coverage/*.profraw -o coverage/indexed.profdata
           
           echo "Test executables found for coverage: "
-          find build/ -type f -executable -path "*/test/*" -o -path "*/bin/*"
+          find build/src build/app -type f -executable \( -path "*/test/*" -o -path "*/bin/*" \)
           
           llvm-cov show \
             -instr-profile=coverage/indexed.profdata \
