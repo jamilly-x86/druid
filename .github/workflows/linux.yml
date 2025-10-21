@@ -61,16 +61,12 @@ jobs:
         if: ${{ matrix.config.clang-tidy }}
         run: cmake --build --preset ${{ matrix.config.preset }} --target clang-tidy
 
-      - name: install-llvm-22
-        if: ${{ matrix.config.compiler == 'clang' }}
-        run: |
-          apt-get update && apt-get install -y llvm-22
-          echo "/usr/lib/llvm-22/bin" >> $GITHUB_PATH
-
       - name: clang-code-coverage
         if: ${{ matrix.config.compiler == 'clang' }}
         run: |
+          apt-get update && apt-get install -y llvm-22
           export LLVM_PROFILE_FILE="coverage/raw.profraw"
+          export PATH="/usr/lib/llvm-22/bin:$PATH"
           
           cmake --build --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
           ctest --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
@@ -96,19 +92,3 @@ jobs:
         with:
           name: coverage-report
           path: coverage-report
-
-      - name: export-llvm-coverage-to-json
-        if: ${{ matrix.config.compiler == 'clang' }}
-        run: |
-          llvm-cov export \
-            --instr-profile=coverage/indexed.profdata \
-            $(find build/ -type f -executable -path "*/test/*" -o -path "*/bin/*") \
-            > coverage/coverage.json
-
-      - name: upload-coverage-to-codecov
-        if: ${{ matrix.config.compiler == 'clang' }}
-        uses: codecov/codecov-action@v4
-        with:
-          files: coverage/coverage.json
-          flags: clang
-          fail_ci_if_error: true
