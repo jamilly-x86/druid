@@ -3,8 +3,6 @@ module;
 #include <core/Signal.h>
 #include <flecs.h>
 #include <chrono>
-#include <entt/entity/entity.hpp>
-#include <entt/entity/registry.hpp>
 #include <utility>
 #include <variant>
 
