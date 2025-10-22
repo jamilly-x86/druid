@@ -41,6 +41,6 @@ export namespace druid::core
 		}
 
 	private:
-		flecs::entity entity_{};
+		flecs::entity entity_;
 	};
 }

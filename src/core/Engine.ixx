@@ -216,7 +216,7 @@ export namespace druid::core
 		}
 
 	private:
-		flecs::world world_{};
+		flecs::world world_;
 		std::vector<std::unique_ptr<Service>> services_;
 
 		Signal<void(std::chrono::steady_clock::duration)> on_update_;
