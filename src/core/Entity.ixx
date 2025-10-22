@@ -1,8 +1,5 @@
-module;
-
-#include <flecs.h>
-
 export module druid.core.entity;
+export import <flecs.h>;
 
 export namespace druid::core
 {

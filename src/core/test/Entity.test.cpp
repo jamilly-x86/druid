@@ -1,16 +1,7 @@
 #include <gtest/gtest.h>
 
-//#ifdef _MSC_VER
-//#pragma warning(push)
-//#pragma warning(disable:4127) // flecs uses constexpr tests that trigger C4127
-//#endif
-
 import druid.core.engine;
 import druid.core.entity;
-
-//#ifdef _MSC_VER
-//#pragma warning(pop)
-//#endif
 
 TEST(Entity, create)
 {
