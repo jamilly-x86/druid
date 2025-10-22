@@ -1,15 +1,17 @@
 module;
 
-#include <core/Signal.h>
 #include <raylib.h>
 #include <rlgl.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/vec2.hpp>
+#include <algorithm>
+#include <vector>
 
 export module druid.graphics.node;
 import druid.core.object;
+import druid.core.signal;
 import druid.graphics.renderer;
 
 using druid::core::Signal;

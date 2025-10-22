@@ -1,13 +1,14 @@
 module;
 
-#include <core/Signal.h>
 #include <chrono>
 #include <utility>
 #include <variant>
+#include <vector>
 
 export module druid.core.engine;
 import druid.core.entity;
 import druid.core.event;
+import druid.core.signal;
 
 export namespace druid::core
 {
