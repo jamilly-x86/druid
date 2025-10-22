@@ -21,6 +21,7 @@ find_package(PalSigslot CONFIG REQUIRED)
 find_package(flecs CONFIG REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
+    druid-external
     Pal::Sigslot
     $<IF:$<TARGET_EXISTS:flecs::flecs>,flecs::flecs,flecs::flecs_static>
 )

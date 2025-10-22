@@ -1,7 +1,6 @@
 module;
 
 #include <core/Signal.h>
-#include <flecs.h>
 #include <chrono>
 #include <utility>
 #include <variant>
