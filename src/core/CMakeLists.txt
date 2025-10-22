@@ -3,6 +3,7 @@ project(druid-core)
 project_add_library(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PUBLIC
+    ${CMAKE_SOURCE_DIR}/include/core/Entity.h
     ${CMAKE_SOURCE_DIR}/include/core/Signal.h
 )
 
@@ -10,7 +11,6 @@ target_sources(${PROJECT_NAME} PUBLIC
     FILE_SET cxx_modules TYPE CXX_MODULES FILES
         Concepts.ixx
         Engine.ixx
-        Entity.ixx
         EnumMask.ixx
         Event.ixx
         File.ixx
@@ -21,7 +21,6 @@ find_package(PalSigslot CONFIG REQUIRED)
 find_package(flecs CONFIG REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    druid-external
     Pal::Sigslot
     $<IF:$<TARGET_EXISTS:flecs::flecs>,flecs::flecs,flecs::flecs_static>
 )

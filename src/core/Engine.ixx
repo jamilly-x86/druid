@@ -1,12 +1,12 @@
 module;
 
+#include <core/Entity.h>
 #include <core/Signal.h>
 #include <chrono>
 #include <utility>
 #include <variant>
 
 export module druid.core.engine;
-import druid.core.entity;
 import druid.core.event;
 
 export namespace druid::core
