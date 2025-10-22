@@ -1,7 +1,6 @@
 module;
 
-#include <entt/entity/entity.hpp>
-#include <entt/entity/registry.hpp>
+#include <flecs.h>
 
 export module druid.core.entity;
 
@@ -10,35 +9,38 @@ export namespace druid::core
 	class Entity
 	{
 	public:
-		explicit Entity(entt::registry& x) : registry_{&x}, id_{registry_->create()}
+		explicit Entity( flecs::entity x) :  entity_{x}
 		{
 		}
 
 		template <typename T, typename... Args>
 		[[nodiscard]] auto add_component(Args&&... args) -> T&
 		{
-			return registry_->emplace<T>(id_, std::forward<Args>(args)...);
+			// Construct a T from the forwarded args and call flecs::entity::set(T)
+			// This ensures set() is called with a single value parameter (matching flecs overloads),
+			// and supports the zero-arg case (default-constructed T).
+			entity_.set<T>(T(std::forward<Args>(args)...));
+			return entity_.get_mut<T>();
 		}
 
 		template <typename T>
 		auto remove_component() -> void
 		{
-			registry_->erase<T>(id_);
+			entity_.remove<T>();
 		}
 
 		template <typename... Args>
 		[[nodiscard]] auto has_components() const -> bool
 		{
-			return registry_->all_of<Args...>(id_);
+			return (entity_.has<Args>() && ...);
 		}
 
 		[[nodiscard]] auto valid() const -> bool
 		{
-			return id_ != entt::null;
+			return entity_.is_valid();
 		}
 
 	private:
-		entt::registry* registry_{};
-		entt::entity id_{entt::null};
+		flecs::entity entity_{};
 	};
 }

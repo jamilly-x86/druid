@@ -5,11 +5,11 @@
   "description": "A modern C++ game engine for creation and exploration.",
   "homepage": "https://github.com/druidengine/druid",
   "dependencies": [
-    "entt",
     "glm",
     "gtest",
     "magic-enum",
     "palsigslot",
-    "raylib"
+    "raylib",
+    "flecs"
   ]
 }

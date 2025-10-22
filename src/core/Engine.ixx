@@ -1,6 +1,7 @@
 module;
 
 #include <core/Signal.h>
+#include <flecs.h>
 #include <chrono>
 #include <entt/entity/entity.hpp>
 #include <entt/entity/registry.hpp>
@@ -166,7 +167,7 @@ export namespace druid::core
 
 		[[nodiscard]] auto create_entity() -> Entity
 		{
-			return Entity{registry_};
+			return Entity{world_.entity()};
 		}
 
 		template <typename... Ts>
@@ -218,7 +219,7 @@ export namespace druid::core
 		}
 
 	private:
-		entt::registry registry_;
+		flecs::world world_{};
 		std::vector<std::unique_ptr<Service>> services_;
 
 		Signal<void(std::chrono::steady_clock::duration)> on_update_;

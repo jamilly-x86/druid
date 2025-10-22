@@ -18,9 +18,11 @@ target_sources(${PROJECT_NAME} PUBLIC
 )
 
 find_package(PalSigslot CONFIG REQUIRED)
-find_package(EnTT CONFIG REQUIRED)
+# find_package(EnTT CONFIG REQUIRED)
+find_package(flecs CONFIG REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Pal::Sigslot
-    EnTT::EnTT
+    # EnTT::EnTT
+    $<IF:$<TARGET_EXISTS:flecs::flecs>,flecs::flecs,flecs::flecs_static>
 )
