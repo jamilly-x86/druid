@@ -1,13 +1,14 @@
 module;
 
-#include <core/Signal.h>
 #include <chrono>
 #include <utility>
 #include <variant>
+#include <vector>
 
 export module druid.core.engine;
-
+import druid.core.entity;
 import druid.core.event;
+import druid.core.signal;
 
 export namespace druid::core
 {
@@ -46,8 +47,10 @@ export namespace druid::core
 	private:
 		Engine& engine_;
 	};
+
 	template <typename T>
 	concept ServiceType = std::is_base_of_v<Service, T>;
+
 	class Engine
 	{
 	public:
@@ -160,6 +163,11 @@ export namespace druid::core
 			return *ptr;
 		}
 
+		[[nodiscard]] auto create_entity() -> Entity
+		{
+			return Entity{world_.entity()};
+		}
+
 		template <typename... Ts>
 		struct Overloaded : Ts...
 		{
@@ -209,6 +217,7 @@ export namespace druid::core
 		}
 
 	private:
+		flecs::world world_;
 		std::vector<std::unique_ptr<Service>> services_;
 
 		Signal<void(std::chrono::steady_clock::duration)> on_update_;

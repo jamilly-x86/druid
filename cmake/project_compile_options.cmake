@@ -21,10 +21,6 @@ function(project_compile_common)
 	elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 		# using GCC
 		target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
-	elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-		# using Visual Studio C++
-		target_compile_options(${PROJECT_NAME} PRIVATE /MP /permissive- /W4)
-		target_compile_options(${PROJECT_NAME} PRIVATE /wd4251)
 	endif()
 	
 	if(BUILD_ENABLE_HARDENED)

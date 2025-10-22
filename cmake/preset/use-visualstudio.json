@@ -7,7 +7,8 @@
             "generator": "Visual Studio 17 2022",
             "binaryDir": "${sourceDir}/build-vs",
             "cacheVariables": {
-                "CMAKE_COMPILE_WARNING_AS_ERROR": "ON"
+                "CMAKE_COMPILE_WARNING_AS_ERROR": "ON",
+                "CMAKE_CXX_FLAGS": "/wd4127 /MP /permissive- /W4 /EHsc /Zc:preprocessor"
             }
         }
     ]

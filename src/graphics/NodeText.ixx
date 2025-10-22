@@ -1,6 +1,5 @@
 module;
 
-#include <core/Signal.h>
 #include <string>
 
 export module druid.graphics.node.text;

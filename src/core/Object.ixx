@@ -1,6 +1,5 @@
 module;
 
-#include <core/Signal.h>
 #include <algorithm>
 #include <memory>
 #include <string>
@@ -8,6 +7,7 @@ module;
 #include <vector>
 
 export module druid.core.object;
+import druid.core.signal;
 
 export namespace druid::core
 {
