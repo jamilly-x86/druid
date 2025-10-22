@@ -1,5 +1,5 @@
 export module druid.core.entity;
-export import druid.external.flecs;
+import druid.external.flecs;
 
 export namespace druid::core
 {
