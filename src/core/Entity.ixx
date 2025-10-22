@@ -1,12 +1,15 @@
+module;
+
+#include <flecs.h>
+
 export module druid.core.entity;
-import druid.external.flecs;
 
 export namespace druid::core
 {
 	class Entity
 	{
 	public:
-		explicit Entity( flecs::entity x) :  entity_{x}
+		explicit Entity(flecs::entity x) : entity_{x}
 		{
 		}
 

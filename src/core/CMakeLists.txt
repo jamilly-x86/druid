@@ -3,7 +3,6 @@ project(druid-core)
 project_add_library(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PUBLIC
-    ${CMAKE_SOURCE_DIR}/include/core/Entity.h
     ${CMAKE_SOURCE_DIR}/include/core/Signal.h
 )
 
@@ -12,6 +11,7 @@ target_sources(${PROJECT_NAME} PUBLIC
         Concepts.ixx
         Engine.ixx
         EnumMask.ixx
+        Entity.ixx
         Event.ixx
         File.ixx
         Object.ixx
