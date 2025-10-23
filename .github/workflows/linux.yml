@@ -61,30 +61,11 @@ jobs:
         if: ${{ matrix.config.clang-tidy }}
         run: cmake --build --preset ${{ matrix.config.preset }} --target clang-tidy
 
-      - name: clang-code-coverage
+      - name: clang-coverage
         if: ${{ matrix.config.compiler == 'clang' }}
         run: |
           apt-get update && apt-get install -y llvm-22
-          export LLVM_PROFILE_FILE="coverage/raw.profraw"
-          export PATH="/usr/lib/llvm-22/bin:$PATH"
-          
-          cmake --build --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
-          ctest --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
-          
-          mkdir -p coverage
-          find build/ -name "*.profraw" -exec cp {} coverage/ \;
-          
-          llvm-profdata merge -sparse coverage/*.profraw -o coverage/indexed.profdata
-          
-          echo "Test executables found for coverage: "
-          find build/src build/app -type f -executable \( -path "*/test/*" -o -path "*/bin/*" \)
-          
-          llvm-cov show \
-            -instr-profile=coverage/indexed.profdata \
-            --show-line-counts-or-regions \
-            --ignore-filename-regex="build/.*|.*external/.*|.*vcpkg/.*|.*third_party/.*|.*/test/.*|.*\.test\.cpp" \
-            $(find build/ -type f -executable -path "*/test/*" -o -path "*/bin/*") \
-            -format=html -output-dir=coverage-report
+          cmake --build --preset ${{ matrix.config.preset }} --target clang-coverage
 
       - name: upload-code-coverage-artifact
         if: ${{ matrix.config.compiler == 'clang' }}
