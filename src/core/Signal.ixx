@@ -1,7 +1,6 @@
 module;
 
-#include <sigslot/signal.hpp>
-#include <typeinfo>
+#include <functional>
 
 export module druid.core.signal;
 
@@ -33,7 +32,7 @@ export namespace druid::core
 	public:
 		auto connect(auto callback) -> void
 		{
-			signal_.connect(std::forward<decltype(callback)>(callback));
+			signal_ = std::forward<decltype(callback)>(callback);
 		}
 
 		auto operator()(Args... args) const -> void
@@ -42,6 +41,6 @@ export namespace druid::core
 		}
 
 	private:
-		sigslot::signal<Args...> signal_{};
+		std::function<R(Args...)> signal_{};
 	};
 }
