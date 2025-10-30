@@ -6,7 +6,6 @@ module;
 #include <vector>
 
 export module druid.core.engine;
-import druid.core.entity;
 import druid.core.event;
 import druid.core.signal;
 
@@ -161,11 +160,6 @@ export namespace druid::core
 			auto* ptr = service.get();
 			services_.emplace_back(std::move(service));
 			return *ptr;
-		}
-
-		[[nodiscard]] auto create_entity() -> Entity
-		{
-			return Entity{world_.entity()};
 		}
 
 		template <typename... Ts>

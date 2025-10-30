@@ -7,7 +7,6 @@ target_sources(${PROJECT_NAME} PUBLIC
         Concepts.ixx
         Engine.ixx
         EnumMask.ixx
-        Entity.ixx
         Event.ixx
         File.ixx
         Object.ixx

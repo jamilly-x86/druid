@@ -1,12 +1,10 @@
-project(druid-core-test)
+project(druid-entity-test)
 
 project_add_executable(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
-    Engine.test.cpp
-    Object.test.cpp
-    EnumMask.test.cpp
-    Signal.test.cpp
+    Entity.test.cpp
+    World.test.cpp
 )
 
 enable_testing()
@@ -14,7 +12,7 @@ enable_testing()
 find_package(GTest CONFIG REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    druid-core
+    druid-entity
     GTest::gtest
     GTest::gtest_main
 )
