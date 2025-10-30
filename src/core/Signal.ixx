@@ -1,6 +1,7 @@
 module;
 
 #include <functional>
+#include <typeinfo>
 
 export module druid.core.signal;
 
