@@ -1,6 +1,9 @@
-export module druid.entity.world;
+module;
 
-import std;
+#include <cstdint>
+#include <vector>
+
+export module druid.entity.world;
 
 export namespace druid::entity
 {
