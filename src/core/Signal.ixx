@@ -37,6 +37,11 @@ export namespace druid::core
 
 		auto operator()(Args... args) const -> void
 		{
+			if (!signal_)
+			{
+				return;
+			}
+
 			signal_(std::forward<Args>(args)...);
 		}
 
