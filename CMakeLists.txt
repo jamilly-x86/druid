@@ -54,7 +54,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     include(ProcessorCount)
     ProcessorCount(NPROC)
     add_custom_target(clang-tidy
-        COMMAND run-clang-tidy -p ${CMAKE_BINARY_DIR} -j ${NPROC} -source-filter="^${CMAKE_SOURCE_DIR}/\(app|src|module\)/.*"
+        COMMAND run-clang-tidy -p ${CMAKE_BINARY_DIR} -j ${NPROC} -source-filter="^${CMAKE_SOURCE_DIR}/\(app|src\)/.*"
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         COMMENT "Running clang-tidy on all files"
     )

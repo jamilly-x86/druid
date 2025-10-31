@@ -1,16 +1,16 @@
 #pragma once
 
+#include <druid/core/Object.h>
+#include <druid/core/Signal.h>
+#include <druid/graphics/Renderer.h>
 #include <raylib.h>
 #include <rlgl.h>
+#include <algorithm>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/vec2.hpp>
-#include <algorithm>
 #include <vector>
-#include <druid/core/Object.h>
-#include <druid/core/Signal.h>
-#include <druid/graphics/Renderer.h>
 
 using druid::core::Signal;
 
@@ -97,12 +97,12 @@ namespace druid::graphics
 			return nodes_;
 		}
 
-		auto transform() const -> glm::mat4
+		[[nodiscard]] auto transform() const -> glm::mat4
 		{
 			return transform_;
 		}
 
-		auto transform_global() const -> glm::mat4
+		[[nodiscard]] auto transform_global() const -> glm::mat4
 		{
 			if (parent() != nullptr)
 			{
@@ -128,7 +128,7 @@ namespace druid::graphics
 			rlPopMatrix();
 		}
 
-		template<typename Callback>
+		template <typename Callback>
 		auto on_draw(Callback&& x) -> void
 		{
 			on_draw_.connect(std::forward<Callback>(x));

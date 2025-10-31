@@ -1,11 +1,11 @@
 #pragma once
 
+#include <druid/core/Signal.h>
 #include <algorithm>
 #include <memory>
 #include <string>
 #include <string_view>
 #include <vector>
-#include <druid/core/Signal.h>
 
 namespace druid::core
 {
@@ -19,7 +19,7 @@ namespace druid::core
 	public:
 		Object() = default;
 
-		virtual ~Object()
+		virtual ~Object() noexcept
 		{
 			on_destroyed_();
 		}
@@ -138,31 +138,31 @@ namespace druid::core
 			return parent_;
 		}
 
-		template<typename Callback>
+		template <typename Callback>
 		auto on_destroyed(Callback&& x) -> void
 		{
 			on_destroyed_.connect(std::forward<Callback>(x));
 		}
 
-		template<typename Callback>
+		template <typename Callback>
 		auto on_added(Callback&& x) -> void
 		{
 			on_added_.connect(std::forward<Callback>(x));
 		}
 
-		template<typename Callback>
+		template <typename Callback>
 		auto on_removed(Callback&& x) -> void
 		{
 			on_removed_.connect(std::forward<Callback>(x));
 		}
 
-		template<typename Callback>
+		template <typename Callback>
 		auto on_child_added(Callback&& x) -> void
 		{
 			on_child_added_.connect(std::forward<Callback>(x));
 		}
 
-		template<typename Callback>
+		template <typename Callback>
 		auto on_child_removed(Callback&& x) -> void
 		{
 			on_child_removed_.connect(std::forward<Callback>(x));

@@ -1,9 +1,9 @@
 #pragma once
 
+#include <druid/graphics/Color.h>
+#include <druid/graphics/Node.h>
 #include <string>
 #include <string_view>
-#include <druid/graphics/Node.h>
-#include <druid/graphics/Color.h>
 
 namespace druid::graphics
 {
@@ -48,7 +48,7 @@ namespace druid::graphics
 			color_ = color;
 		}
 
-		auto get_color() const -> Color
+		[[nodiscard]] auto get_color() const -> Color
 		{
 			return color_;
 		}

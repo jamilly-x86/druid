@@ -1,5 +1,6 @@
 #pragma once
 
+#include <exception>
 #include <functional>
 #include <typeinfo>
 
@@ -29,20 +30,27 @@ namespace druid::core
 	class Signal<R(Args...)>
 	{
 	public:
-		template<typename Callback>
+		template <typename Callback>
 		auto connect(Callback&& callback) -> void
 		{
 			signal_ = std::forward<Callback>(callback);
 		}
 
-		auto operator()(Args... args) const -> void
+		auto operator()(Args... args) const noexcept -> void
 		{
 			if (!signal_)
 			{
 				return;
 			}
 
-			signal_(std::forward<Args>(args)...);
+			try
+			{
+				signal_(std::forward<Args>(args)...);
+			}
+			catch (const std::exception& e)
+			{
+				(void)e;
+			}
 		}
 
 	private:
