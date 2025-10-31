@@ -36,8 +36,8 @@ namespace druid::graphics
 		static const Color Black;
 		static const Color Transparent;
 
-		constexpr Color() = default;
-		constexpr Color(const Rgba& x) : rgba_{x}
+		constexpr Color() noexcept = default;
+		constexpr Color(const Rgba& x) noexcept : rgba_{x}
 		{
 		}
 
@@ -83,7 +83,7 @@ namespace druid::graphics
 
 		[[nodiscard]] auto rgba_f() const -> RgbaF
 		{
-			return {.r = this->red_f(), .g = this->green_f(), .b = this->blue_f(), .a = this->alpha_f()};
+			return {.r=this->red_f(), .g=this->green_f(), .b=this->blue_f(), .a=this->alpha_f()};
 		}
 
 	private:
