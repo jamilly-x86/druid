@@ -3,6 +3,8 @@
 
 namespace druid::core
 {
+	// This feels so wrong.
+	// NOLINTNEXTLINE (cppcoreguidelines-avoid-non-const-global-variables)
 	Engine* singleton{};
 
 	auto Engine::instance() -> Engine*
