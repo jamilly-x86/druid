@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-import druid.core.object;
+#include <druid/core/Object.h>
 
 using druid::core::Object;
 

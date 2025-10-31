@@ -17,7 +17,7 @@ Checks: "-*,
   performance-*"
 
 WarningsAsErrors: "*"
-HeaderFilterRegex: ".*ixx"
+HeaderFilterRegex: ".*"
 FormatStyle: file
 UseColor: "true"
 CheckOptions:

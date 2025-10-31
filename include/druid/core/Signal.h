@@ -1,11 +1,10 @@
-module;
+#pragma once
 
-#include <sigslot/signal.hpp>
+#include <exception>
+#include <functional>
 #include <typeinfo>
 
-export module druid.core.signal;
-
-export namespace druid::core
+namespace druid::core
 {
 	/// @brief Primary template declaration for Signal.
 	/// @tparam T Function-signature type (e.g. R(Args...)).
@@ -31,17 +30,30 @@ export namespace druid::core
 	class Signal<R(Args...)>
 	{
 	public:
-		auto connect(auto callback) -> void
+		template <typename Callback>
+		auto connect(Callback&& callback) -> void
 		{
-			signal_.connect(std::forward<decltype(callback)>(callback));
+			signal_ = std::forward<Callback>(callback);
 		}
 
-		auto operator()(Args... args) const -> void
+		auto operator()(Args... args) const noexcept -> void
 		{
-			signal_(std::forward<Args>(args)...);
+			if (!signal_)
+			{
+				return;
+			}
+
+			try
+			{
+				signal_(std::forward<Args>(args)...);
+			}
+			catch (const std::exception& e)
+			{
+				(void)e;
+			}
 		}
 
 	private:
-		sigslot::signal<Args...> signal_{};
+		std::function<R(Args...)> signal_{};
 	};
 }

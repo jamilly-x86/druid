@@ -1,11 +1,9 @@
-module;
+#pragma once
 
 #include <cstdint>
 #include <variant>
 
-export module druid.core.event;
-
-export namespace druid::core
+namespace druid::core
 {
 	struct EventKeyboard
 	{

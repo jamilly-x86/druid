@@ -1,15 +1,13 @@
-module;
+#pragma once
 
+#include <druid/graphics/Color.h>
+#include <druid/graphics/Node.h>
 #include <string>
-
-export module druid.graphics.node.text;
-
-import druid.graphics.node;
-import druid.graphics.color;
+#include <string_view>
 
 namespace druid::graphics
 {
-	export class NodeText : public Node
+	class NodeText : public Node
 	{
 	public:
 		static constexpr auto DefaultFontSize{20};
@@ -50,7 +48,7 @@ namespace druid::graphics
 			color_ = color;
 		}
 
-		auto get_color() const -> Color
+		[[nodiscard]] auto get_color() const -> Color
 		{
 			return color_;
 		}

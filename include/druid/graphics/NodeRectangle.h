@@ -1,15 +1,12 @@
-module;
+#pragma once
 
+#include <druid/graphics/Color.h>
+#include <druid/graphics/Node.h>
 #include <glm/vec2.hpp>
-
-export module druid.graphics.node.rectangle;
-
-import druid.graphics.node;
-import druid.graphics.color;
 
 namespace druid::graphics
 {
-	export class NodeRectangle : public Node
+	class NodeRectangle : public Node
 	{
 	public:
 		NodeRectangle()
@@ -34,7 +31,7 @@ namespace druid::graphics
 			size_ = x;
 		}
 
-		auto get_size() const -> glm::vec2
+		[[nodiscard]] auto get_size() const -> glm::vec2
 		{
 			return size_;
 		}
@@ -44,17 +41,17 @@ namespace druid::graphics
 			color_ = color;
 		}
 
-		auto get_color() const -> Color
+		[[nodiscard]] auto get_color() const -> Color
 		{
 			return color_;
 		}
 
-		auto top_left() const -> glm::vec2
+		[[nodiscard]] auto top_left() const -> glm::vec2
 		{
 			return {-size_.x * Half, -size_.y * Half};
 		}
 
-		auto bottom_right() const -> glm::vec2
+		[[nodiscard]] auto bottom_right() const -> glm::vec2
 		{
 			return size_;
 		}

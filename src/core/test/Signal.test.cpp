@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-import druid.core.signal;
+#include <druid/core/Signal.h>
 
 using druid::core::Signal;
 

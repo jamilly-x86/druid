@@ -8,8 +8,6 @@
     "glm",
     "gtest",
     "magic-enum",
-    "palsigslot",
-    "raylib",
-    "flecs"
+    "raylib"
   ]
 }
