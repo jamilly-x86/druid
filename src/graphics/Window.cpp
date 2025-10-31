@@ -12,7 +12,7 @@
 
 namespace
 {
-		[[nodiscard]] auto convert_raylib_key(KeyboardKey x) -> druid::core::EventKeyboard::Key
+		[[nodiscard]] auto ConvertRayLibKey(KeyboardKey x) -> druid::core::EventKeyboard::Key
 		{
 			using Key = druid::core::EventKeyboard::Key;
 
@@ -274,12 +274,12 @@ namespace druid::graphics
 
 			if (IsKeyPressed(key))
 			{
-				EventKeyboard e{.type = EventKeyboard::Type::KeyPressed, .key = convert_raylib_key(key)};
+				EventKeyboard e{.type = EventKeyboard::Type::KeyPressed, .key = ConvertRayLibKey(key)};
 				engine().event(e);
 			}
 			else if (IsKeyReleased(key))
 			{
-				EventKeyboard e{.type = EventKeyboard::Type::KeyReleased, .key = convert_raylib_key(key)};
+				EventKeyboard e{.type = EventKeyboard::Type::KeyReleased, .key = ConvertRayLibKey(key)};
 				engine().event(e);
 			}
 		}
