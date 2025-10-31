@@ -4,6 +4,7 @@ project_add_library(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
     Color.cpp
+    Node.cpp
     Window.cpp
 )
 

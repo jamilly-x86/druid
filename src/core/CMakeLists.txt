@@ -5,6 +5,7 @@ project_add_library(${PROJECT_NAME})
 target_sources(${PROJECT_NAME} PRIVATE
     Engine.cpp
     File.cpp
+    Object.cpp
 )
 
 target_sources(${PROJECT_NAME} PUBLIC

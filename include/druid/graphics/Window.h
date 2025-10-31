@@ -1,13 +1,13 @@
 #pragma once
 
+#include <druid/core/Engine.h>
+#include <druid/core/Event.h>
+#include <druid/graphics/Color.h>
+#include <druid/graphics/Node.h>
+#include <druid/graphics/Renderer.h>
 #include <chrono>
 #include <memory>
 #include <string>
-#include <druid/core/Engine.h>
-#include <druid/core/Event.h>
-#include <druid/graphics/Node.h>
-#include <druid/graphics/Renderer.h>
-#include <druid/graphics/Color.h>
 
 namespace druid::graphics
 {
@@ -29,10 +29,7 @@ namespace druid::graphics
 		auto update(std::chrono::steady_clock::duration x) -> void override;
 		auto update_end() -> void override;
 
-		[[nodiscard]] auto root_node() -> Node&
-		{
-			return root_node_;
-		}
+		[[nodiscard]] auto root_node() -> Node&;
 
 		auto set_title(std::string_view x) -> void;
 		[[nodiscard]] auto get_title() -> std::string_view;

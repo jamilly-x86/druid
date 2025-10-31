@@ -82,4 +82,45 @@ namespace druid::core
 			},
 			x);
 	}
+
+	Service::Service(Engine& x) : engine_{x}
+	{
+	}
+
+	auto Service::update(std::chrono::steady_clock::duration /*x*/) -> void
+	{
+	}
+
+	auto Service::update_fixed(std::chrono::steady_clock::duration /*x*/) -> void
+	{
+	}
+
+	auto Service::update_end() -> void
+	{
+	}
+
+	auto Service::engine() -> Engine&
+	{
+		return engine_;
+	}
+
+	auto Engine::set_interval_fixed(std::chrono::steady_clock::duration x) -> void
+	{
+		interval_fixed_ = x;
+	}
+
+	auto Engine::get_interval_fixed() const noexcept -> std::chrono::steady_clock::duration
+	{
+		return interval_fixed_;
+	}
+
+	auto Engine::quit() -> void
+	{
+		running_ = false;
+	}
+
+	auto Engine::running() const noexcept -> bool
+	{
+		return running_;
+	}
 }
