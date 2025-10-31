@@ -10,7 +10,7 @@
 namespace druid::core
 {
 	class Engine;
-
+	
 	class Service
 	{
 	public:
@@ -43,6 +43,8 @@ namespace druid::core
 	public:
 		static constexpr auto DefaultIntervalFixed{std::chrono::milliseconds{10}};
 		static constexpr auto DefaultUpdateFixedLimit{5};
+
+		static auto instance() -> Engine*;
 
 		Engine();
 

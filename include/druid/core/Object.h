@@ -1,11 +1,12 @@
 #pragma once
 
+#include <druid/core/Engine.h>
 #include <druid/core/Signal.h>
 #include <algorithm>
 #include <memory>
 #include <string>
-#include <string_view>
 #include <vector>
+#include <gsl/pointers>
 
 namespace druid::core
 {
@@ -17,8 +18,7 @@ namespace druid::core
 	class Object
 	{
 	public:
-		Object() = default;
-
+		Object();
 		virtual ~Object() noexcept;
 
 		Object(const Object&) = delete;
@@ -104,10 +104,14 @@ namespace druid::core
 			on_child_removed_.connect(std::forward<Callback>(x));
 		}
 
+	protected:
+		[[nodiscard]] auto engine() const -> Engine&;
+
 	private:
 		std::vector<std::unique_ptr<Object>> children_;
 		std::string name_;
 		Object* parent_{};
+		gsl::strict_not_null<Engine*> engine_;
 
 		Signal<void()> on_destroyed_;
 		Signal<void(Object*)> on_added_;

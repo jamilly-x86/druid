@@ -3,6 +3,10 @@
 
 namespace druid::core
 {
+	Object::Object() : engine_{Engine::instance()}
+	{
+	}
+
 	Object::~Object() noexcept
 	{
 		on_destroyed_();
@@ -83,5 +87,10 @@ namespace druid::core
 	auto Object::parent() const noexcept -> Object*
 	{
 		return parent_;
+	}
+
+	auto Object::engine() const -> Engine&
+	{
+		return *engine_;
 	}
 }
