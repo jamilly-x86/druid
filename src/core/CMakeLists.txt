@@ -3,7 +3,6 @@ project(druid-core)
 project_add_library(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
-    Color.cpp
     Engine.cpp
     File.cpp
 )

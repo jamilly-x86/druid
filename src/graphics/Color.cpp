@@ -1,8 +1,6 @@
 #include <druid/graphics/Color.h>
 
-namespace druid
-{
-namespace graphics
+namespace druid::graphics
 {
 	const Color Color::Druid{{.r = 53, .g = 39, .b = 39}};
 	const Color Color::Red{{.r = Rgba::Max}};
@@ -11,5 +9,4 @@ namespace graphics
 	const Color Color::White{{.r = Rgba::Max, .g = Rgba::Max, .b = Rgba::Max}};
 	const Color Color::Black{{}};
 	const Color Color::Transparent{{.a = 0U}};
-}
 }
