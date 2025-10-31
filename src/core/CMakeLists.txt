@@ -20,3 +20,9 @@ target_sources(${PROJECT_NAME} PUBLIC
         ${CMAKE_SOURCE_DIR}/include/druid/core/Object.h
         ${CMAKE_SOURCE_DIR}/include/druid/core/Signal.h
 )
+
+find_package(Microsoft.GSL CONFIG REQUIRED)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    Microsoft.GSL::GSL
+)
