@@ -1,16 +1,12 @@
 #pragma once
 
-#include <raylib.h>
 #include <chrono>
 #include <memory>
 #include <string>
-#include <string_view>
-#include <magic_enum/magic_enum.hpp>
 #include <druid/core/Engine.h>
 #include <druid/core/Event.h>
 #include <druid/graphics/Node.h>
 #include <druid/graphics/Renderer.h>
-#include <druid/graphics/renderer/Raylib.h>
 #include <druid/graphics/Color.h>
 
 namespace druid::graphics
@@ -42,8 +38,6 @@ namespace druid::graphics
 		[[nodiscard]] auto get_title() -> std::string_view;
 
 	private:
-		auto convert_raylib_key(KeyboardKey key) -> druid::core::EventKeyboard::Key;
-		
 		Node root_node_;
 		std::unique_ptr<Renderer> renderer_;
 		std::string title_{DefaultTitle};
