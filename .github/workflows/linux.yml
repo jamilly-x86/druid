@@ -17,10 +17,12 @@ jobs:
         config:
           - preset: x64-linux-gcc-release
             compiler: gcc
-            clang-tidy: false
           - preset: x64-linux-clang-debug
             compiler: clang
             clang-tidy: true
+          - preset: x64-linux-llvm-coverage
+            compiler: clang
+            llvm-coverage: true
 
     runs-on: ubuntu-latest
     container: ubuntu:25.10
@@ -73,3 +75,7 @@ jobs:
       - name: clang-tidy
         if: ${{ matrix.config.clang-tidy }}
         run: cmake --build --preset ${{ matrix.config.preset }} --target clang-tidy
+
+      - name: llvm-coverage
+        if: ${{ matrix.config.llvm-coverage }}
+        run: cmake --build --preset ${{ matrix.config.preset }} --target llvm-coverage

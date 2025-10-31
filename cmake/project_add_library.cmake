@@ -1,5 +1,9 @@
-function(project_add_library)
-    add_library(${ARGV})
+function(project_add_library target)
+    add_library(${target})
+
+    get_property(PROJECT_LIB_TARGETS GLOBAL PROPERTY PROJECT_LIB_TARGETS)
+    list(APPEND PROJECT_LIB_TARGETS ${target})
+    set_property(GLOBAL PROPERTY PROJECT_LIB_TARGETS ${PROJECT_LIB_TARGETS})
 
     project_compile_lib()
 

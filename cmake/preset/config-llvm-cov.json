@@ -1,0 +1,12 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "config-llvm-cov",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fprofile-instr-generate -fcoverage-mapping"
+            }
+        }
+    ]
+}

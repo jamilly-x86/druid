@@ -3,6 +3,7 @@
     "include": [
         "config-build-dir.json",
         "config-debug.json",
+        "config-llvm-cov.json",
         "config-release.json",
         "host-arm64-linux.json",
         "host-x64-linux.json",
@@ -37,6 +38,13 @@
                 "use-clang",
                 "use-ninja",
                 "use-vcpkg"
+            ]
+        },
+        {
+            "name": "x64-linux-llvm-coverage",
+            "inherits": [
+                "x64-linux-clang-debug",
+                "config-llvm-cov"
             ]
         },
         {
@@ -100,6 +108,11 @@
             "jobs": 8
         },
         {
+            "name": "x64-linux-llvm-coverage",
+            "configurePreset": "x64-linux-llvm-coverage",
+            "jobs": 8
+        },
+        {
             "name": "x64-linux-gcc-debug",
             "configurePreset": "x64-linux-gcc-debug",
             "jobs": 8
@@ -133,6 +146,16 @@
             "configurePreset": "x64-linux-clang-release",
             "output": {
                 "outputOnFailure": true
+            }
+        },
+        {
+            "name": "x64-linux-llvm-coverage",
+            "configurePreset": "x64-linux-llvm-coverage",
+            "output": {
+                "outputOnFailure": true
+            },
+            "environment": {
+                "LLVM_PROFILE_FILE": "${sourceDir}/build/coverage/%m.profraw"
             }
         },
         {
