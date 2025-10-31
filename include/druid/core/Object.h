@@ -1,15 +1,13 @@
-module;
+#pragma once
 
 #include <algorithm>
 #include <memory>
 #include <string>
 #include <string_view>
 #include <vector>
+#include <druid/core/Signal.h>
 
-export module druid.core.object;
-import druid.core.signal;
-
-export namespace druid::core
+namespace druid::core
 {
 	class Object;
 	template <typename T>
@@ -140,29 +138,34 @@ export namespace druid::core
 			return parent_;
 		}
 
-		auto on_destroyed(auto x) -> void
+		template<typename Callback>
+		auto on_destroyed(Callback&& x) -> void
 		{
-			on_destroyed_.connect(std::forward<decltype(x)>(x));
+			on_destroyed_.connect(std::forward<Callback>(x));
 		}
 
-		auto on_added(auto x) -> void
+		template<typename Callback>
+		auto on_added(Callback&& x) -> void
 		{
-			on_added_.connect(std::forward<decltype(x)>(x));
+			on_added_.connect(std::forward<Callback>(x));
 		}
 
-		auto on_removed(auto x) -> void
+		template<typename Callback>
+		auto on_removed(Callback&& x) -> void
 		{
-			on_removed_.connect(std::forward<decltype(x)>(x));
+			on_removed_.connect(std::forward<Callback>(x));
 		}
 
-		auto on_child_added(auto x) -> void
+		template<typename Callback>
+		auto on_child_added(Callback&& x) -> void
 		{
-			on_child_added_.connect(std::forward<decltype(x)>(x));
+			on_child_added_.connect(std::forward<Callback>(x));
 		}
 
-		auto on_child_removed(auto x) -> void
+		template<typename Callback>
+		auto on_child_removed(Callback&& x) -> void
 		{
-			on_child_removed_.connect(std::forward<decltype(x)>(x));
+			on_child_removed_.connect(std::forward<Callback>(x));
 		}
 
 	private:

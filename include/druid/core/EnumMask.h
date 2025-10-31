@@ -1,13 +1,10 @@
-module;
+#pragma once
 
 #include <initializer_list>
 #include <type_traits>
+#include <druid/core/Concepts.h>
 
-export module druid.core.enummask;
-
-import druid.core.concepts;
-
-export namespace druid::core
+namespace druid::core
 {
 	template <TypeEnum T>
 	class EnumMask

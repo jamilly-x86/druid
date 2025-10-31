@@ -1,13 +1,11 @@
-module;
+#pragma once
 
 #include <cstdint>
 #include <limits>
 
-export module druid.graphics.color;
-
 namespace druid::graphics
 {
-	export struct Rgba
+	struct Rgba
 	{
 		static constexpr auto Max = std::numeric_limits<uint8_t>::max();
 
@@ -17,7 +15,7 @@ namespace druid::graphics
 		uint8_t a{Rgba::Max};
 	};
 
-	export struct RgbaF
+	struct RgbaF
 	{
 		static constexpr auto Max = 1.0F;
 		float r{};
@@ -27,7 +25,7 @@ namespace druid::graphics
 	};
 
 	/// \brief This class represents color as 8-bit RGBA.
-	export class Color
+	class Color
 	{
 	public:
 		static const Color Druid;
@@ -92,12 +90,4 @@ namespace druid::graphics
 		static constexpr auto Scalar = 1.0F / Rgba::Max;
 		Rgba rgba_{};
 	};
-
-	constexpr Color Color::Druid{{.r = 53, .g = 39, .b = 39}};
-	constexpr Color Color::Red{{.r = Rgba::Max}};
-	constexpr Color Color::Green{{.g = Rgba::Max}};
-	constexpr Color Color::Blue{{.b = Rgba::Max}};
-	constexpr Color Color::White{{.r = Rgba::Max, .g = Rgba::Max, .b = Rgba::Max}};
-	constexpr Color Color::Black{{}};
-	constexpr Color Color::Transparent{{.a = 0U}};
 }

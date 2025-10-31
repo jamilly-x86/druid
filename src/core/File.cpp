@@ -1,15 +1,8 @@
-module;
-
-#include <cstddef>
-#include <filesystem>
-#include <fstream>
-#include <vector>
-
-export module druid.core.file;
+#include <druid/core/File.h>
 
 namespace druid::core
 {
-	export auto ReadFile(const std::filesystem::path& x) -> std::vector<std::byte>
+	auto ReadFile(const std::filesystem::path& x) -> std::vector<std::byte>
 	{
 		std::vector<std::byte> v;
 		std::ifstream ifs{x, std::ios::binary | std::ios::ate};

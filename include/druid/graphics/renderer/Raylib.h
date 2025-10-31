@@ -1,14 +1,12 @@
-module;
+#pragma once
 
 #include <raylib.h>
 #include <string>
-
-export module druid.graphics.renderer.raylib;
-import druid.graphics.renderer;
+#include <druid/graphics/Renderer.h>
 
 namespace druid::graphics::renderer
 {
-	export class Raylib : public Renderer
+	class Raylib : public Renderer
 	{
 	public:
 		Raylib() = default;

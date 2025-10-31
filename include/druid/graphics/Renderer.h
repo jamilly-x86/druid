@@ -1,13 +1,11 @@
-module;
+#pragma once
 
 #include <string>
-
-export module druid.graphics.renderer;
-export import druid.graphics.color;
+#include <druid/graphics/Color.h>
 
 namespace druid::graphics
 {
-	export class Renderer
+	class Renderer
 	{
 	public:
 		Renderer() = default;

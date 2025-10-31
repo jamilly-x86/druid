@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-import druid.entity.world;
+#include <druid/entity/World.h>
 
 TEST(Word, create_entity)
 {

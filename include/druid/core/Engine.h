@@ -1,17 +1,17 @@
-module;
+#pragma once
 
 #include <chrono>
+#include <memory>
 #include <utility>
 #include <variant>
 #include <vector>
+#include <druid/core/Event.h>
+#include <druid/core/Signal.h>
 
-export module druid.core.engine;
-import druid.core.event;
-import druid.core.signal;
-
-export namespace druid::core
+namespace druid::core
 {
 	class Engine;
+	
 	class Service
 	{
 	public:
@@ -56,35 +56,7 @@ export namespace druid::core
 		static constexpr auto DefaultIntervalFixed{std::chrono::milliseconds{10}};
 		static constexpr auto DefaultUpdateFixedLimit{5};
 
-		Engine()
-		{
-			on_update(
-				[this](auto x)
-				{
-					for (auto& service : services_)
-					{
-						service->update(x);
-					}
-				});
-
-			on_update_fixed(
-				[this](auto x)
-				{
-					for (auto& service : services_)
-					{
-						service->update_fixed(x);
-					}
-				});
-
-			on_update_end(
-				[this]
-				{
-					for (auto& service : services_)
-					{
-						service->update_end();
-					}
-				});
-		}
+		Engine();
 
 		/// @brief Set the interval at which the fixed update function is called.
 		/// @param x The new fixed update interval.
@@ -102,43 +74,7 @@ export namespace druid::core
 
 		/// @brief Run the main loop of the engine. This will block until quit() is called.
 		/// @return The exit code of the engine.
-		auto run() -> int
-		{
-			try
-			{
-				running_ = true;
-
-				start_ = std::chrono::steady_clock::now();
-
-				while (running_)
-				{
-					const auto now = std::chrono::steady_clock::now();
-					const auto delta = now - start_;
-					start_ = now;
-					accumulate_ += delta;
-
-					on_update_(delta);
-
-					auto count = 0;
-
-					while (accumulate_ >= interval_fixed_ && count < update_fixed_limit_)
-					{
-						accumulate_ -= interval_fixed_;
-						count++;
-
-						on_update_fixed_(interval_fixed_);
-					}
-
-					on_update_end_();
-				}
-
-				return EXIT_SUCCESS;
-			}
-			catch (...)
-			{
-				return EXIT_FAILURE;
-			}
-		}
+		auto run() -> int;
 
 		/// @brief Quit the main loop of the engine.
 		auto quit() -> void
@@ -168,46 +104,42 @@ export namespace druid::core
 			using Ts::operator()...;
 		};
 
-		auto event(const Event& x) -> void
+		auto event(const Event& x) -> void;
+
+		template<typename Callback>
+		auto on_event_window(Callback&& x) -> void
 		{
-			std::visit(
-				Overloaded{
-					[this](const EventWindow& x) { on_event_window_(x); },
-					[this](const EventKeyboard& x) { on_event_keyboard_(x); },
-					[this](const EventMouse& x) { on_event_mouse_(x); },
-					[](auto) {},
-				},
-				x);
+			on_event_window_.connect(std::forward<Callback>(x));
 		}
 
-		auto on_event_window(auto x) -> void
+		template<typename Callback>
+		auto on_event_keyboard(Callback&& x) -> void
 		{
-			on_event_window_.connect(std::forward<decltype(x)>(x));
+			on_event_keyboard_.connect(std::forward<Callback>(x));
 		}
 
-		auto on_event_keyboard(auto x) -> void
+		template<typename Callback>
+		auto on_event_mouse(Callback&& x) -> void
 		{
-			on_event_keyboard_.connect(std::forward<decltype(x)>(x));
+			on_event_mouse_.connect(std::forward<Callback>(x));
 		}
 
-		auto on_event_mouse(auto x) -> void
+		template<typename Callback>
+		auto on_update(Callback&& x) -> void
 		{
-			on_event_mouse_.connect(std::forward<decltype(x)>(x));
+			on_update_.connect(std::forward<Callback>(x));
 		}
 
-		auto on_update(auto x) -> void
+		template<typename Callback>
+		auto on_update_fixed(Callback&& x) -> void
 		{
-			on_update_.connect(std::forward<decltype(x)>(x));
+			on_update_fixed_.connect(std::forward<Callback>(x));
 		}
 
-		auto on_update_fixed(auto x) -> void
+		template<typename Callback>
+		auto on_update_end(Callback&& x) -> void
 		{
-			on_update_fixed_.connect(std::forward<decltype(x)>(x));
-		}
-
-		auto on_update_end(auto x) -> void
-		{
-			on_update_end_.connect(std::forward<decltype(x)>(x));
+			on_update_end_.connect(std::forward<Callback>(x));
 		}
 
 	private:

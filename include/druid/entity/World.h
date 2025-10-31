@@ -1,11 +1,9 @@
-module;
+#pragma once
 
 #include <cstdint>
 #include <vector>
 
-export module druid.entity.world;
-
-export namespace druid::entity
+namespace druid::entity
 {
 	enum class Entity : std::uint64_t
 	{

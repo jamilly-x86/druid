@@ -1,15 +1,13 @@
-module;
+#pragma once
 
 #include <string>
-
-export module druid.graphics.node.text;
-
-import druid.graphics.node;
-import druid.graphics.color;
+#include <string_view>
+#include <druid/graphics/Node.h>
+#include <druid/graphics/Color.h>
 
 namespace druid::graphics
 {
-	export class NodeText : public Node
+	class NodeText : public Node
 	{
 	public:
 		static constexpr auto DefaultFontSize{20};

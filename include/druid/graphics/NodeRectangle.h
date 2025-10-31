@@ -1,15 +1,12 @@
-module;
+#pragma once
 
 #include <glm/vec2.hpp>
-
-export module druid.graphics.node.rectangle;
-
-import druid.graphics.node;
-import druid.graphics.color;
+#include <druid/graphics/Node.h>
+#include <druid/graphics/Color.h>
 
 namespace druid::graphics
 {
-	export class NodeRectangle : public Node
+	class NodeRectangle : public Node
 	{
 	public:
 		NodeRectangle()

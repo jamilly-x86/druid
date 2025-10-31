@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <glm/vec2.hpp>
 
-import druid.graphics.node;
+#include <druid/graphics/Node.h>
 
 using druid::graphics::Node;
 

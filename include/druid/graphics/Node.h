@@ -1,4 +1,4 @@
-module;
+#pragma once
 
 #include <raylib.h>
 #include <rlgl.h>
@@ -8,15 +8,13 @@ module;
 #include <glm/vec2.hpp>
 #include <algorithm>
 #include <vector>
-
-export module druid.graphics.node;
-import druid.core.object;
-import druid.core.signal;
-import druid.graphics.renderer;
+#include <druid/core/Object.h>
+#include <druid/core/Signal.h>
+#include <druid/graphics/Renderer.h>
 
 using druid::core::Signal;
 
-export namespace druid::graphics
+namespace druid::graphics
 {
 	class Node;
 
@@ -69,9 +67,9 @@ export namespace druid::graphics
 			return scale_;
 		}
 
-		auto set_rotation(float angle) -> void
+		auto set_rotation(float rotation) -> void
 		{
-			rotation_ = angle;
+			rotation_ = rotation;
 			update_transform();
 		}
 
@@ -80,23 +78,21 @@ export namespace druid::graphics
 			return rotation_;
 		}
 
+		template <NodeType T, typename... Args>
+		[[nodiscard]] auto create_node(Args&&... args) -> T&
+		{
+			auto child = std::make_unique<T>(std::forward<Args>(args)...);
+			auto* ptr = child.get();
+			add_child(std::move(child));
+			return *ptr;
+		}
+
 		[[nodiscard]] auto create_node() -> Node&
 		{
-			return create_child<Node>();
+			return create_node<Node>();
 		}
 
-		template <NodeType T, typename... Args>
-		[[nodiscard]] auto create_node(auto&&... args) -> T&
-		{
-			return create_child<T>(std::forward<Args>(args)...);
-		}
-
-		[[nodiscard]] auto parent_node() const noexcept -> Node*
-		{
-			return parent_node_;
-		}
-
-		[[nodiscard]] auto nodes() const noexcept -> const std::vector<Node*>&
+		[[nodiscard]] auto nodes() -> std::vector<Node*>&
 		{
 			return nodes_;
 		}
@@ -132,9 +128,10 @@ export namespace druid::graphics
 			rlPopMatrix();
 		}
 
-		auto on_draw(auto x) -> void
+		template<typename Callback>
+		auto on_draw(Callback&& x) -> void
 		{
-			on_draw_.connect(std::forward<decltype(x)>(x));
+			on_draw_.connect(std::forward<Callback>(x));
 		}
 
 	private:

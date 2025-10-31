@@ -1,6 +1,6 @@
-export module druid.entity;
+#pragma once
 
-export namespace druid::entity
+namespace druid::entity
 {
     class Entity
     {
