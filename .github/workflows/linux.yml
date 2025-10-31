@@ -23,11 +23,6 @@ jobs:
             clang-tidy: true
 
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/druidengine/images/ubuntu-dev:main
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
 
     env:
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/.vcpkg_cache
@@ -48,6 +43,23 @@ jobs:
           restore-keys: |
             vcpkg-${{ matrix.config.compiler }}-
 
+      - name: install-tools
+        run: |
+          sudo apt update -y
+          sudo apt upgrade -y
+          sudo apt install -y curl tar git zip unzip make autoconf libtool ninja-build cmake
+          sudo apt install -y clang-20 clang-tidy-20 clang-format-20 llvm-20-tools g++-15
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 10
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-15 10
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-20 200
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-20 200
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-20 200
+          sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-20 200
+          sudo update-alternatives --install /usr/bin/run-clang-tidy run-clang-tidy /usr/bin/run-clang-tidy-20 200
+
+      - name: install-raylib-dependencies
+        run: |
+          sudo apt install -y libxinerama-dev libxcursor-dev xorg-dev libglu1-mesa-dev pkg-config libgl1-mesa-dev libx11-dev libxrandr-dev
       - name: cmake-configure
         run: cmake --preset ${{ matrix.config.preset }}
 
