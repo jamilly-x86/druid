@@ -9,7 +9,7 @@ namespace druid::graphics
 	class NodeRectangle : public Node
 	{
 	public:
-		NodeRectangle()
+		NodeRectangle(druid::core::Engine& x) : Node{x}
 		{
 			on_draw(
 				[this](auto& renderer)

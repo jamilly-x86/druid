@@ -3,7 +3,7 @@
 
 namespace druid::core
 {
-	Object::Object() : engine_{Engine::instance()}
+	Object::Object(Engine& x) : engine_{&x}
 	{
 	}
 
@@ -37,7 +37,7 @@ namespace druid::core
 
 	auto Object::create_child(std::string_view x) -> Object&
 	{
-		auto child = std::make_unique<Object>();
+		auto child = std::make_unique<Object>(engine());
 		child->set_name(x);
 		auto* ptr = child.get();
 		add_child(std::move(child));

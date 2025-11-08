@@ -1,6 +1,5 @@
 #pragma once
 
-#include <druid/core/Engine.h>
 #include <druid/core/Signal.h>
 #include <algorithm>
 #include <memory>
@@ -10,6 +9,8 @@
 
 namespace druid::core
 {
+	class Engine;
+	
 	class Object;
 	template <typename T>
 	concept ObjectType = std::is_base_of_v<Object, T>;
@@ -18,7 +19,7 @@ namespace druid::core
 	class Object
 	{
 	public:
-		Object();
+		Object(Engine& x);
 		virtual ~Object() noexcept;
 
 		Object(const Object&) = delete;

@@ -246,7 +246,7 @@ namespace
 
 namespace druid::graphics
 {
-	Window::Window(druid::core::Engine& x) : Service{x}, renderer_{std::make_unique<renderer::Raylib>()}
+	Window::Window(druid::core::Engine& x) : Service{x}, root_node_{x}, renderer_{std::make_unique<renderer::Raylib>()}
 	{
 		InitWindow(width_, height_, title_.c_str());
 		SetWindowState(FLAG_WINDOW_RESIZABLE);

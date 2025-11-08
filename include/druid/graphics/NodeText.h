@@ -12,7 +12,7 @@ namespace druid::graphics
 	public:
 		static constexpr auto DefaultFontSize{20};
 
-		NodeText()
+		NodeText(druid::core::Engine& x) : Node{x}
 		{
 			on_draw([this](auto& renderer) { renderer.draw_text(0, 0, text_, font_size_, color_); });
 		}
