@@ -3,7 +3,7 @@
 
 namespace druid::graphics
 {
-	Node::Node()
+	Node::Node(druid::core::Engine& x) : Object{x}
 	{
 		on_added([this](auto* parent) { parent_node_ = dynamic_cast<Node*>(parent); });
 		on_removed([this](auto*) { parent_node_ = nullptr; });

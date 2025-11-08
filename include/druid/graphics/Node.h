@@ -28,7 +28,7 @@ namespace druid::graphics
 		static constexpr auto DefaultScale = glm::vec2{1.0F, 1.0F};
 		static constexpr auto DefaultRotation = 0.0F;
 
-		Node();
+		Node(druid::core::Engine& x);
 
 		auto set_position(const glm::vec2& pos) -> void;
 
@@ -47,7 +47,7 @@ namespace druid::graphics
 		template <NodeType T, typename... Args>
 		[[nodiscard]] auto create_node(Args&&... args) -> T&
 		{
-			auto child = std::make_unique<T>(std::forward<Args>(args)...);
+			auto child = std::make_unique<T>(engine(), std::forward<Args>(args)...);
 			auto* ptr = child.get();
 			add_child(std::move(child));
 			return *ptr;

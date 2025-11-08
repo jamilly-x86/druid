@@ -1,65 +1,70 @@
 #include <gtest/gtest.h>
 
-#include <druid/core/Object.h>
+#include <druid/core/Engine.h>
 
+using druid::core::Engine;
 using druid::core::Object;
 
 TEST(Object, name)
 {
-	Object object;
-	object.set_name("test");
-	EXPECT_EQ(object.get_name(), "test");
+	Engine engine;
+	auto object = engine.create_object();
+	object->set_name("test");
+	EXPECT_EQ(object->get_name(), "test");
 }
 
 TEST(Object, addChild)
 {
-	Object object;
-	EXPECT_NO_THROW(object.add_child(std::make_unique<Object>()));
+	Engine engine;
+	auto object = engine.create_object();
+	EXPECT_NO_THROW(object->add_child(std::make_unique<Object>(engine)));
 }
 
 TEST(Object, create_child)
 {
-	Object object;
-
-	auto& child = object.create_child("test");
+	Engine engine;
+	auto object = engine.create_object();
+	auto& child = object->create_child("test");
 	EXPECT_EQ(child.get_name(), "test");
 }
 
 TEST(Object, remove)
 {
-	Object object;
-	EXPECT_EQ(object.remove(), nullptr);
+	Engine engine;
+	auto object = engine.create_object();
+	EXPECT_EQ(object->remove(), nullptr);
 
-	(void)object.create_child("one");
-	auto& two = object.create_child("two");
-	(void)object.create_child("three");
+	(void)object->create_child("one");
+	auto& two = object->create_child("two");
+	(void)object->create_child("three");
 
 	EXPECT_EQ(two.get_name(), "two");
 
-	EXPECT_EQ(object.children().size(), 3U);
+	EXPECT_EQ(object->children().size(), 3U);
 
 	auto child = two.remove();
 	EXPECT_EQ(child->get_name(), "two");
 
-	EXPECT_EQ(object.children().size(), 2U);
+	EXPECT_EQ(object->children().size(), 2U);
 }
 
 TEST(Object, find_child)
 {
-	Object object;
-	auto& one = object.create_child("one");
-	auto& two = object.create_child("two");
-	auto& three = object.create_child("three");
+	Engine engine;
+	auto object = engine.create_object();
+	auto& one = object->create_child("one");
+	auto& two = object->create_child("two");
+	auto& three = object->create_child("three");
 
-	auto* child = object.find_child("one");
+	auto* child = object->find_child("one");
 	ASSERT_NE(child, nullptr);
 	EXPECT_EQ(child, &one);
 
-	child = object.find_child("two");
+	child = object->find_child("two");
 	ASSERT_NE(child, nullptr);
 	EXPECT_EQ(child, &two);
 
-	child = object.find_child("three");
+	child = object->find_child("three");
 	ASSERT_NE(child, nullptr);
 	EXPECT_EQ(child, &three);
 }

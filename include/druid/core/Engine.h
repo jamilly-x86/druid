@@ -1,6 +1,7 @@
 #pragma once
 
 #include <druid/core/Event.h>
+#include <druid/core/Object.h>
 #include <druid/core/Signal.h>
 #include <chrono>
 #include <memory>
@@ -44,8 +45,6 @@ namespace druid::core
 		static constexpr auto DefaultIntervalFixed{std::chrono::milliseconds{10}};
 		static constexpr auto DefaultUpdateFixedLimit{5};
 
-		static auto instance() -> Engine*;
-
 		Engine();
 
 		/// @brief Set the interval at which the fixed update function is called.
@@ -66,6 +65,12 @@ namespace druid::core
 		/// @brief Tells whether the engine is currently running.
 		/// @return True if the engine is running, false otherwise.
 		[[nodiscard]] auto running() const noexcept -> bool;
+
+		template <druid::core::ObjectType T = Object>
+		[[nodiscard]] auto create_object() -> std::unique_ptr<T>
+		{
+			return std::make_unique<T>(*this);
+		}
 
 		template <ServiceType T>
 		[[nodiscard]] auto create_service() -> T&
