@@ -35,7 +35,8 @@ namespace druid::scene
 
 	auto Node::clear_transform() const -> void
 	{
-		entity_.remove<Transform>();
+		// Remove simply returns the entity so ignore the return value warning.
+		(void)entity_.remove<Transform>();
 	}
 
 	auto Node::make_dirty(Dirty dirty) -> void
