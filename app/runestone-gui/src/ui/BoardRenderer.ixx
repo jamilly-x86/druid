@@ -1,8 +1,8 @@
 module;
 
-#include <ranges>
 #include <raylib.h>
 #include <array>
+#include <ranges>
 
 export module ui.boardrenderer;
 
@@ -41,7 +41,8 @@ export namespace runestone_gui::ui
 
 					const Color color = (dark_square == false) ? LightSquare : DarkSquare;
 
-					squares_.at((rank * Files) + file) = Square(static_cast<float>(px), static_cast<float>(py), static_cast<float>(square_size_), color);
+					squares_.at((rank * Files) + file) =
+						Square(static_cast<float>(px), static_cast<float>(py), static_cast<float>(square_size_), color);
 
 					dark_square = !dark_square;
 				}
@@ -49,7 +50,7 @@ export namespace runestone_gui::ui
 		}
 
 		static constexpr Color LightSquare{240, 217, 181, 255};
-		static constexpr Color DarkSquare{181, 136,  99, 255};
+		static constexpr Color DarkSquare{181, 136, 99, 255};
 		static constexpr std::size_t Files{8};
 		static constexpr std::size_t Ranks{8};
 

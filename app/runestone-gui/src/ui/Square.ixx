@@ -21,11 +21,13 @@ export namespace runestone_gui::ui
 
 			if (hightighted_ == true)
 			{
-				DrawRectangleLinesEx(rectangle_, 3.0f, YELLOW);
+				DrawRectangleLinesEx(rectangle_, LineThickness, YELLOW);
 			}
 		}
 
 	private:
+		static constexpr auto LineThickness{3.0F};
+
 		Rectangle rectangle_{};
 		Color color_{};
 		bool hightighted_{false};
