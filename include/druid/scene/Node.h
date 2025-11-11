@@ -13,7 +13,7 @@ namespace druid::scene
 	{
 	public:
 		/// @brief Represents discrete kinds of changes (dirty states) that indicate which part of a node needs to be re-calculated.
-		enum class Dirty
+		enum class Dirty : std::uint8_t
 		{
 			Transform,
 			Mesh,
@@ -32,7 +32,7 @@ namespace druid::scene
 		Node(Node&&) noexcept = default;
 
 		[[nodiscard]] auto operator=(const Node&) -> Node& = default;
-		[[nodiscard]] auto operator=(Node&) noexcept -> Node& = default;
+		[[nodiscard]] auto operator=(Node&&) noexcept -> Node& = default;
 
 		/// @brief Sets the node's Transform. Marks the Node's Transform as dirty.
 		/// @param x The new Transform to set.
