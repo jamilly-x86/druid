@@ -28,6 +28,12 @@ namespace druid::scene
 		Node(Tree& x, flecs::entity e);
 		~Node();
 
+		Node(const Node&) = default;
+		Node(Node&&) noexcept = default;
+
+		[[nodiscard]] auto operator=(const Node&) -> Node& = default;
+		[[nodiscard]] auto operator=(Node&) noexcept -> Node& = default;
+
 		/// @brief Sets the node's Transform. Marks the Node's Transform as dirty.
 		/// @param x The new Transform to set.
 		auto set_transform(const Transform& x) -> void;
