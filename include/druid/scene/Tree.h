@@ -12,6 +12,8 @@ namespace druid::scene
 	public:
 		[[nodiscard]] auto create_node() -> std::unique_ptr<Node>;
 		auto make_dirty(Node::Dirty dirty, flecs::entity e) -> void;
+
+
 		
 	private:
 		flecs::world world_;
