@@ -13,7 +13,7 @@ namespace druid::scene
 		[[nodiscard]] auto create_node() -> std::unique_ptr<Node>;
 		auto make_dirty(Node::Dirty dirty, flecs::entity e) -> void;
 
-
+		auto update_transforms() const -> void;
 		
 	private:
 		flecs::world world_;

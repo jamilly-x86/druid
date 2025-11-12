@@ -6,7 +6,7 @@ namespace druid::scene
 {
 	struct Transform
 	{
-		glm::mat4 global{};
-		glm::mat4 local{};
+		glm::mat4 global{1.0F};
+		glm::mat4 local{1.0F};
 	};
 }
