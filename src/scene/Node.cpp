@@ -39,6 +39,18 @@ namespace druid::scene
 		(void)entity_.remove<Transform>();
 	}
 
+	auto Node::add_child(Node* x) -> void
+	{
+		x->entity_.child_of(entity_);
+		x->make_dirty(Dirty::NodeAdded);
+	}
+
+	auto Node::remove_child(Node* x) -> void
+	{
+		x->entity_.remove(flecs::ChildOf, entity_);
+		x->make_dirty(Dirty::NodeRemoved);
+	}
+
 	auto Node::make_dirty(Dirty dirty) -> void
 	{
 		tree_->make_dirty(dirty, entity_);

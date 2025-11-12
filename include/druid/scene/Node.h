@@ -45,6 +45,10 @@ namespace druid::scene
 		/// @brief Clears the node's transformation state. This removes the cached transform associated with the node.
 		auto clear_transform() const -> void;
 
+		[[nodiscard]] auto add_child(Node* x) -> void;
+		[[nodiscard]] auto remove_child(Node* x) -> void;
+
+
 		/// @brief Marks the specified state as dirty.
 		/// @param dirty The state to be marked as dirty.
 		auto make_dirty(Dirty dirty) -> void;
