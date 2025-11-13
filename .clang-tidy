@@ -40,6 +40,7 @@ CheckOptions:
   modernize-loop-convert.NamingStyle: CamelCase
   llvm-else-after-return.WarnOnUnfixable: "false"
   google-readability-function-size.StatementThreshold: "800"
+  readability-magic-numbers.IgnoredNumericLiterals: "0,1,2,3,0.0,1.0,2.0,3.0"
   readability-identifier-naming.ClassCase: "CamelCase"
   readability-identifier-naming.ClassMemberCase: "lower_case"
   readability-identifier-naming.ClassMethodCase: "lower_case"
