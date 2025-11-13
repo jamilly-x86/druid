@@ -9,16 +9,30 @@ FetchContent_Declare(
     GIT_TAG 2025.09.17
 )
 
-# Acquire Doxygen
+# Acquire Doxygen. Acquisition of the Doxygen binary may
+# be necessary in order to include the necessary BISON dependency version.
 find_package(Doxygen QUIET)
 if(NOT DOXYGEN_FOUND)
-    # Grab Doxygen binary (this includes the required Bison version to use Doxygen)
+    # Select platform-appropriate url
+    if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
+        set(DOXYGEN_URL "https://www.doxygen.nl/files/doxygen-1.13.2.darwin-universal.tar.gz")
+    elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+        set(DOXYGEN_URL "https://www.doxygen.nl/files/doxygen-1.13.2.linux.bin.tar.gz")
+    elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+        set(DOXYGEN_URL "https://www.doxygen.nl/files/doxygen-1.13.2.windows.x64.bin.zip")
+    else()
+        message(FATAL_ERROR "Unsupported host system for Doxygen binary fetch.")
+    endif()
+
+    message(STATUS "Fetching Doxygen from: ${DOXYGEN_URL}")
+
     FetchContent_Declare(
-        doxygen_bin
-        URL https://www.doxygen.nl/files/doxygen-1.13.2.darwin-universal.tar.gz
+            doxygen_bin
+            URL ${DOXYGEN_URL}
     )
     FetchContent_MakeAvailable(doxygen_bin)
-    set(DOXYGEN_EXECUTABLE ${doxygen_bin_SOURCE_DIR}/doxygen)
+
+    set(DOXYGEN_EXECUTABLE "${doxygen_bin_SOURCE_DIR}/doxygen")
 endif()
 
 FetchContent_MakeAvailable(vcpkg)
