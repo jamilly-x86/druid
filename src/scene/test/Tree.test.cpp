@@ -18,10 +18,14 @@ TEST(Tree, SetTransform)
 	druid::scene::Tree tree;
 	auto node = tree.create_node();
 	druid::scene::Transform transform;
-	transform.local = glm::translate(glm::mat4{1.0F}, glm::vec3(1.0F, 2.0F, 3.0F));
+
+	constexpr auto position = glm::vec3{1.0F, 2.0F, 3.0F};
+	transform.local = glm::translate(glm::mat4{1.0F}, position);
 	node->set_transform(transform);
+	tree.update_transforms();
 	const auto& retrieved_transform = node->get_transform();
 	EXPECT_EQ(retrieved_transform.local, transform.local);
+	EXPECT_EQ(retrieved_transform.global, transform.local);
 }
 
 TEST(Tree, NestedTransform)
@@ -29,8 +33,12 @@ TEST(Tree, NestedTransform)
 	druid::scene::Tree tree;
 	auto parent_node = tree.create_node();
 	auto child_node = tree.create_node();
-	parent_node->set_transform({.local = glm::translate(glm::mat4{1.0F}, glm::vec3(2.0F, 0.0F, 0.0F))});
-	child_node->set_transform({.local = glm::translate(glm::mat4{1.0F}, glm::vec3(0.0F, 2.0F, 0.0F))});
+
+	constexpr auto pos1 = glm::vec3(2.0F, 0.0F, 0.0F);
+	constexpr auto pos2 = glm::vec3(0.0F, 2.0F, 0.0F);
+
+	parent_node->set_transform({.local = glm::translate(glm::mat4{1.0F}, pos1)});
+	child_node->set_transform({.local = glm::translate(glm::mat4{1.0F}, pos2)});
 	parent_node->add_child(child_node.get());
 	tree.update_transforms();
 	const auto& parent_transform = parent_node->get_transform();
@@ -41,7 +49,7 @@ TEST(Tree, NestedTransform)
 	glm::vec3 skew;
 	glm::vec4 perspective;
 	glm::decompose(parent_transform.global, scale, rotation, translation, skew, perspective);
-	EXPECT_EQ(translation, glm::vec3(2.0F, 0.0F, 0.0F));
+	EXPECT_EQ(translation, pos1);
 	glm::decompose(child_transform.global, scale, rotation, translation, skew, perspective);
-	EXPECT_EQ(translation, glm::vec3(2.0F, 2.0F, 0.0F));
+	EXPECT_EQ(translation, pos1 + pos2);
 }
