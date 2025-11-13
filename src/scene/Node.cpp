@@ -50,7 +50,8 @@ namespace druid::scene
 
 	auto Node::remove_child(Node* x) -> void
 	{
-		x->entity_.remove(flecs::ChildOf, entity_);
+		// Remove simply returns the entity so ignore the return value warning.
+		(void)x->entity_.remove(flecs::ChildOf, entity_);
 		x->make_dirty(Dirty::NodeRemoved);
 	}
 
