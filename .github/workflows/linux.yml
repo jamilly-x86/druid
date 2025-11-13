@@ -20,6 +20,7 @@ jobs:
           - preset: x64-linux-clang-debug
             compiler: clang
             clang-tidy: true
+            doxygen: true
           - preset: x64-linux-llvm-coverage
             compiler: clang
             llvm-coverage: true
