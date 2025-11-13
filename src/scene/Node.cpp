@@ -1,3 +1,4 @@
+#include <druid/scene/Heirarchy.h>
 #include <druid/scene/Node.h>
 #include <druid/scene/Transform.h>
 #include <druid/scene/Tree.h>
@@ -6,6 +7,7 @@ namespace druid::scene
 {
 	Node::Node(Tree& x, flecs::entity e) : tree_{&x}, entity_{e}
 	{
+		entity_.set<Heirarchy>({.depth = 0});
 	}
 
 	Node::~Node()
@@ -42,6 +44,7 @@ namespace druid::scene
 	auto Node::add_child(Node* x) -> void
 	{
 		x->entity_.child_of(entity_);
+		x->entity_.set<Heirarchy>({.depth = entity_.get<Heirarchy>().depth + 1});
 		x->make_dirty(Dirty::NodeAdded);
 	}
 
@@ -53,6 +56,11 @@ namespace druid::scene
 
 	auto Node::make_dirty(Dirty dirty) -> void
 	{
+		if (dirty == Dirty::Transform)
+		{
+			entity_.add<Transform>();
+		}
+
 		tree_->make_dirty(dirty, entity_);
 	}
 }

@@ -4,6 +4,7 @@
 
 namespace druid::scene
 {
+	/// @brief Internal Node component to track local and global rendering positions.
 	struct Transform
 	{
 		glm::mat4 global{1.0F};
