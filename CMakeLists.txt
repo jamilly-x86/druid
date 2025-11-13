@@ -9,6 +9,18 @@ FetchContent_Declare(
     GIT_TAG 2025.09.17
 )
 
+# Acquire Doxygen
+find_package(Doxygen QUIET)
+if(NOT DOXYGEN_FOUND)
+    # Grab Doxygen binary (this includes the required Bison version to use Doxygen)
+    FetchContent_Declare(
+        doxygen_bin
+        URL https://www.doxygen.nl/files/doxygen-1.13.2.darwin-universal.tar.gz
+    )
+    FetchContent_MakeAvailable(doxygen_bin)
+    set(DOXYGEN_EXECUTABLE ${doxygen_bin_SOURCE_DIR}/doxygen)
+endif()
+
 FetchContent_MakeAvailable(vcpkg)
 
 project(druid LANGUAGES CXX)
@@ -79,5 +91,37 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
             -output-dir=${CMAKE_BINARY_DIR}/coverage/html
             -instr-profile=${CMAKE_BINARY_DIR}/coverage/merged.profdata
             ${LLVM_COV_OBJECTS}
+    )
+
+    set(DOXYGEN_IN ${CMAKE_SOURCE_DIR}/docs/doxygen/.doxyfile)
+    set(DOXYGEN_OUT ${CMAKE_BINARY_DIR}/Doxyfile)
+
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+
+    if(TARGET doxygen)
+        # If you built Doxygen from source (via FetchContent)
+        set(DOXYGEN_EXECUTABLE $<TARGET_FILE:doxygen>)
+    elseif(DEFINED doxygen_bin_SOURCE_DIR AND EXISTS "${doxygen_bin_SOURCE_DIR}/doxygen")
+        # If you fetched a prebuilt binary of Doxygen
+        set(DOXYGEN_EXECUTABLE "${doxygen_bin_SOURCE_DIR}/doxygen")
+    else()
+        # Fallback: system-installed Doxygen
+        find_program(DOXYGEN_EXECUTABLE doxygen)
+        if (NOT DOXYGEN_EXECUTABLE)
+            message(FATAL_ERROR "Doxygen not found — please install it or use a FetchContent binary.")
+        endif()
+    endif()
+
+    add_custom_target(doxygen
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMENT "Generating documentation with Doxygen..."
+        VERBATIM
+    )
+
+    add_custom_command(
+        TARGET doxygen
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E echo "Documentation generated at: ${CMAKE_BINARY_DIR}/docs/html/index.html"
     )
 endif()
