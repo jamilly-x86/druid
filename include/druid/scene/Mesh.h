@@ -4,6 +4,7 @@
 
 namespace druid::scene
 {
+	/// @brief Internal Node component for storing mesh rendering data.
 	struct Mesh
 	{
 		std::vector<float> vertices{};

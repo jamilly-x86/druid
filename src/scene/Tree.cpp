@@ -1,3 +1,4 @@
+#include <druid/scene/Heirarchy.h>
 #include <druid/scene/Tree.h>
 
 namespace druid::scene
@@ -9,38 +10,38 @@ namespace druid::scene
 
 	auto Tree::make_dirty(Node::Dirty dirty, flecs::entity e) -> void
 	{
-		dirty_[dirty].insert(e);
+		const auto depth = e.get<Heirarchy>().depth;
+		dirty_transforms_[depth].insert(e);
+		e.children([this, dirty](flecs::entity child) { make_dirty(dirty, child); });
 	}
 
-	auto Tree::update_transforms() const -> void
+	auto Tree::update_transforms() -> void
 	{
-		const auto it = dirty_.find(Node::Dirty::Transform);
-
-		if (it == std::end(dirty_))
+		for (const auto& [depth, entities] : dirty_transforms_)
 		{
-			return;
-		}
-
-		for (auto entity : it->second)
-		{
-			if (!entity.has<Transform>())
+			// Nodes at this depth have no parent. Therefore, their local transform
+			// is their global transform.
+			if (depth == 0)
 			{
+				for (auto entity : entities)
+				{
+					auto& tx = entity.get_mut<Transform>();
+					tx.global = tx.local;
+				}
+
 				continue;
 			}
 
-			const auto& parent_transform = entity.get<Transform>();
+			for (auto entity : entities)
+			{
+				auto parent = entity.parent();
+				const auto& tx_parent = parent.get<Transform>();
 
-			entity.children(
-				[parent_transform](flecs::entity child)
-				{
-					if (!child.has<Transform>())
-					{
-						return;
-					}
-
-					auto& child_transform = child.get_mut<Transform>();
-					child_transform.global = parent_transform.global * child_transform.local;
-				});
+				auto& tx = entity.get_mut<Transform>();
+				tx.global = tx_parent.global * tx.local;
+			}
 		}
+
+		dirty_transforms_.clear();
 	}
 }

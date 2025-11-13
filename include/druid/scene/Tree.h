@@ -2,8 +2,9 @@
 
 #include <druid/scene/Node.h>
 #include <flecs.h>
-#include <unordered_map>
 #include <set>
+#include <unordered_map>
+#include <map>
 
 namespace druid::scene
 {
@@ -13,10 +14,10 @@ namespace druid::scene
 		[[nodiscard]] auto create_node() -> std::unique_ptr<Node>;
 		auto make_dirty(Node::Dirty dirty, flecs::entity e) -> void;
 
-		auto update_transforms() const -> void;
-		
+		auto update_transforms() -> void;
+
 	private:
 		flecs::world world_;
-		std::unordered_map<Node::Dirty, std::set<flecs::entity>> dirty_;
+		std::map<int, std::set<flecs::entity>> dirty_transforms_;
 	};
 }
