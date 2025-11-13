@@ -32,7 +32,15 @@ if(NOT DOXYGEN_FOUND)
     )
     FetchContent_MakeAvailable(doxygen_bin)
 
-    set(DOXYGEN_EXECUTABLE "${doxygen_bin_SOURCE_DIR}/doxygen")
+    if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
+        set(DOXYGEN_EXECUTABLE "${doxygen_bin_SOURCE_DIR}/doxygen")
+    elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+        set(DOXYGEN_EXECUTABLE "${doxygen_bin_SOURCE_DIR}/bin/doxygen")
+    elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+        set(DOXYGEN_EXECUTABLE "${doxygen_bin_SOURCE_DIR}/doxygen.exe")
+    endif()
+
+    message(STATUS "Using Doxygen executable: ${DOXYGEN_EXECUTABLE}")
 endif()
 
 FetchContent_MakeAvailable(vcpkg)
