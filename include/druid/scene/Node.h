@@ -42,16 +42,13 @@ namespace druid::scene
 		/// @return The node's Transform.
 		[[nodiscard]] auto get_transform() const -> const Transform&;
 
-		/// @brief Clears the node's transformation state. This removes the cached transform associated with the node.
-		auto clear_transform() const -> void;
+		/// @brief Adds the specified node as a child. Does not take ownership.
+		/// @param x Reference to the node to add as a child.
+		auto add_child(Node& x) -> void;
 
-		/// @brief Adds the specified node as a child.
-		/// @param x Pointer to the node to add as a child.
-		auto add_child(Node* x) -> void;
-
-		/// @brief Removes the specified child node from its parent or containing structure.
-		/// @param x Pointer to the child node to remove. The parent or container that owns this node will be updated to no longer include it.
-		auto remove_child(Node* x) -> void;
+		/// @brief Removes the specified child node from this parent. Does not take ownership.
+		/// @param x Reference to the child node to remove. The parent or container that owns this node will be updated to no longer include it.
+		auto remove_child(Node& x) -> void;
 
 		/// @brief Marks the specified state as dirty.
 		/// @param dirty The state to be marked as dirty.

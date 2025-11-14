@@ -12,6 +12,7 @@ namespace druid::scene
 	{
 		const auto depth = e.get<Heirarchy>().depth;
 		dirty_transforms_[depth].insert(e);
+
 		e.children([this, dirty](flecs::entity child) { make_dirty(dirty, child); });
 	}
 
