@@ -9,39 +9,20 @@ FetchContent_Declare(
     GIT_TAG 2025.09.17
 )
 
-# Acquire Doxygen. Acquisition of the Doxygen binary may
-# be necessary in order to include the necessary BISON dependency version.
-find_package(Doxygen QUIET)
-if(NOT DOXYGEN_FOUND)
-    # Select platform-appropriate url
-#    if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
-#        set(DOXYGEN_URL "https://www.doxygen.nl/files/doxygen-1.13.2.darwin-universal.tar.gz")
-    if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
-        set(DOXYGEN_URL "https://www.doxygen.nl/files/doxygen-1.13.2.linux.bin.tar.gz")
-    elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
-        set(DOXYGEN_URL "https://www.doxygen.nl/files/doxygen-1.13.2.windows.x64.bin.zip")
-    else()
-        message(FATAL_ERROR "Unsupported host system for Doxygen binary fetch.")
-    endif()
-
-    message(STATUS "Fetching Doxygen from: ${DOXYGEN_URL}")
-
-    FetchContent_Declare(
-            doxygen_bin
-            URL ${DOXYGEN_URL}
-    )
-    FetchContent_MakeAvailable(doxygen_bin)
-
-#    if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
-#        set(DOXYGEN_EXECUTABLE "${doxygen_bin_SOURCE_DIR}/doxygen")
-    if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
-        set(DOXYGEN_EXECUTABLE "${doxygen_bin_SOURCE_DIR}/bin/doxygen")
-    elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
-        set(DOXYGEN_EXECUTABLE "${doxygen_bin_SOURCE_DIR}/doxygen.exe")
-    endif()
-
-    message(STATUS "Using Doxygen executable: ${DOXYGEN_EXECUTABLE}")
-endif()
+## Acquire Doxygen. Acquisition of the Doxygen binary may
+## be necessary in order to include the necessary BISON dependency version.
+#find_package(Doxygen QUIET)
+#if(NOT DOXYGEN_FOUND AND CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+#    set(DOXYGEN_URL "https://www.doxygen.nl/files/doxygen-1.13.2.linux.bin.tar.gz")
+#
+#    FetchContent_Declare(
+#        doxygen_bin
+#        URL ${DOXYGEN_URL}
+#    )
+#    FetchContent_MakeAvailable(doxygen_bin)
+#
+#    set(DOXYGEN_EXECUTABLE "${doxygen_bin_SOURCE_DIR}/bin/doxygen")
+#endif()
 
 FetchContent_MakeAvailable(vcpkg)
 
@@ -120,19 +101,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 
     configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
 
-    if(TARGET doxygen)
-        # If you built Doxygen from source (via FetchContent)
-        set(DOXYGEN_EXECUTABLE $<TARGET_FILE:doxygen>)
-    elseif(DEFINED doxygen_bin_SOURCE_DIR AND EXISTS "${doxygen_bin_SOURCE_DIR}/doxygen")
-        # If you fetched a prebuilt binary of Doxygen
-        set(DOXYGEN_EXECUTABLE "${doxygen_bin_SOURCE_DIR}/doxygen")
-    else()
-        # Fallback: system-installed Doxygen
-        find_program(DOXYGEN_EXECUTABLE doxygen)
-        if (NOT DOXYGEN_EXECUTABLE)
-            message(FATAL_ERROR "Doxygen not found — please install it or use a FetchContent binary.")
-        endif()
-    endif()
+    find_program(DOXYGEN_EXECUTABLE doxygen REQUIRED)
 
     add_custom_target(doxygen
         COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
@@ -140,7 +109,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         COMMENT "Generating documentation with Doxygen..."
         VERBATIM
     )
-
     add_custom_command(
         TARGET doxygen
         POST_BUILD
