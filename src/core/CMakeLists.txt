@@ -8,7 +8,6 @@ target_sources(${PROJECT_NAME} PUBLIC
     FILES
         ${CMAKE_SOURCE_DIR}/include/druid/core/Concepts.h
         ${CMAKE_SOURCE_DIR}/include/druid/core/Engine.h
-        ${CMAKE_SOURCE_DIR}/include/druid/core/EnumMask.h
         ${CMAKE_SOURCE_DIR}/include/druid/core/Event.h
         ${CMAKE_SOURCE_DIR}/include/druid/core/File.h
         ${CMAKE_SOURCE_DIR}/include/druid/core/Object.h
