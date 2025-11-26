@@ -2,12 +2,6 @@ project(druid-core)
 
 project_add_library(${PROJECT_NAME})
 
-target_sources(${PROJECT_NAME} PRIVATE
-    Engine.cpp
-    File.cpp
-    Object.cpp
-)
-
 target_sources(${PROJECT_NAME} PUBLIC
     FILE_SET HEADERS 
     BASE_DIRS ${CMAKE_SOURCE_DIR}/include
@@ -19,6 +13,17 @@ target_sources(${PROJECT_NAME} PUBLIC
         ${CMAKE_SOURCE_DIR}/include/druid/core/File.h
         ${CMAKE_SOURCE_DIR}/include/druid/core/Object.h
         ${CMAKE_SOURCE_DIR}/include/druid/core/Signal.h
+)
+
+target_sources(${PROJECT_NAME} PRIVATE
+    Engine.cpp
+    File.cpp
+    Object.cpp
+)
+
+target_sources(${PROJECT_NAME} PUBLIC
+    FILE_SET cxx_modules TYPE CXX_MODULES FILES
+        EnumMask.ixx
 )
 
 find_package(Microsoft.GSL CONFIG REQUIRED)
