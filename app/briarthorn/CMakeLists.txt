@@ -14,13 +14,11 @@ find_package(flecs CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(magic_enum CONFIG REQUIRED)
 find_package(Microsoft.GSL CONFIG REQUIRED)
-find_package(raylib CONFIG REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    druid-core
+    druid-raylib
     $<IF:$<TARGET_EXISTS:flecs::flecs>,flecs::flecs,flecs::flecs_static>
     glm::glm
     magic_enum::magic_enum
     Microsoft.GSL::GSL
-    raylib
 )
