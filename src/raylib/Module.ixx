@@ -24,7 +24,7 @@ namespace druid::raylib
 			x.component<Drawable>();
 			x.component<Window>();
 
-			x.system<Window>().kind(flecs::OnStart).each([this](Window& window) { InitWindow(window.width, window.height, window.title.c_str()); });
+			x.system<Window>().kind(flecs::OnStart).each([](Window& window) { InitWindow(window.width, window.height, window.title.c_str()); });
 
 			// x.system<Window>().kind(flecs::OnDelete).each([](Window&) {
 			//	CloseWindow();
@@ -44,7 +44,7 @@ namespace druid::raylib
 					});
 
 			x.system<Drawable>().kind(render).each(
-				[this](const Drawable& drawable)
+				[](const Drawable& drawable)
 				{
 					std::visit(
 						[](auto&& arg)
