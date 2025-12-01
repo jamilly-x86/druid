@@ -2,8 +2,10 @@
 #include <raylib.h>
 #include <cmath>
 #include <cstdlib>
+#include "druid/raylib/Drawable.h"
+#include "druid/raylib/Window.h"
+#include <druid/raylib/Module.h>
 
-import druid.raylib;
 
 auto main() -> int
 {

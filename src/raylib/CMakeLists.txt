@@ -3,10 +3,16 @@ project(druid-raylib)
 project_add_library(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PUBLIC
-    FILE_SET cxx_modules TYPE CXX_MODULES FILES
-        Drawable.ixx
-        Module.ixx
-        Window.ixx
+    FILE_SET HEADERS 
+    BASE_DIRS ${CMAKE_SOURCE_DIR}/include
+    FILES
+        ${CMAKE_SOURCE_DIR}/include/druid/raylib/Drawable.h
+        ${CMAKE_SOURCE_DIR}/include/druid/raylib/Module.h
+        ${CMAKE_SOURCE_DIR}/include/druid/raylib/Window.h
+)
+
+target_sources(${PROJECT_NAME} PUBLIC
+    Module.cpp
 )
 
 find_package(flecs CONFIG REQUIRED)
