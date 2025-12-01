@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <druid/core/EnumMask.h>
+import druid.core.enummask;
 
 namespace
 {
