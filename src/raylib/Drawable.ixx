@@ -3,6 +3,7 @@ module;
 #include <cmath>
 #include <vector>
 #include <variant>
+#include <cstdint>
 
 export module druid.raylib.drawable;
 
