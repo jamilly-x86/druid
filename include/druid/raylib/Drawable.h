@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cmath>
 #include <cstdint>
 #include <variant>
 #include <vector>
@@ -20,6 +19,8 @@ namespace druid::raylib
 		std::uint8_t b{};
 		std::uint8_t a{};
 	};
+
+	static constexpr auto Black = Color{0, 0, 0, 255};
 
 	struct Rectangle
 	{
@@ -46,7 +47,7 @@ namespace druid::raylib
 	{
 		static auto from_arc(druid::raylib::Arc x) -> TriangleStrip;
 
-		std::vector<Vertex> vertices{};
+		std::vector<Vertex> vertices;
 		Color color{};
 	};
 

@@ -1,4 +1,6 @@
 #include <druid/raylib/Drawable.h>
+#include <numbers>
+#include <cmath>
 
 auto druid::raylib::TriangleStrip::from_arc(druid::raylib::Arc x) -> TriangleStrip
 {
@@ -7,9 +9,8 @@ auto druid::raylib::TriangleStrip::from_arc(druid::raylib::Arc x) -> TriangleStr
 	const auto angle_step = (x.angle_end - x.angle_start) / static_cast<float>(x.segments - 1);
 	for (int i = 0; i < x.segments; ++i)
 	{
-		constexpr auto pi{3.14159265F};
 		const auto angle = x.angle_start + (static_cast<float>(i) * angle_step);
-		const auto rad = angle * (pi / 180.0F);
+		const auto rad = angle * (std::numbers::pi_v<float> / 180.0F);
 		const auto outer_x = x.x + ((x.radius + x.line_width / 2.0F) * std::cos(rad));
 		const auto outer_y = x.y + ((x.radius + x.line_width / 2.0F) * std::sin(rad));
 		const auto inner_x = x.x + ((x.radius - x.line_width / 2.0F) * std::cos(rad));
