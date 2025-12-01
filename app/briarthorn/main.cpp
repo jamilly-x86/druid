@@ -1,18 +1,17 @@
+#include <druid/raylib/Module.h>
 #include <flecs.h>
 #include <raylib.h>
 #include <cmath>
 #include <cstdlib>
 #include "druid/raylib/Drawable.h"
 #include "druid/raylib/Window.h"
-#include <druid/raylib/Module.h>
-
 
 auto main() -> int
 {
 	flecs::world world;
 
 	// clang-format off
-	auto module = world.import<druid::raylib::Module>();
+	world.import<druid::raylib::Module>();
 	// clang-format on
 
 	auto window = world.entity();
@@ -32,7 +31,7 @@ auto main() -> int
 		world.entity().set<druid::raylib::Drawable>(r);
 	}
 
-	world.entity().set<druid::raylib::Drawable>(druid::raylib::TriangleStrip::make_arc(640, 360, 100, -45, 300, 4, 120, { 255, 255, 0, 255 }));
+	world.entity().set<druid::raylib::Drawable>(druid::raylib::TriangleStrip::make_arc(640, 360, 100, -45, 300, 4, 120, {255, 255, 0, 255}));
 	world.entity().set<druid::raylib::Drawable>(druid::raylib::TriangleStrip::make_arc(640, 360, 250, -50, 305, 4, 120, {255, 255, 0, 255}));
 
 	// Run indefinitely.

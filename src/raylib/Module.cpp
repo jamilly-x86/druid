@@ -1,5 +1,5 @@
-#include <druid/raylib/Module.h>
 #include <druid/raylib/Drawable.h>
+#include <druid/raylib/Module.h>
 #include <druid/raylib/Window.h>
 
 #include <raylib.h>
@@ -51,7 +51,7 @@ namespace druid::raylib
 						else if constexpr (std::is_same_v<T, TriangleStrip>)
 						{
 							DrawTriangleStrip(reinterpret_cast<const Vector2*>(arg.vertices.data()), static_cast<int>(arg.vertices.size()),
-												{arg.color.r, arg.color.g, arg.color.b, arg.color.a});
+											  {arg.color.r, arg.color.g, arg.color.b, arg.color.a});
 						}
 					},
 					drawable);
