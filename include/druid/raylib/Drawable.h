@@ -1,9 +1,9 @@
 #pragma once
 
 #include <cmath>
-#include <vector>
-#include <variant>
 #include <cstdint>
+#include <variant>
+#include <vector>
 
 namespace druid::raylib
 {
