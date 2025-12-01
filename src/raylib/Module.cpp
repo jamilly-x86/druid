@@ -1,5 +1,6 @@
-#include <druid/raylib/Drawable.h>
 #include <druid/raylib/Module.h>
+
+#include <druid/raylib/Drawable.h>
 #include <druid/raylib/Window.h>
 
 #include <raylib.h>
