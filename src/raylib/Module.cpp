@@ -44,6 +44,7 @@ Module::Module(flecs::world& x)
 					}
 					else if constexpr (std::is_same_v<T, TriangleStrip>)
 					{
+						// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 						DrawTriangleStrip(reinterpret_cast<const Vector2*>(arg.vertices.data()), static_cast<int>(arg.vertices.size()),
 										  {arg.color.r, arg.color.g, arg.color.b, arg.color.a});
 					}

@@ -20,7 +20,7 @@ namespace druid::raylib
 		std::uint8_t a{};
 	};
 
-	static constexpr auto Black = Color{0, 0, 0, 255};
+	static constexpr auto Black = Color{.r=0, .g=0, .b=0, .a=255};
 
 	struct Rectangle
 	{
