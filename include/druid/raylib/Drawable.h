@@ -1,13 +1,11 @@
-module;
+#pragma once
 
 #include <cmath>
 #include <vector>
 #include <variant>
 #include <cstdint>
 
-export module druid.raylib.drawable;
-
-export namespace druid::raylib
+namespace druid::raylib
 {
 	struct Vertex
 	{
