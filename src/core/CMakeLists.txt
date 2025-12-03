@@ -22,11 +22,14 @@ target_sources(${PROJECT_NAME} PRIVATE
 
 target_sources(${PROJECT_NAME} PUBLIC
     FILE_SET cxx_modules TYPE CXX_MODULES FILES
+        Components.ixx
         EnumMask.ixx
 )
 
 find_package(Microsoft.GSL CONFIG REQUIRED)
+find_package(flecs CONFIG REQUIRED)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_link_libraries(${PROJECT_NAME} PUBLIC
+    $<IF:$<TARGET_EXISTS:flecs::flecs>,flecs::flecs,flecs::flecs_static>
     Microsoft.GSL::GSL
 )
