@@ -45,8 +45,6 @@ namespace druid::raylib
 
 	struct TriangleStrip
 	{
-		static auto from_arc(druid::raylib::Arc x) -> TriangleStrip;
-
 		std::vector<Vertex> vertices;
 		Color color{};
 	};
