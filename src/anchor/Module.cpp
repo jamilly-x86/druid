@@ -23,14 +23,14 @@ Module::Module(flecs::world& x)
 
 				druid::core::Position target_position{};
 
-				auto* target_transform = target.try_get<druid::core::Transform>();
+				const auto* target_transform = target.try_get<druid::core::Transform>();
 
 				if (target_transform != nullptr)
 				{
 					target_position = target_transform->position;
 				}
 
-				auto* target_size = target.try_get<druid::core::Size>();
+				const auto* target_size = target.try_get<druid::core::Size>();
 
 				if (target_size == nullptr)
 				{
