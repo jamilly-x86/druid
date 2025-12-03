@@ -28,7 +28,7 @@ namespace druid::anchor
 			Point point{Point::Center};
 		};
 
-		static auto Center(flecs::entity e) -> Target
+		static auto center(flecs::entity e) -> Target
 		{
 			return Target{e, Point::Center};
 		}

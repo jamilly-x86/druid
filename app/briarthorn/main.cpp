@@ -42,11 +42,11 @@ auto main() -> int
 
 	auto arc_inner = world.entity();
 	arc_inner.set<Drawable>(Arc{.radius = 100, .angle_start = -45, .angle_end = 300, .line_width = 4, .segments = 120, .color = {255, 255, 0, 255}});
-	arc_inner.set<Anchor>({.point = Anchor::Point::Center, .target = Anchor::Center(window)});
+	arc_inner.set<Anchor>({.point = Anchor::Point::Center, .target = Anchor::center(window)});
 
 	auto arc_outer = world.entity();
 	arc_outer.set<Drawable>(Arc{.radius = 250, .angle_start = -50, .angle_end = 300, .line_width = 4, .segments = 305, .color = {255, 255, 0, 255}});
-	arc_outer.set<Anchor>({.point = Anchor::Point::Center, .target = Anchor::Center(window)});
+	arc_outer.set<Anchor>({.point = Anchor::Point::Center, .target = Anchor::center(window)});
 
 	// Run indefinitely.
 	while (world.progress())
