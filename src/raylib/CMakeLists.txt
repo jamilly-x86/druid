@@ -16,12 +16,11 @@ target_sources(${PROJECT_NAME} PUBLIC
     Module.cpp
 )
 
-find_package(flecs CONFIG REQUIRED)
 find_package(raylib CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
-    $<IF:$<TARGET_EXISTS:flecs::flecs>,flecs::flecs,flecs::flecs_static>
+    druid-core
     raylib
     glfw
 )

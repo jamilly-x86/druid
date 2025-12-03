@@ -17,6 +17,7 @@ find_package(Microsoft.GSL CONFIG REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     druid-raylib
+    druid-anchor
     $<IF:$<TARGET_EXISTS:flecs::flecs>,flecs::flecs,flecs::flecs_static>
     glm::glm
     magic_enum::magic_enum
