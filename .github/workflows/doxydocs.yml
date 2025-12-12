@@ -1,0 +1,57 @@
+name: Deploy Doxygen Docs
+
+on:
+  # Runs automatically when the "linux" workflow completes
+  workflow_run:
+    workflows: ["linux"]
+    types: [completed]
+
+  # Allow manual re-deploys from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  pages: write
+  id-token: write
+
+# Prevent overlapping Pages deployments
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # Only proceed if:
+    #  - the triggering linux workflow concluded successfully
+    #  - it was triggered by the main branch
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download doxygen artifact from triggering run
+        uses: actions/download-artifact@v4
+        with:
+          # This run-id refers to the completed "linux" workflow run that triggered us
+          run-id: ${{ github.event.workflow_run.id }}
+          name: doxygen-html
+          path: ./public-raw
+
+      - name: Unpack site
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public
+          tar -C public -xzf public-raw/doxygen-html.tar.gz
+          test -f public/index.html || (echo "index.html not found in public/ — check your doxygen output path" && ls -R public && exit 1)
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
