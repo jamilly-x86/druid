@@ -173,8 +173,15 @@ export namespace runestone
 		/// @param
 		/// @param
 		explicit ChessPiece(Color color, Type type)
-			: underlying_type_(static_cast<UnderlyingType>(static_cast<std::uint8_t>(type) | static_cast<std::uint8_t>(color)))
 		{
+			if (type == Type::Empty)
+			{
+				underlying_type_ = UnderlyingType::Empty;
+			}
+			else
+			{
+				underlying_type_ = static_cast<UnderlyingType>(static_cast<uint8_t>(type) | static_cast<uint8_t>(color));
+			}
 		}
 
 		auto operator==(const ChessPiece& chess_piece) const -> bool
