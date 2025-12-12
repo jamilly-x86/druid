@@ -11,10 +11,22 @@
 namespace druid::core
 {
 	class Engine;
-	
+
+	/// @class druid::core::Service
+	/// @brief Base type for engine-managed subsystems.
+	///
+	/// Services receive three lifecycle calls per frame:
+	/// - `update(delta)`
+	/// - `update_fixed(dt_fixed)`
+	/// - `update_end()`
+	///
+	/// Derive from `Service` to implement rendering, physics, audio, etc.
+	/// A service always has access to the hosting `Engine` via `engine()`.
 	class Service
 	{
 	public:
+		/// @brief Create a service bound to an engine.
+		/// @param x Engine that owns and schedules this service.
 		Service(Engine& x);
 
 		virtual ~Service() = default;
@@ -24,12 +36,19 @@ namespace druid::core
 		auto operator=(const Service&) -> Service& = delete;
 		auto operator=(Service&&) noexcept -> Service& = delete;
 
+		/// @brief Variable-timestep update for per-frame work.
+		/// @param x Elapsed time since the previous frame.
 		virtual auto update(std::chrono::steady_clock::duration /*x*/) -> void;
 
+		/// @brief Fixed-timestep update for deterministic simulation.
+		/// @param x Fixed step duration configured on the `Engine`.
 		virtual auto update_fixed(std::chrono::steady_clock::duration /*x*/) -> void;
 
+		/// @brief End-of-frame hook for cleanup and presentation.
 		virtual auto update_end() -> void;
 
+		/// @brief Access the owning engine.
+		/// @return Reference to the engine.
 		[[nodiscard]] auto engine() -> Engine&;
 
 	private:
@@ -39,12 +58,33 @@ namespace druid::core
 	template <typename T>
 	concept ServiceType = std::is_base_of_v<Service, T>;
 
+	/// @class druid::core::Engine
+	/// @brief Main update/event loop and service orchestrator.
+	///
+	/// The Engine owns the game loop and dispatches three update phases to all
+	/// registered services:
+	/// - **update**: variable-timestep work each frame
+	/// - **update_fixed**: fixed-timestep simulation steps (capped by a limit)
+	/// - **update_end**: post-frame cleanup and rendering handoff
+	///
+	/// It also acts as the central event hub for window, keyboard, and mouse input,
+	/// forwarding `Event` variants to subscribers.
+	///
+	/// @note Use `set_interval_fixed()` to control the fixed-timestep duration.
+	/// @note Call `quit()` to request the loop to stop.
+	///
+	/// @code
+	/// druid::core::Engine eng;
+	/// // Configure services & callbacks...
+	/// return eng.run(); // returns EXIT_SUCCESS or EXIT_FAILURE
+	/// @endcode
 	class Engine
 	{
 	public:
 		static constexpr auto DefaultIntervalFixed{std::chrono::milliseconds{10}};
 		static constexpr auto DefaultUpdateFixedLimit{5};
 
+		/// @brief Construct an Engine and wire default dispatchers.
 		Engine();
 
 		/// @brief Set the interval at which the fixed update function is called.

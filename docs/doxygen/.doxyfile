@@ -968,6 +968,7 @@ WARN_LOGFILE           = ".doxyfile.tmp"
 INPUT                  += \
                           "@CMAKE_SOURCE_DIR@/src" \
                           "@CMAKE_SOURCE_DIR@/app" \
+                          "@CMAKE_SOURCE_DIR@/include" \
                           "@CMAKE_SOURCE_DIR@/README.md" \
                           "@CMAKE_SOURCE_DIR@/CONTRIBUTING.md"
 
