@@ -7,6 +7,27 @@ export module runestone.chesspiece;
 
 export namespace runestone
 {
+	/// @class ChessPiece
+	/// @brief Enumeration-based factory for creating, identifying, and converting chess pieces.
+	///
+	/// The `PieceFactory` class defines color-agnostic (`Type`), color-specific (`Color`),
+	/// and combined (`Piece`) enumerations representing all standard chess pieces.
+	/// It provides utilities to construct, query, and convert these values
+	/// between FEN characters and internal representations.
+	///
+	/// @note Each piece is encoded as a compact 8-bit value for efficient board representation.
+	///	This layout allows constant-time bitwise extraction of color and piece type
+	/// using the `HexSeven` and `HexEight` masks.
+	///
+	/// @par Bit Layout
+	/// @code
+	/// // bit layout for our piece encoding:
+	/// // bit:     7  6  5  4  3  2  1  0
+	/// // usage:   -  -  -  -  C  T  T  T
+	/// //                      |  |--|--|
+	/// //                      |  +----- piece type (3 bits: 0–6)
+	/// //                      +-------- color (1 bit: 0=white, 1=black)
+	/// @endcode
 	class ChessPiece
 	{
 	public:
