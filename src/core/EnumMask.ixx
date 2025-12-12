@@ -1,3 +1,5 @@
+/// @file EnumMask.ixx
+/// @module druid.core.enummask
 module;
 
 #include <initializer_list>
