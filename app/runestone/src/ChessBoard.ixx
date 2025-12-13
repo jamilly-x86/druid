@@ -1,3 +1,5 @@
+/// @file ChessBoard.ixx
+/// @module runestone.chessboard
 module;
 
 #include <bit>

@@ -1,3 +1,5 @@
+/// @file ChessPiece.ixx
+/// @module runestone.chesspiece
 module;
 
 #include <cstdint>
@@ -8,26 +10,34 @@ export module runestone.chesspiece;
 export namespace runestone
 {
 	/// @class ChessPiece
-	/// @brief Enumeration-based factory for creating, identifying, and converting chess pieces.
+	/// @brief Compact, enum-backed representation of a chess piece with helpers for FEN conversion.
 	///
-	/// The `PieceFactory` class defines color-agnostic (`Type`), color-specific (`Color`),
-	/// and combined (`Piece`) enumerations representing all standard chess pieces.
-	/// It provides utilities to construct, query, and convert these values
-	/// between FEN characters and internal representations.
+	/// @details
+	/// `ChessPiece` encodes a chess piece in a single byte for fast board operations and cache-friendly
+	/// storage. The encoding is intentionally simple:
 	///
-	/// @note Each piece is encoded as a compact 8-bit value for efficient board representation.
-	///	This layout allows constant-time bitwise extraction of color and piece type
-	/// using the `HexSeven` and `HexEight` masks.
+	/// - **Type** (bits 0–2): one of {Empty(0), Pawn(1), Knight(2), Bishop(3), Rook(4), Queen(5), King(6)}
+	/// - **Color** (bit 3): White(0) or Black(1)
 	///
-	/// @par Bit Layout
+	/// This layout allows constant-time bitwise extraction of color and type and enables efficient
+	/// table lookups (e.g., attack masks, material values) without branching.
+	/// The class also provides utilities to convert to/from FEN characters.
+	///
+	/// @par Bit layout
 	/// @code
-	/// // bit layout for our piece encoding:
 	/// // bit:     7  6  5  4  3  2  1  0
 	/// // usage:   -  -  -  -  C  T  T  T
 	/// //                      |  |--|--|
-	/// //                      |  +----- piece type (3 bits: 0–6)
-	/// //                      +-------- color (1 bit: 0=white, 1=black)
+	/// //                      |  +----- piece type (0..6; 0 = Empty)
+	/// //                      +-------- color (0 = White, 1 = Black)
 	/// @endcode
+	///
+	/// @par Invariants & semantics
+	/// - `Type::Empty` is **colorless**. When constructed with `type == Type::Empty`, the piece is set
+	///   to empty regardless of the `Color` argument.
+	/// - Non-empty pieces always carry a valid color bit and a type in the range `[Pawn..King]`.
+	/// - Functions that conceptually require a non-empty piece (e.g., asking for a color) will return
+	///   `std::unexpected(Error::InvalidPiece)` when invoked on `Empty`.
 	class ChessPiece
 	{
 	public:
@@ -190,9 +200,20 @@ export namespace runestone
 			}
 		}
 
-		/// @brief
-		/// @param
-		/// @param
+		/// @brief Construct a chess piece from a color and type.
+		///
+		/// This constructor encodes the given `Color` and `Type` into the internal
+		/// compact 8-bit representation. If `type == Type::Empty`, the piece is treated
+		/// as colorless and the `color` parameter is ignored. Otherwise, the final value
+		/// is computed as:
+		///
+		/// @code
+		///   encoded = static_cast<uint8_t>(type) | static_cast<uint8_t>(color);
+		/// @endcode
+		///
+		/// @param color The color of the piece (ignored when `type == Type::Empty`).
+		/// @param type  The piece type. If `Type::Empty`, the resulting piece becomes
+		///              `UnderlyingType::Empty` regardless of `color`.
 		explicit ChessPiece(Color color, Type type)
 		{
 			if (type == Type::Empty)
@@ -205,6 +226,15 @@ export namespace runestone
 			}
 		}
 
+		/// @brief Compare two chess pieces for equality.
+		///
+		/// Two `ChessPiece` objects are considered equal if both their encoded
+		/// underlying values and raw bit representations match exactly. This ensures
+		/// that comparisons reflect both the piece type and its color.
+		///
+		/// @param chess_piece The other piece to compare with.
+		/// @return `true` if both pieces represent the same color and type;
+		///         `false` otherwise.
 		auto operator==(const ChessPiece& chess_piece) const -> bool
 		{
 			return raw() == chess_piece.raw() && raw_bits() == chess_piece.raw_bits();
