@@ -200,6 +200,8 @@ export namespace runestone
 			}
 		}
 
+		constexpr ChessPiece() noexcept = default;
+
 		/// @brief Construct a chess piece from a color and type.
 		///
 		/// This constructor encodes the given `Color` and `Type` into the internal
@@ -214,7 +216,7 @@ export namespace runestone
 		/// @param color The color of the piece (ignored when `type == Type::Empty`).
 		/// @param type  The piece type. If `Type::Empty`, the resulting piece becomes
 		///              `UnderlyingType::Empty` regardless of `color`.
-		explicit ChessPiece(Color color, Type type)
+		constexpr explicit ChessPiece(Color color, Type type)
 		{
 			if (type == Type::Empty)
 			{
@@ -226,6 +228,8 @@ export namespace runestone
 			}
 		}
 
+
+
 		/// @brief Compare two chess pieces for equality.
 		///
 		/// Two `ChessPiece` objects are considered equal if both their encoded
@@ -235,7 +239,7 @@ export namespace runestone
 		/// @param chess_piece The other piece to compare with.
 		/// @return `true` if both pieces represent the same color and type;
 		///         `false` otherwise.
-		auto operator==(const ChessPiece& chess_piece) const -> bool
+		constexpr auto operator==(const ChessPiece& chess_piece) const -> bool
 		{
 			return raw() == chess_piece.raw() && raw_bits() == chess_piece.raw_bits();
 		}
