@@ -101,5 +101,5 @@ if(DOXYGEN_EXECUTABLE)
             COMMAND ${CMAKE_COMMAND} -E echo "Documentation generated at: ${CMAKE_BINARY_DIR}/docs/html/index.html"
     )
 else()
-    message(WARNING "Doxygen not found — documentation target will be skipped.")
+    message(WARNING "Doxygen executable not found - doxygen target will be skipped.")
 endif()
