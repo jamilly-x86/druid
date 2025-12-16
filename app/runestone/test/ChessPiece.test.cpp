@@ -71,7 +71,7 @@ TEST(ChessPiece, pieceColor)
 				auto c = chess_piece.piece_color();
 				if (!c)
 				{
-					EXPECT_EQ(chess_piece.piece_color().error(), runestone::ChessPiece::Error::InvalidPiece);
+					EXPECT_EQ(chess_piece.piece_color().error(), runestone::ChessPiece::Error::InvalidInputPiece);
 				}
 			}
 
@@ -113,7 +113,7 @@ TEST(ChessPiece, isBlack)
 				auto c = chess_piece.black();
 				if (!c)
 				{
-					EXPECT_EQ(chess_piece.black().error(), runestone::ChessPiece::Error::InvalidPiece);
+					EXPECT_EQ(chess_piece.black().error(), runestone::ChessPiece::Error::InvalidInputPiece);
 				}
 			}
 		}
@@ -150,7 +150,7 @@ TEST(ChessPiece, isWhite)
 				auto c = chess_piece.white();
 				if (!c)
 				{
-					EXPECT_EQ(chess_piece.white().error(), runestone::ChessPiece::Error::InvalidPiece);
+					EXPECT_EQ(chess_piece.white().error(), runestone::ChessPiece::Error::InvalidInputPiece);
 				}
 			}
 		}
@@ -192,11 +192,11 @@ TEST(ChessPiece, charToPieceBlackPieces)
 
 TEST(ChessPiece, charToPieceInvalidCharacters)
 {
-	EXPECT_EQ(runestone::ChessPiece::char_to_piece('x').error(), runestone::ChessPiece::Error::InvalidCharacter);
-	EXPECT_EQ(runestone::ChessPiece::char_to_piece('1').error(), runestone::ChessPiece::Error::InvalidCharacter);
-	EXPECT_EQ(runestone::ChessPiece::char_to_piece(' ').error(), runestone::ChessPiece::Error::InvalidCharacter);
-	EXPECT_EQ(runestone::ChessPiece::char_to_piece('\0').error(), runestone::ChessPiece::Error::InvalidCharacter);
-	EXPECT_EQ(runestone::ChessPiece::char_to_piece('Z').error(), runestone::ChessPiece::Error::InvalidCharacter);
+	EXPECT_EQ(runestone::ChessPiece::char_to_piece('x').error(), runestone::ChessPiece::Error::InvalidInputCharacter);
+	EXPECT_EQ(runestone::ChessPiece::char_to_piece('1').error(), runestone::ChessPiece::Error::InvalidInputCharacter);
+	EXPECT_EQ(runestone::ChessPiece::char_to_piece(' ').error(), runestone::ChessPiece::Error::InvalidInputCharacter);
+	EXPECT_EQ(runestone::ChessPiece::char_to_piece('\0').error(), runestone::ChessPiece::Error::InvalidInputCharacter);
+	EXPECT_EQ(runestone::ChessPiece::char_to_piece('Z').error(), runestone::ChessPiece::Error::InvalidInputCharacter);
 }
 
 TEST(ChessPiece, pieceToCharWhitePieces)
@@ -231,12 +231,12 @@ TEST(ChessPiece, pieceToCharBlackPieces)
 			  'k');
 }
 
-TEST(ChessPiece, pieceToCharInvalidPieces)
+TEST(ChessPiece, pieceToCharInvalidInputPieces)
 {
 	EXPECT_EQ(runestone::ChessPiece::piece_to_char(runestone::ChessPiece(runestone::ChessPiece::Color::Black, runestone::ChessPiece::Type::Empty)).error(),
-			  runestone::ChessPiece::Error::InvalidPiece);
+			  runestone::ChessPiece::Error::InvalidInputPiece);
 	EXPECT_EQ(runestone::ChessPiece::piece_to_char(runestone::ChessPiece(runestone::ChessPiece::Color::White, runestone::ChessPiece::Type::Empty)).error(),
-			  runestone::ChessPiece::Error::InvalidPiece);
+			  runestone::ChessPiece::Error::InvalidInputPiece);
 }
 
 TEST(ChessPiece, roundTripCharToPieceToChar)

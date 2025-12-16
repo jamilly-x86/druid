@@ -37,7 +37,7 @@ export namespace runestone
 	///   to empty regardless of the `Color` argument.
 	/// - Non-empty pieces always carry a valid color bit and a type in the range `[Pawn..King]`.
 	/// - Functions that conceptually require a non-empty piece (e.g., asking for a color) will return
-	///   `std::unexpected(Error::InvalidPiece)` when invoked on `Empty`.
+	///   `std::unexpected(Error::InvalidInputPiece)` when invoked on `Empty`.
 	class ChessPiece
 	{
 	public:
@@ -46,15 +46,27 @@ export namespace runestone
 		/// @note Piece type stored in bits 0-2 (0x7).
 		enum class Type : std::uint8_t
 		{
-			// clang-format off
-			Empty = 0,		// 0b000
-			Pawn = 1,		// 0b001
-			Knight = 2,		// 0b010
-			Bishop = 3,		// 0b011
-			Rook = 4,		// 0b100
-			Queen = 5,		// 0b101
-			King = 6,		// 0b110
-					// clang-format on
+			/// @brief Represents an empty piece (no piece).
+			/// @note the bit representation: 0b000.
+			Empty = 0,
+			/// @brief Represents a pawn chess piece.
+			/// @note the bit representation: 0b001.
+			Pawn = 1,
+			/// @brief Represents a knight chess piece.
+			/// @note the bit representation: 0b010.
+			Knight = 2,
+			/// @brief Represents a bishop chess piece.
+			/// @note the bit representation: 0b011.
+			Bishop = 3,
+			/// @brief Represents a rook chess piece.
+			/// @note the bit representation: 0b100.
+			Rook = 4,
+			/// @brief Represents a queen chess piece.
+			/// @note the bit representation: 0b101.
+			Queen = 5,
+			/// @brief Represents a pawn chess piece.
+			/// @note the bit representation: 0b110.
+			King = 6
 		};
 
 		/// @enum Color
@@ -62,18 +74,22 @@ export namespace runestone
 		/// @note Color is stored in bit 3 (0x8).
 		enum class Color : std::uint8_t
 		{
-			// clang-format off
-			White = 0,		// binary: 0b0000 = bit 3 is 0
-			Black = 8,		// binary: 0b1000 = bit 3 is 1
-					 // clang-format on
+			/// @brief Represents the white player.
+			/// @note the bit representation: 0b0000 = bit 3 is 0.
+			White = 0,
+			/// @brief Represents the black player.
+			/// @note the bit representation: 0b1000 = bit 3 is 1.
+			Black = 8
 		};
 
 		/// @enum Error
 		/// @brief Represents a specific error thrown when calling chess piece utility functions.
 		enum class Error : std::uint8_t
 		{
-			InvalidCharacter,
-			InvalidPiece
+			/// @brief Error denoting that the input character is invalid.
+			InvalidInputCharacter,
+			/// @brief Error denoting that the input piece is invalid.
+			InvalidInputPiece
 		};
 
 		/// @brief Convert a character to chess piece.
@@ -133,14 +149,14 @@ export namespace runestone
 				}
 				default:
 				{
-					return std::unexpected(Error::InvalidCharacter);
+					return std::unexpected(Error::InvalidInputCharacter);
 				}
 			}
 		}
 
 		/// @brief Convert chess piece enum to FEN character.
 		/// @param chess_piece Piece enum value to convert.
-		/// @return Corresponding FEN character ('K', 'k', 'P', 'p', etc.) or Error::InvalidPiece.
+		/// @return Corresponding FEN character ('K', 'k', 'P', 'p', etc.) or Error::InvalidInputPiece.
 		static constexpr auto piece_to_char(ChessPiece chess_piece) noexcept -> std::expected<char, Error>
 		{
 			switch (chess_piece.raw())
@@ -195,7 +211,7 @@ export namespace runestone
 				}
 				default:
 				{
-					return std::unexpected(Error::InvalidPiece);
+					return std::unexpected(Error::InvalidInputPiece);
 				}
 			}
 		}
@@ -253,31 +269,31 @@ export namespace runestone
 		{
 			if ((raw_bits() & HexSeven) == 0)
 			{
-				return std::unexpected(Error::InvalidPiece);
+				return std::unexpected(Error::InvalidInputPiece);
 			}
 			return static_cast<Color>(raw_bits() & HexEight);
 		}
 
 		/// @brief Check if piece is white.
 		/// @return True if white, false otherwise. If piece is empty,
-		/// return Error::InvalidPiece.
+		/// return Error::InvalidInputPiece.
 		[[nodiscard]] constexpr auto white() const noexcept -> std::expected<bool, Error>
 		{
 			if ((raw_bits() & HexSeven) == 0)
 			{
-				return std::unexpected(Error::InvalidPiece);
+				return std::unexpected(Error::InvalidInputPiece);
 			}
 			return (raw_bits() & HexEight) == 0;
 		}
 
 		/// @brief Check if piece is black.
 		/// @return True if black, false otherwise. If piece is empty,
-		/// return Error::InvalidPiece.
+		/// return Error::InvalidInputPiece.
 		[[nodiscard]] constexpr auto black() const noexcept -> std::expected<bool, Error>
 		{
 			if ((raw_bits() & HexSeven) == 0)
 			{
-				return std::unexpected(Error::InvalidPiece);
+				return std::unexpected(Error::InvalidInputPiece);
 			}
 			return (raw_bits() & HexEight) != 0;
 		}
