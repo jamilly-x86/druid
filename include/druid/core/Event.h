@@ -99,7 +99,9 @@ namespace druid::core
 			KbMenu,
 
 			// Keypad keys
+			// clang-format off
 			Kp0, Kp1, Kp2, Kp3, Kp4, Kp5, Kp6, Kp7, Kp8, Kp9,
+			// clang-format on
 			KpDecimal,
 			KpDivide,
 			KpMultiply,
