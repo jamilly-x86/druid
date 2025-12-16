@@ -81,3 +81,25 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
             ${LLVM_COV_OBJECTS}
     )
 endif()
+
+find_program(DOXYGEN_EXECUTABLE doxygen QUIET)
+if(DOXYGEN_EXECUTABLE)
+    set(DOXYGEN_IN ${CMAKE_SOURCE_DIR}/docs/doxygen/.doxyfile)
+    set(DOXYGEN_OUT ${CMAKE_BINARY_DIR}/.doxyfile)
+
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+
+    add_custom_target(doxygen
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+            COMMENT "Generating documentation with Doxygen..."
+            VERBATIM
+    )
+    add_custom_command(
+            TARGET doxygen
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E echo "Documentation generated at: ${CMAKE_BINARY_DIR}/docs/html/index.html"
+    )
+else()
+    message(WARNING "Doxygen executable not found - doxygen target will be skipped.")
+endif()
