@@ -12,14 +12,33 @@ namespace druid::core
 	class Engine;
 	
 	class Object;
+
+	/// @concept ObjectType
+	/// @brief Constrains a type to those derived from druid::core::Object.
 	template <typename T>
 	concept ObjectType = std::is_base_of_v<Object, T>;
 
-	/// @brief The base class of druid. This object manages child-parent relationship hierarchies.
+	/// @class Object
+	/// @brief Base class for all hierarchical objects in the Druid engine.
+	///
+	/// `Object` provides a scene-graph–like parent/child hierarchy with ownership
+	/// semantics based on `std::unique_ptr`. Each object:
+	/// - Is owned either by an engine or another object.
+	/// - May own zero or more child objects.
+	/// - Knows its parent (if any).
+	/// - Can emit lifecycle signals when it is added, removed, or destroyed.
+	///
+	/// Objects are non-copyable and non-movable to preserve hierarchy integrity.
 	class Object
 	{
 	public:
+		/// @brief Construct an object associated with the given engine.
+		/// @param x Owning engine instance.
 		Object(Engine& x);
+
+		/// @brief Virtual destructor.
+		///
+		/// Emits the `on_destroyed` signal before destruction.
 		virtual ~Object() noexcept;
 
 		Object(const Object&) = delete;
@@ -75,30 +94,68 @@ namespace druid::core
 		/// @return A pointer to the parent Object, or nullptr if there is no parent.
 		[[nodiscard]] auto parent() const noexcept -> Object*;
 
+		/// @brief Subscribe to the destroyed signal.
+		///
+		/// This signal is emitted immediately before this object is destroyed.
+		/// Callbacks are invoked while the object is still valid, allowing
+		/// observers to perform cleanup or detach references.
+		///
+		/// @tparam Callback A callable type invocable with no arguments.
+		/// @param x Callback function to invoke when this object is about to be destroyed.
 		template <typename Callback>
 		auto on_destroyed(Callback&& x) -> void
 		{
 			on_destroyed_.connect(std::forward<Callback>(x));
 		}
 
+		/// @brief Subscribe to the removed-from-parent signal.
+		///
+		/// This signal is emitted when this object is detached from its parent.
+		/// The callback is invoked with a pointer to the object that was removed
+		/// (i.e., `this`).
+		///
+		/// @tparam Callback A callable type invocable with `Object*`.
+		/// @param x Callback function to invoke when this object is removed
+		///          from its parent.
 		template <typename Callback>
 		auto on_added(Callback&& x) -> void
 		{
 			on_added_.connect(std::forward<Callback>(x));
 		}
 
+		/// @brief Subscribe to the child-added signal.
+		///
+		/// This signal is emitted whenever a new child object is added to this
+		/// object. The callback receives a pointer to the child that was added.
+		///
+		/// @tparam Callback A callable type invocable with `Object*`.
+		/// @param x Callback function to invoke when a child is added.
 		template <typename Callback>
 		auto on_removed(Callback&& x) -> void
 		{
 			on_removed_.connect(std::forward<Callback>(x));
 		}
 
+		/// @brief Subscribe to the child-removed signal.
+		///
+		/// This signal is emitted whenever a child object is removed from this
+		/// object. The callback receives a pointer to the child that was removed.
+		///
+		/// @tparam Callback A callable type invocable with `Object*`.
+		/// @param x Callback function to invoke when a child is removed.
 		template <typename Callback>
 		auto on_child_added(Callback&& x) -> void
 		{
 			on_child_added_.connect(std::forward<Callback>(x));
 		}
 
+		/// @brief Subscribe to the child-removed signal.
+		///
+		/// This signal is emitted whenever a child object is removed from this
+		/// object. The callback receives a pointer to the child that was removed.
+		///
+		/// @tparam Callback A callable type invocable with `Object*`.
+		/// @param x Callback function to invoke when a child is removed.
 		template <typename Callback>
 		auto on_child_removed(Callback&& x) -> void
 		{
@@ -106,6 +163,8 @@ namespace druid::core
 		}
 
 	protected:
+		/// @brief Access the owning engine.
+		/// @return Reference to the engine associated with this object.
 		[[nodiscard]] auto engine() const -> Engine&;
 
 	private:
