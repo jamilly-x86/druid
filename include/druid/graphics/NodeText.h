@@ -28,7 +28,7 @@ namespace druid::graphics
 		/// using the current font size and color.
 		///
 		/// @param x Owning engine instance.
-		explicit NodeText(druid::core::Engine& x) : Node{x}
+		NodeText(core::Engine& x) : Node{x}
 		{
 			on_draw([this](auto& renderer)
 			{
