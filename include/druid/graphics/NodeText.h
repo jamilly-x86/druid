@@ -30,10 +30,7 @@ namespace druid::graphics
 		/// @param x Owning engine instance.
 		NodeText(core::Engine& x) : Node{x}
 		{
-			on_draw([this](auto& renderer)
-			{
-				renderer.draw_text(0, 0, text_, font_size_, color_);
-			});
+			on_draw([this](auto& renderer) { renderer.draw_text(0, 0, text_, font_size_, color_); });
 		}
 
 		/// @brief Virtual destructor.
