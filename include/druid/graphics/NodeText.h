@@ -88,4 +88,4 @@ namespace druid::graphics
 		int font_size_{DefaultFontSize};
 		Color color_{Color::White};
 	};
-} // namespace druid::graphics
+}
