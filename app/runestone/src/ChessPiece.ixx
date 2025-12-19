@@ -216,9 +216,6 @@ export namespace runestone
 			}
 		}
 
-		/// @brief Default constructs a chess piece.
-		constexpr ChessPiece() noexcept = default;
-
 		/// @brief Construct a chess piece from a color and type.
 		///
 		/// This constructor encodes the given `Color` and `Type` into the internal
@@ -233,7 +230,7 @@ export namespace runestone
 		/// @param color The color of the piece (ignored when `type == Type::Empty`).
 		/// @param type  The piece type. If `Type::Empty`, the resulting piece becomes
 		///              `UnderlyingType::Empty` regardless of `color`.
-		constexpr explicit ChessPiece(Color color, Type type) noexcept
+		explicit ChessPiece(Color color, Type type)
 		{
 			if (type == Type::Empty)
 			{
@@ -254,21 +251,21 @@ export namespace runestone
 		/// @param chess_piece The other piece to compare with.
 		/// @return `true` if both pieces represent the same color and type;
 		///         `false` otherwise.
-		constexpr auto operator==(const ChessPiece& chess_piece) const -> bool
+		auto operator==(const ChessPiece& chess_piece) const -> bool
 		{
 			return raw() == chess_piece.raw() && raw_bits() == chess_piece.raw_bits();
 		}
 
 		/// @brief Get the chess piece type.
 		/// @return The chess piece type.
-		[[nodiscard]] constexpr auto type() const noexcept -> Type
+		[[nodiscard]] constexpr auto piece_type() const noexcept -> Type
 		{
 			return static_cast<Type>(raw_bits() & HexSeven);
 		}
 
 		/// @brief Get the chess piece color.
 		/// @return The chess piece color.
-		[[nodiscard]] constexpr auto color() const noexcept -> std::expected<Color, Error>
+		[[nodiscard]] constexpr auto piece_color() const noexcept -> std::expected<Color, Error>
 		{
 			if ((raw_bits() & HexSeven) == 0)
 			{
