@@ -8,17 +8,36 @@ namespace druid::scene
 {
 	class Tree;
 
-	/// @brief Represents a scene node that stores transforms, mesh, and material for rendering within a hierarchical tree.
+	/// @class Node
+	/// @brief Scene node wrapper around a Flecs entity, managed within a Tree.
+	///
+	/// `Node` represents a node in a hierarchical scene structure. It is bound to:
+	/// - A owning/manager `Tree` (non-null)
+	/// - A `flecs::entity` that stores the node's data (e.g., transform, mesh, material)
+	///
+	/// The node supports basic hierarchy edits (add/remove child) and uses a
+	/// "dirty state" mechanism to signal which aspects of the node require
+	/// recomputation (e.g., transform propagation, render data rebuild).
 	class Node
 	{
 	public:
-		/// @brief Represents discrete kinds of changes (dirty states) that indicate which part of a node needs to be re-calculated.
+		/// @enum Dirty
+		/// @brief Discrete dirty flags indicating which parts of a node need to be reprocessed.
+		///
+		/// These values are used to mark pending work such as transform propagation,
+		/// mesh/material updates, or hierarchy changes. The `Tree` is typically
+		/// responsible for responding to dirty states and performing the required updates.
 		enum class Dirty : std::uint8_t
 		{
+			/// @brief Transform data changed (local/global recomputation needed).
 			Transform,
+			/// @brief Mesh data changed (geometry/buffers may need rebuilding).
 			Mesh,
+			/// @brief Material data changed (shader params/textures may need updating).
 			Material,
+			/// @brief A node was added to the hierarchy.
 			NodeAdded,
+			/// @brief A node was removed from the hierarchy.
 			NodeRemoved
 		};
 
@@ -26,12 +45,25 @@ namespace druid::scene
 		/// @param x Reference to the Tree that will contain or manage the node.
 		/// @param e flecs::entity representing the entity associated with the node.
 		Node(Tree& x, flecs::entity e);
+
+		/// @brief Destroy the node wrapper.
+		///
+		/// @note The destructor does not imply entity destruction unless the implementation
+		///       explicitly performs such cleanup through `Tree`/Flecs.
 		~Node();
 
+		/// @brief Copy construction (shallow copy of tree pointer and entity handle).
 		Node(const Node&) = default;
+
+		/// @brief Move construction (moves tree pointer and entity handle).
 		Node(Node&&) noexcept = default;
 
+		/// @brief Copy assignment (shallow copy of tree pointer and entity handle).
+		/// @return Reference to this node.
 		[[nodiscard]] auto operator=(const Node&) -> Node& = default;
+
+		/// @brief Move assignment (moves tree pointer and entity handle).
+		/// @return Reference to this node.
 		[[nodiscard]] auto operator=(Node&&) noexcept -> Node& = default;
 
 		/// @brief Sets the node's Transform. Marks the Node's Transform as dirty.
