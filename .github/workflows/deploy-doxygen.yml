@@ -1,0 +1,59 @@
+name: deploy-doxygen
+
+on:
+  workflow_run:
+    workflows: ["linux"]
+    types: [completed]
+    branches: ["main"]
+
+permissions:
+  # Needed to download artifacts from the triggering run (read Actions artifacts)
+  actions: read
+  contents: read
+
+  # Needed for GitHub Pages deployment
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    # workflow_run fires even when CI fails; this makes deploy run ONLY on success
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      # Download artifact from the CI run that triggered this workflow
+      - name: download-doxygen-artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: doxygen-html
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: ./artifact
+
+      - name: extract-doxygen
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p site
+          tar -xzf ./artifact/doxygen-html.tar.gz -C site
+
+      - name: configure-github-page
+        uses: actions/configure-pages@v5
+
+      - name: upload-page
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+      - name: deploy-page
+        id: deploy
+        uses: actions/deploy-pages@v4
