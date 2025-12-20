@@ -88,19 +88,23 @@ jobs:
         if: ${{ matrix.config.doxygen }}
         run: cmake --build --preset ${{ matrix.config.preset }} --target doxygen
 
-#      - name: package-doxygen-html
-#        if: ${{ matrix.config.doxygen }}
-#        run: |
-#          set -euo pipefail
-#          DOCS_DIR="$(dirname "$(find . -type f -path '*/docs/html/index.html' | head -n1)")"
-#          [[ -n "${DOCS_DIR}" ]] || { echo "Could not locate docs/html/index.html"; exit 1; }
-#          tar -C "${DOCS_DIR}" -czf doxygen-html.tar.gz .
-#
-#      - name: upload-doxygen-artifact
-#        if: ${{ matrix.config.doxygen }}
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: doxygen-html
-#          path: doxygen-html.tar.gz
-#          retention-days: 14
+      - name: package-doxygen
+        if: ${{ matrix.config.doxygen }}
+        run: |
+          set -euo pipefail
+          DOCS_INDEX="$(find . -type f -path '*/docs/html/index.html' | head -n 1)"
+          if [ -z "$DOCS_INDEX" ]; then
+            echo "Could not locate docs/html/index.html"
+            exit 1
+          fi
+          DOCS_DIR="$(dirname "$DOCS_INDEX")"
+          tar -C "$DOCS_DIR" -czf doxygen-html.tar.gz .
+
+      - name: upload-doxygen
+        if: ${{ matrix.config.doxygen }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: doxygen-html
+          path: doxygen-html.tar.gz
+          retention-days: 14
 
