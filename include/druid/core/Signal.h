@@ -16,8 +16,10 @@ namespace druid::core
 	template <typename T>
 	class Signal;
 
-	/// @class Signal<R(Args...)>
 	/// @brief Lightweight signal/callback wrapper for function-signature types.
+	///
+	/// @tparam R Return type of the signal invocation.
+	/// @tparam Args Argument types accepted by the signal.
 	///
 	/// `Signal` provides a minimal observer-style mechanism where a single
 	/// callable can be connected and later invoked. It is intentionally simple:
@@ -27,9 +29,6 @@ namespace druid::core
 	///
 	/// This class serves as a thin wrapper around `std::function` while preserving
 	/// a function-signature–based interface.
-	///
-	/// @tparam R Return type of the signal invocation.
-	/// @tparam Args Argument types accepted by the signal.
 	///
 	/// @note
 	/// This wrapper exists primarily to ensure that RTTI / type information for
