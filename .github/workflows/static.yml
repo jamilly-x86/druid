@@ -1,17 +1,20 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: deploy-doxygen
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
+  workflow_run:
+    workflows: ["linux"]
+    types: [completed]
     branches: ["main"]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
+  # Needed to download artifacts from the triggering run (read Actions artifacts)
+  actions: read
   contents: read
+
+  # Needed for GitHub Pages deployment
   pages: write
   id-token: write
 
@@ -19,25 +22,43 @@ permissions:
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
+    # workflow_run fires even when CI fails; this makes deploy run ONLY on success
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+      url: ${{ steps.deploy.outputs.page_url }}
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      # Download artifact from the CI run that triggered this workflow
+      - name: download-doxygen-artifact
+        uses: actions/download-artifact@v5
         with:
-          # Upload entire repository
-          path: '.'
-      - name: Deploy to GitHub Pages
-        id: deployment
+          name: doxygen-html
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: ./artifact
+
+      - name: extract-doxygen
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p site
+          tar -xzf ./artifact/doxygen-html.tar.gz -C site
+
+      - name: configure-github-page
+        uses: actions/configure-pages@v5
+
+      - name: upload-page
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+      - name: deploy-page
+        id: deploy
         uses: actions/deploy-pages@v4
