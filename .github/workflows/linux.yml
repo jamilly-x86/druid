@@ -93,7 +93,7 @@ jobs:
         run: |
           set -euo pipefail
           DOCS_INDEX="$(find . -type f -path '*/docs/html/index.html' | head -n 1)"
-          if [[ -z "$DOCS_INDEX" ]]; then
+          if [ -z "$DOCS_INDEX" ]; then
             echo "Could not locate docs/html/index.html"
             exit 1
           fi
