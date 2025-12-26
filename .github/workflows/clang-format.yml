@@ -1,0 +1,71 @@
+name: clang-format (auto-format)
+
+on:
+  push:
+    branches-ignore: ["main"]
+    paths:
+      - "**/*.cpp"
+      - "**/*.h"
+      - "**/*.ixx"
+      - ".clang-format"
+      - ".clang-format-ignore"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: clang-format-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    # extra guard to avoid pointless reruns
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    container: ubuntu:25.10
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: run-clang-format-on-changed-files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.sha }}"
+
+          # New branch pushes can have BEFORE = all zeros; fall back to formatting all tracked files
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            echo "No 'before' SHA (new branch). Formatting all tracked C/C++ files."
+            git ls-files -z -- \
+              '*.cpp' '*.h' '*.ixx' \
+              | xargs -0 -r clang-format -i
+          else
+            echo "Formatting files changed in this push: $BEFORE..$AFTER"
+            git diff --name-only -z --diff-filter=ACMR "$BEFORE" "$AFTER" -- \
+              '*.cpp' '*.h' '*.ixx' \
+              | xargs -0 -r clang-format -i
+          fi
+
+      - name: commit-and-push
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if git diff --quiet; then
+            echo "No formatting changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+          git commit -m "chore: clang-format"
+
+          # Push back to the same branch even if checkout is detached
+          git push origin "HEAD:${{ github.ref_name }}"
