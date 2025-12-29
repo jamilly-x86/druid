@@ -30,6 +30,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: install-tools
+        run: |
+          apt-get update -y
+          apt-get install -y git
+
       - name: run-clang-format-on-changed-files
         shell: bash
         run: |
