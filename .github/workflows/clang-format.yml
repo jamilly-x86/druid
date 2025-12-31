@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   format:
-    # extra guard to avoid pointless reruns
+    # Prevent infinite loops from the bot’s own formatting commit
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
 
@@ -31,30 +31,21 @@ jobs:
           fetch-depth: 0
 
       - name: install-tools
+        shell: bash
         run: |
+          set -euo pipefail
           apt-get update -y
           apt-get install -y git
 
-      - name: run-clang-format-on-changed-files
+      - name: run-clang-format-on-all-files
         shell: bash
         run: |
           set -euo pipefail
 
-          BEFORE="${{ github.event.before }}"
-          AFTER="${{ github.sha }}"
-
-          # New branch pushes can have BEFORE = all zeros; fall back to formatting all tracked files
-          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
-            echo "No 'before' SHA (new branch). Formatting all tracked C/C++ files."
-            git ls-files -z -- \
-              '*.cpp' '*.h' '*.ixx' \
-              | xargs -0 -r clang-format -i
-          else
-            echo "Formatting files changed in this push: $BEFORE..$AFTER"
-            git diff --name-only -z --diff-filter=ACMR "$BEFORE" "$AFTER" -- \
-              '*.cpp' '*.h' '*.ixx' \
-              | xargs -0 -r clang-format -i
-          fi
+          echo "Formatting ALL tracked source files on this branch..."
+          git ls-files -z -- \
+            '*.cpp' '*.h' '*.ixx' \
+            | xargs -0 -r clang-format -i
 
       - name: commit-and-push
         shell: bash
