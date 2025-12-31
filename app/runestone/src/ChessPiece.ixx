@@ -308,7 +308,7 @@ export namespace runestone
 			// white pieces (color = 0, so bit 3 = 0)
 			WhitePawn = 1,		                            // 0b0001 = 0 (white) | 1 (pawn)
 			WhiteKnight = 2,	                             // 0b0010 = 0 (white) | 2 (knight)
-			WhiteBishop = 3,	// 0b0011 = 0 (white) | 3 (bishop)
+			WhiteBishop = 3,	            // 0b0011 = 0 (white) | 3 (bishop)
 			WhiteRook = 4,		// 0b0100 = 0 (white) | 4 (rook)
 			WhiteQueen = 5,		// 0b0101 = 0 (white) | 5 (queen)
 			WhiteKing = 6,		// 0b0110 = 0 (white) | 6 (king)
