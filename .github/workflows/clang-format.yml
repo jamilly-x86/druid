@@ -53,7 +53,6 @@ jobs:
             vcpkg-${{ matrix.config.compiler }}-
 
       - name: install-tools
-        shell: bash
         run: |
           apt update -y
           apt upgrade -y
