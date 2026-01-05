@@ -78,7 +78,7 @@ jobs:
         run: ctest --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
 
       - name: clang-format
-        if: ${{ matrix.config.clang-tidy-check }}
+        if: ${{ matrix.config.clang-format-check }}
         run: cmake --build --preset ${{ matrix.config.preset }} --target clang-format-check
 
       - name: clang-tidy
