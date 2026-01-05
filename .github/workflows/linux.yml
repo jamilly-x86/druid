@@ -20,6 +20,7 @@ jobs:
           - preset: x64-linux-clang-debug
             compiler: clang
             clang-tidy: true
+            clang-format-check: true
             doxygen: true
           - preset: x64-linux-llvm-coverage
             compiler: clang
@@ -75,6 +76,10 @@ jobs:
 
       - name: cmake-test
         run: ctest --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
+
+      - name: clang-format
+        if: ${{ matrix.config.clang-tidy-check }}
+        run: cmake --build --preset ${{ matrix.config.preset }} --target clang-format-check
 
       - name: clang-tidy
         if: ${{ matrix.config.clang-tidy }}

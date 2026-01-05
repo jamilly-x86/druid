@@ -92,10 +92,17 @@ if(CLANG_FORMAT_EXECUTABLE)
 
     list(FILTER SOURCE_FILES INCLUDE REGEX ".*\\.(cpp|h|ixx)$")
 
+    add_custom_target(clang-format-check
+        COMMAND ${CLANG_FORMAT_EXECUTABLE} --dry-run -Werror ${SOURCE_FILES}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Checking format of source files..."
+        VERBATIM
+    )
+
     add_custom_target(clang-format
         COMMAND ${CLANG_FORMAT_EXECUTABLE} -i ${SOURCE_FILES}
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Running clang-format"
+        COMMENT "Formating source files..."
         VERBATIM
     )
 else()
