@@ -42,7 +42,7 @@ jobs:
 
       - name: vcpkg-cache-directory
         shell: bash
-        run: mkdir -p "$VCPKG_DEFAULT_BINARY_CACHE"
+        run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
 
       - name: vcpkg-cache-restore
         uses: actions/cache@v4
@@ -69,6 +69,9 @@ jobs:
 
       - name: cmake-configure
         run: cmake --preset ${{ matrix.config.preset }}
+
+      - name: cmake-build
+        run: cmake --build --preset ${{ matrix.config.preset }} --parallel $(( $(nproc --all) + 1 ))
 
       - name: clang-format
         if: ${{ matrix.config.clang-format }}
