@@ -2,15 +2,15 @@
 
 #include <druid/core/Signal.h>
 #include <algorithm>
+#include <gsl/pointers>
 #include <memory>
 #include <string>
 #include <vector>
-#include <gsl/pointers>
 
 namespace druid::core
 {
 	class Engine;
-	
+
 	class Object;
 
 	/// @concept ObjectType

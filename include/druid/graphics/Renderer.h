@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <druid/graphics/Color.h>
+#include <string>
 
 namespace druid::graphics
 {
@@ -52,12 +52,7 @@ namespace druid::graphics
 		/// @param width Width of the rectangle.
 		/// @param height Height of the rectangle.
 		/// @param color Fill color of the rectangle.
-		virtual auto draw_rectangle(
-			float x,
-			float y,
-			float width,
-			float height,
-			druid::graphics::Color color) -> void = 0;
+		virtual auto draw_rectangle(float x, float y, float width, float height, druid::graphics::Color color) -> void = 0;
 
 		/// @brief Draw a text string.
 		///
@@ -66,11 +61,6 @@ namespace druid::graphics
 		/// @param text UTF-8 text string to render.
 		/// @param font_size Font size in pixels (or backend-defined units).
 		/// @param color Text color.
-		virtual auto draw_text(
-			float x,
-			float y,
-			const std::string& text,
-			int font_size,
-			druid::graphics::Color color) -> void = 0;
+		virtual auto draw_text(float x, float y, const std::string& text, int font_size, druid::graphics::Color color) -> void = 0;
 	};
 }

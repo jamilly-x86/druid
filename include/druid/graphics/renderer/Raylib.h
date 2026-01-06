@@ -1,8 +1,8 @@
 #pragma once
 
+#include <druid/graphics/Renderer.h>
 #include <raylib.h>
 #include <string>
-#include <druid/graphics/Renderer.h>
 
 namespace druid::graphics::renderer
 {
@@ -38,12 +38,7 @@ namespace druid::graphics::renderer
 		/// @param clear Background clear color.
 		auto begin(druid::graphics::Color clear) -> void override
 		{
-			const ::Color rl_color{
-				.r = clear.red(),
-				.g = clear.green(),
-				.b = clear.blue(),
-				.a = clear.alpha()
-			};
+			const ::Color rl_color{.r = clear.red(), .g = clear.green(), .b = clear.blue(), .a = clear.alpha()};
 
 			ClearBackground(rl_color);
 			BeginDrawing();
@@ -66,26 +61,11 @@ namespace druid::graphics::renderer
 		/// @param width Rectangle width.
 		/// @param height Rectangle height.
 		/// @param color Fill color.
-		auto draw_rectangle(
-			float x,
-			float y,
-			float width,
-			float height,
-			druid::graphics::Color color) -> void override
+		auto draw_rectangle(float x, float y, float width, float height, druid::graphics::Color color) -> void override
 		{
-			const ::Color rl_color{
-				.r = color.red(),
-				.g = color.green(),
-				.b = color.blue(),
-				.a = color.alpha()
-			};
+			const ::Color rl_color{.r = color.red(), .g = color.green(), .b = color.blue(), .a = color.alpha()};
 
-			const Rectangle rect{
-				.x = x,
-				.y = y,
-				.width = width,
-				.height = height
-			};
+			const Rectangle rect{.x = x, .y = y, .width = width, .height = height};
 
 			DrawRectangleRec(rect, rl_color);
 		}
@@ -97,26 +77,11 @@ namespace druid::graphics::renderer
 		/// @param text UTF-8 text string to render.
 		/// @param font_size Font size in pixels.
 		/// @param color Text color.
-		auto draw_text(
-			float x,
-			float y,
-			const std::string& text,
-			int font_size,
-			druid::graphics::Color color) -> void override
+		auto draw_text(float x, float y, const std::string& text, int font_size, druid::graphics::Color color) -> void override
 		{
-			const ::Color rl_color{
-				.r = color.red(),
-				.g = color.green(),
-				.b = color.blue(),
-				.a = color.alpha()
-			};
+			const ::Color rl_color{.r = color.red(), .g = color.green(), .b = color.blue(), .a = color.alpha()};
 
-			DrawText(
-				text.c_str(),
-				static_cast<int>(x),
-				static_cast<int>(y),
-				font_size,
-				rl_color);
+			DrawText(text.c_str(), static_cast<int>(x), static_cast<int>(y), font_size, rl_color);
 		}
 	};
 }

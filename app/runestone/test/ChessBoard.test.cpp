@@ -4,21 +4,21 @@ import runestone.chessboard;
 
 TEST(ChessBoard, defaultConstructsToEmpty)
 {
-    constexpr runestone::ChessBoard board;
+	constexpr runestone::ChessBoard board;
 
-    EXPECT_TRUE(board.empty());
-    EXPECT_EQ(board.occupancies(), 0ULL);
-    EXPECT_EQ(board.size(), 0);
+	EXPECT_TRUE(board.empty());
+	EXPECT_EQ(board.occupancies(), 0ULL);
+	EXPECT_EQ(board.size(), 0);
 }
 
 TEST(ChessBoard, constructsFromRawValue)
 {
 	constexpr auto set_bits = 8;
-    constexpr runestone::ChessBoard board(runestone::ChessBoard::AFile);
+	constexpr runestone::ChessBoard board(runestone::ChessBoard::AFile);
 
-    EXPECT_EQ(board.occupancies(), runestone::ChessBoard::AFile);
-    EXPECT_FALSE(board.empty());
-    EXPECT_EQ(board.size(), set_bits);
+	EXPECT_EQ(board.occupancies(), runestone::ChessBoard::AFile);
+	EXPECT_FALSE(board.empty());
+	EXPECT_EQ(board.size(), set_bits);
 }
 
 TEST(ChessBoard, occupySquare)
@@ -49,28 +49,28 @@ TEST(ChessBoard, vacateSquare)
 TEST(ChessBoard, flipSquareOccupancy)
 {
 	runestone::ChessBoard board;
-    board.flip_square_occupancy(runestone::ChessBoard::Square::A2);
+	board.flip_square_occupancy(runestone::ChessBoard::Square::A2);
 	board.flip_square_occupancy(runestone::ChessBoard::Square::A3);
 
-    EXPECT_TRUE(board.occupied(runestone::ChessBoard::Square::A2));
-    EXPECT_TRUE(board.occupied(runestone::ChessBoard::Square::A3));
+	EXPECT_TRUE(board.occupied(runestone::ChessBoard::Square::A2));
+	EXPECT_TRUE(board.occupied(runestone::ChessBoard::Square::A3));
 
 	constexpr auto count = 2;
-    EXPECT_EQ(board.size(), count);
+	EXPECT_EQ(board.size(), count);
 }
 
 TEST(ChessBoard, findFirstOccupancy)
 {
-    constexpr runestone::ChessBoard board(runestone::ChessBoard::AFile);
-    EXPECT_EQ(board.find_first_occupancy(), 0);
+	constexpr runestone::ChessBoard board(runestone::ChessBoard::AFile);
+	EXPECT_EQ(board.find_first_occupancy(), 0);
 }
 
 TEST(ChessBoard, findLastOccupancy)
 {
-    constexpr runestone::ChessBoard board(runestone::ChessBoard::AFile);
+	constexpr runestone::ChessBoard board(runestone::ChessBoard::AFile);
 	constexpr auto set_bit_index = 56;
 
-    EXPECT_EQ(board.find_last_occupancy(), set_bit_index);
+	EXPECT_EQ(board.find_last_occupancy(), set_bit_index);
 }
 
 TEST(ChessBoard, popFirstOccupancy)
@@ -80,26 +80,26 @@ TEST(ChessBoard, popFirstOccupancy)
 	constexpr auto bits_set1 = 0b10000000ULL;
 	constexpr auto bit_index1 = 7;
 
-    runestone::ChessBoard board(bits_set2);
+	runestone::ChessBoard board(bits_set2);
 
-    EXPECT_EQ(board.pop_first_occupancy(), bit_index2);
-    EXPECT_EQ(board.occupancies(), bits_set1);
+	EXPECT_EQ(board.pop_first_occupancy(), bit_index2);
+	EXPECT_EQ(board.occupancies(), bits_set1);
 
-    EXPECT_EQ(board.pop_first_occupancy(), bit_index1);
-    EXPECT_TRUE(board.empty());
+	EXPECT_EQ(board.pop_first_occupancy(), bit_index1);
+	EXPECT_TRUE(board.empty());
 }
 
 TEST(ChessBoard, unionOccupancies)
 {
-    constexpr runestone::ChessBoard afile(runestone::ChessBoard::AFile);
-    constexpr runestone::ChessBoard bfile(runestone::ChessBoard::BFile);
-    constexpr runestone::ChessBoard result = afile.union_occupancies(bfile);
+	constexpr runestone::ChessBoard afile(runestone::ChessBoard::AFile);
+	constexpr runestone::ChessBoard bfile(runestone::ChessBoard::BFile);
+	constexpr runestone::ChessBoard result = afile.union_occupancies(bfile);
 
-    EXPECT_EQ(result.occupancies(), runestone::ChessBoard::AFile | runestone::ChessBoard::BFile);
+	EXPECT_EQ(result.occupancies(), runestone::ChessBoard::AFile | runestone::ChessBoard::BFile);
 	// afile should be unchanged.
-    EXPECT_EQ(afile.occupancies(), runestone::ChessBoard::AFile);
+	EXPECT_EQ(afile.occupancies(), runestone::ChessBoard::AFile);
 	// bfile should be unchanged.
-    EXPECT_EQ(bfile.occupancies(), runestone::ChessBoard::BFile);
+	EXPECT_EQ(bfile.occupancies(), runestone::ChessBoard::BFile);
 }
 
 TEST(ChessBoard, intersectionOccupancies)
@@ -130,21 +130,21 @@ TEST(ChessBoard, sdiffOccupancies)
 
 TEST(ChessBoard, flipOccupancies)
 {
-    constexpr runestone::ChessBoard afile(runestone::ChessBoard::AFile);
-    constexpr runestone::ChessBoard result = afile.flip_occupancies();
+	constexpr runestone::ChessBoard afile(runestone::ChessBoard::AFile);
+	constexpr runestone::ChessBoard result = afile.flip_occupancies();
 
-    EXPECT_EQ(result.occupancies(), ~runestone::ChessBoard::AFile);
+	EXPECT_EQ(result.occupancies(), ~runestone::ChessBoard::AFile);
 	// afile should be unchanged.
 	EXPECT_EQ(afile.occupancies(), runestone::ChessBoard::AFile);
 }
 
 TEST(ChessBoard, unionAssign)
 {
-    runestone::ChessBoard afile(runestone::ChessBoard::AFile);
-    constexpr runestone::ChessBoard bfile(runestone::ChessBoard::BFile);
-    afile.union_assign(bfile);
+	runestone::ChessBoard afile(runestone::ChessBoard::AFile);
+	constexpr runestone::ChessBoard bfile(runestone::ChessBoard::BFile);
+	afile.union_assign(bfile);
 
-    EXPECT_EQ(afile.occupancies(), runestone::ChessBoard::AFile | runestone::ChessBoard::BFile);
+	EXPECT_EQ(afile.occupancies(), runestone::ChessBoard::AFile | runestone::ChessBoard::BFile);
 	// bfile should be unchanged.
 	EXPECT_EQ(bfile.occupancies(), runestone::ChessBoard::BFile);
 }
@@ -173,13 +173,13 @@ TEST(ChessBoard, sdiffAssign)
 
 TEST(ChessBoard, equalityAndInequalityOperators)
 {
-    constexpr runestone::ChessBoard afile(runestone::ChessBoard::AFile);
+	constexpr runestone::ChessBoard afile(runestone::ChessBoard::AFile);
 	constexpr runestone::ChessBoard afile2(runestone::ChessBoard::AFile);
-    constexpr runestone::ChessBoard bfile(runestone::ChessBoard::BFile);
-    constexpr runestone::ChessBoard cfile(runestone::ChessBoard::CFile);
+	constexpr runestone::ChessBoard bfile(runestone::ChessBoard::BFile);
+	constexpr runestone::ChessBoard cfile(runestone::ChessBoard::CFile);
 
-    EXPECT_TRUE(afile.equals(afile2));
-    EXPECT_TRUE(afile.not_equals(bfile));
-    EXPECT_FALSE(afile.not_equals(afile2));
-    EXPECT_FALSE(bfile.equals(cfile));
+	EXPECT_TRUE(afile.equals(afile2));
+	EXPECT_TRUE(afile.not_equals(bfile));
+	EXPECT_FALSE(afile.not_equals(afile2));
+	EXPECT_FALSE(bfile.equals(cfile));
 }

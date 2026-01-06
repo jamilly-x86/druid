@@ -233,10 +233,12 @@ TEST(ChessPiece, pieceToCharBlackPieces)
 
 TEST(ChessPiece, pieceToCharInvalidInputPieces)
 {
-	EXPECT_EQ(runestone::ChessPiece::piece_to_char(runestone::ChessPiece(runestone::ChessPiece::Color::Black, runestone::ChessPiece::Type::Empty)).error(),
-			  runestone::ChessPiece::Error::InvalidInputPiece);
-	EXPECT_EQ(runestone::ChessPiece::piece_to_char(runestone::ChessPiece(runestone::ChessPiece::Color::White, runestone::ChessPiece::Type::Empty)).error(),
-			  runestone::ChessPiece::Error::InvalidInputPiece);
+	EXPECT_EQ(
+		runestone::ChessPiece::piece_to_char(runestone::ChessPiece(runestone::ChessPiece::Color::Black, runestone::ChessPiece::Type::Empty)).error(),
+		runestone::ChessPiece::Error::InvalidInputPiece);
+	EXPECT_EQ(
+		runestone::ChessPiece::piece_to_char(runestone::ChessPiece(runestone::ChessPiece::Color::White, runestone::ChessPiece::Type::Empty)).error(),
+		runestone::ChessPiece::Error::InvalidInputPiece);
 }
 
 TEST(ChessPiece, roundTripCharToPieceToChar)
