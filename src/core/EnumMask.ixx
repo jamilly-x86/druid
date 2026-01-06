@@ -2,9 +2,9 @@
 /// @module druid.core.enummask
 module;
 
+#include <druid/core/Concepts.h>
 #include <initializer_list>
 #include <type_traits>
-#include <druid/core/Concepts.h>
 
 export module druid.core.enummask;
 
