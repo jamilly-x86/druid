@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <druid/core/Engine.h>
+import druid.core.Object;
 
 using druid::core::Engine;
 using druid::core::Object;
