@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <glm/vec2.hpp>
 
-#include <druid/core/Engine.h>
+import druid.core.Engine;
 import druid.graphics.Node;
 
 using druid::core::Engine;

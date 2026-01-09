@@ -1,6 +1,6 @@
 #pragma once
 
-#include <druid/core/Engine.h>
+import druid.core.Engine;
 #include <druid/core/Event.h>
 #include <druid/graphics/Color.h>
 import druid.graphics.Node;

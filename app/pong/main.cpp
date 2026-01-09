@@ -8,7 +8,7 @@
 #include <iostream>
 #include <magic_enum/magic_enum.hpp>
 
-#include <druid/core/Engine.h>
+import druid.core.Engine;
 #include <druid/core/Event.h>
 #include <druid/graphics/Color.h>
 import druid.graphics.Node;
