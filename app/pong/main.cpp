@@ -11,7 +11,7 @@
 #include <druid/core/Engine.h>
 #include <druid/core/Event.h>
 #include <druid/graphics/Color.h>
-#include <druid/graphics/Node.h>
+import druid.graphics.Node;
 #include <druid/graphics/NodeRectangle.h>
 #include <druid/graphics/NodeText.h>
 #include <druid/graphics/Window.h>

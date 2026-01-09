@@ -1,7 +1,7 @@
 #pragma once
 
 #include <druid/graphics/Color.h>
-#include <druid/graphics/Node.h>
+import druid.graphics.Node;
 #include <glm/vec2.hpp>
 
 namespace druid::graphics

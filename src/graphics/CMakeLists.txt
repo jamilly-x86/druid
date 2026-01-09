@@ -4,7 +4,6 @@ project_add_library(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
     Color.cpp
-    Node.cpp
     Window.cpp
 )
 
@@ -13,12 +12,16 @@ target_sources(${PROJECT_NAME} PUBLIC
     BASE_DIRS ${CMAKE_SOURCE_DIR}/include
     FILES
         ${CMAKE_SOURCE_DIR}/include/druid/graphics/Color.h
-        ${CMAKE_SOURCE_DIR}/include/druid/graphics/Node.h
         ${CMAKE_SOURCE_DIR}/include/druid/graphics/NodeRectangle.h
         ${CMAKE_SOURCE_DIR}/include/druid/graphics/NodeText.h
         ${CMAKE_SOURCE_DIR}/include/druid/graphics/Renderer.h
         ${CMAKE_SOURCE_DIR}/include/druid/graphics/Window.h
         ${CMAKE_SOURCE_DIR}/include/druid/graphics/renderer/Raylib.h
+)
+
+target_sources(${PROJECT_NAME} PUBLIC
+    FILE_SET cxx_modules TYPE CXX_MODULES FILES
+        Node.ixx
 )
 
 find_package(glm CONFIG REQUIRED)

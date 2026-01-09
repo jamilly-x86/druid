@@ -2,7 +2,7 @@
 #include <glm/vec2.hpp>
 
 #include <druid/core/Engine.h>
-#include <druid/graphics/Node.h>
+import druid.graphics.Node;
 
 using druid::core::Engine;
 using druid::graphics::Node;

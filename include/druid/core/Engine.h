@@ -1,8 +1,8 @@
 #pragma once
 
 #include <druid/core/Event.h>
-#include <druid/core/Object.h>
-#include <druid/core/Signal.h>
+import druid.core.Object;
+import druid.core.Signal;
 #include <chrono>
 #include <memory>
 #include <utility>

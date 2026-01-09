@@ -3,7 +3,7 @@
 #include <druid/core/Engine.h>
 #include <druid/core/Event.h>
 #include <druid/graphics/Color.h>
-#include <druid/graphics/Node.h>
+import druid.graphics.Node;
 #include <druid/graphics/Renderer.h>
 #include <chrono>
 #include <memory>

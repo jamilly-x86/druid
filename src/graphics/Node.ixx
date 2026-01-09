@@ -1,20 +1,22 @@
-#pragma once
+module;
 
-#include <druid/core/Object.h>
-#include <druid/core/Signal.h>
 #include <druid/graphics/Renderer.h>
 #include <raylib.h>
 #include <rlgl.h>
-#include <algorithm>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/vec2.hpp>
-#include <vector>
+
+export module druid.graphics.Node;
+
+import std;
+import druid.core.Object;
+import druid.core.Signal;
 
 using druid::core::Signal;
 
-namespace druid::graphics
+export namespace druid::graphics
 {
 	class Node;
 
@@ -51,15 +53,28 @@ namespace druid::graphics
 
 		/// @brief Construct a node associated with the given engine.
 		/// @param x Owning engine instance.
-		Node(core::Engine& x);
+		Node(core::Engine& x) : Object{x}
+		{
+			on_added([this](auto* parent) { parent_node_ = dynamic_cast<Node*>(parent); });
+			on_removed([this](auto*) { parent_node_ = nullptr; });
+			on_child_added([this](auto* child) { nodes_.emplace_back(dynamic_cast<Node*>(child)); });
+			on_child_removed([this](auto* child) { std::erase(nodes_, child); });
+		}
 
 		/// @brief Set the local position of this node.
 		/// @param pos New local position.
-		auto set_position(const glm::vec2& pos) -> void;
+		auto set_position(const glm::vec2& pos) -> void
+		{
+			position_ = pos;
+			update_transform();
+		}
 
 		/// @brief Get the local position of this node.
 		/// @return Local position.
-		[[nodiscard]] auto get_position() const -> glm::vec2;
+		[[nodiscard]] auto get_position() const -> glm::vec2
+		{
+			return position_;
+		}
 
 		/// @brief Get the global position of this node.
 		///
@@ -67,23 +82,44 @@ namespace druid::graphics
 		/// in world space (including parent transforms).
 		///
 		/// @return Global/world position.
-		[[nodiscard]] auto get_position_global() const -> glm::vec2;
+		[[nodiscard]] auto get_position_global() const -> glm::vec2
+		{
+			// NOLINTNEXTLINE (cppcoreguidelines-pro-bounds-avoid-unchecked-container-access)
+			const auto pos = glm::vec3(transform_global()[3]);
+
+			// NOLINTNEXTLINE (cppcoreguidelines-pro-type-union-access,-warnings-as-errors)
+			return {pos.x, pos.y};
+		}
 
 		/// @brief Set the local scale of this node.
 		/// @param scale New local scale.
-		auto set_scale(const glm::vec2& scale) -> void;
+		auto set_scale(const glm::vec2& scale) -> void
+		{
+			scale_ = scale;
+			update_transform();
+		}
 
 		/// @brief Get the local scale of this node.
 		/// @return Local scale.
-		[[nodiscard]] auto get_scale() const -> glm::vec2;
+		[[nodiscard]] auto get_scale() const -> glm::vec2
+		{
+			return scale_;
+		}
 
 		/// @brief Set the local rotation of this node.
 		/// @param rotation New local rotation angle.
-		auto set_rotation(float rotation) -> void;
+		auto set_rotation(float rotation) -> void
+		{
+			rotation_ = rotation;
+			update_transform();
+		}
 
 		/// @brief Get the local rotation of this node.
 		/// @return Local rotation angle.
-		[[nodiscard]] auto get_rotation() const -> float;
+		[[nodiscard]] auto get_rotation() const -> float
+		{
+			return rotation_;
+		}
 
 		/// @brief Create and attach a child node of type `T`.
 		///
@@ -105,7 +141,10 @@ namespace druid::graphics
 
 		/// @brief Create and attach a generic child node.
 		/// @return Reference to the created child node.
-		[[nodiscard]] auto create_node() -> Node&;
+		[[nodiscard]] auto create_node() -> Node&
+		{
+			return create_node<Node>();
+		}
 
 		/// @brief Get a mutable list of direct child nodes.
 		///
@@ -113,14 +152,20 @@ namespace druid::graphics
 		/// `Object` hierarchy, but exposed as `Node*` for convenience.
 		///
 		/// @return Mutable list of pointers to child nodes.
-		[[nodiscard]] auto nodes() -> std::vector<Node*>&;
+		[[nodiscard]] auto nodes() -> std::vector<Node*>&
+		{
+			return nodes_;
+		}
 
 		/// @brief Get the local transform matrix.
 		///
 		/// The transform is derived from local position/scale/rotation.
 		///
 		/// @return Local transform matrix.
-		[[nodiscard]] auto transform() const -> glm::mat4;
+		[[nodiscard]] auto transform() const -> glm::mat4
+		{
+			return transform_;
+		}
 
 		/// @brief Get the global transform matrix.
 		///
@@ -128,7 +173,16 @@ namespace druid::graphics
 		/// ancestor transforms up to the root.
 		///
 		/// @return Global/world transform matrix.
-		[[nodiscard]] auto transform_global() const -> glm::mat4;
+		[[nodiscard]] auto transform_global() const -> glm::mat4
+		{
+			if (parent() != nullptr)
+			{
+				// NOLINTNEXTLINE (cppcoreguidelines-pro-type-static-cast-downcast
+				return parent_node_->transform_global() * transform();
+			}
+
+			return transform();
+		}
 
 		/// @brief Draw this node using the provided renderer.
 		///
@@ -136,7 +190,20 @@ namespace druid::graphics
 		/// point for drawing subtrees depending on implementation.
 		///
 		/// @param x Renderer used for issuing draw calls.
-		auto draw(Renderer& x) const -> void;
+		auto draw(Renderer& x) const -> void
+		{
+			rlPushMatrix();
+			rlMultMatrixf(glm::value_ptr(transform_));
+
+			on_draw_(x);
+
+			for (auto* node : nodes_)
+			{
+				node->draw(x);
+			}
+
+			rlPopMatrix();
+		}
 
 		/// @brief Subscribe to this node's draw callback.
 		///
@@ -155,7 +222,15 @@ namespace druid::graphics
 		using Object::create_child;
 
 		/// @brief Recompute cached local transform from position/scale/rotation.
-		auto update_transform() -> void;
+		auto update_transform() -> void
+		{
+			// NOLINTBEGIN
+			transform_ = glm::identity<glm::mat4>();
+			transform_ = glm::translate(transform_, {position_.x, position_.y, 0.0F});
+			transform_ = glm::rotate(transform_, glm::radians(rotation_), {1.0F, 0.0F, 0.0F});
+			transform_ = glm::scale(transform_, {scale_.x, scale_.y, 1.0F});
+			// NOLINTEND
+		}
 
 		std::vector<Node*> nodes_;
 		Node* parent_node_{nullptr};
