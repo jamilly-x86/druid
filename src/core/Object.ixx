@@ -1,9 +1,7 @@
-module;
-
-import std;
-
 export module druid.core.Object;
 
+import std;
+import druid.core.NotNull;
 import druid.core.Signal;
 
 export namespace druid::core
@@ -239,7 +237,7 @@ export namespace druid::core
 		std::vector<std::unique_ptr<Object>> children_;
 		std::string name_;
 		Object* parent_{};
-		gsl::strict_not_null<Engine*> engine_;
+		not_null<Engine*> engine_;
 
 		Signal<void()> on_destroyed_;
 		Signal<void(Object*)> on_added_;

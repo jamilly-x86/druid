@@ -1,8 +1,6 @@
-module;
+export module druid.core.Signal;
 
 import std;
-
-export module druid.core.Signal;
 
 export namespace druid::core
 {
