@@ -53,7 +53,7 @@ jobs:
           apt update -y
           apt upgrade -y
           apt install -y curl tar git zip unzip make autoconf libtool ninja-build cmake
-          apt install -y clang-22 clang-tidy-22 clang-format-22 llvm-22-tools g++-15
+          apt install -y clang-21 clang-tidy-21 clang-format-21 llvm-21-tools g++-15
           apt install -y doxygen
           update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 10
           update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-15 10
