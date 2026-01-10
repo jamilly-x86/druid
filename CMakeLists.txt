@@ -11,8 +11,12 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(vcpkg)
 
-set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "d0edc3af-4c50-42ea-a356-e2862fe7a444")
-set(CMAKE_CXX_MODULE_STD ON)
+# This needs to be on to match the gnu extensions used to compile the std.pcm
+# on ubuntu 25.10 for import std; to work with clang.
+# set(CMAKE_CXX_EXTENSIONS ON)
+# import std; isn't quite read for clang's libc++ on Apple.
+# set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "d0edc3af-4c50-42ea-a356-e2862fe7a444")
+# set(CMAKE_CXX_MODULE_STD ON)
 
 project(druid LANGUAGES CXX)
 
@@ -29,10 +33,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/installed)
 set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# This needs to be on to match the gnu extensions used to compile the std.pcm
-# on ubuntu 25.10 for import std; to work with clang.
-set(CMAKE_CXX_EXTENSIONS ON)
 
 option(BUILD_ENABLE_HARDENED "Enable hardened compiler options" OFF)
 option(BUILD_TESTING "Enable building ${PROJECT_NAME} test applications." OFF)

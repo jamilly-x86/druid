@@ -1,6 +1,8 @@
-export module druid.core.Concepts;
+module;
 
-import std;
+#include <type_traits>
+
+export module druid.core.Concepts;
 
 export namespace druid::core
 {

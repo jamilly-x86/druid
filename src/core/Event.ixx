@@ -1,10 +1,9 @@
 module;
 
 #include <cstdint>
+#include <variant>
 
 export module druid.core.Event;
-
-import std;
 
 export namespace druid::core
 {

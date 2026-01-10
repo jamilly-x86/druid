@@ -1,10 +1,9 @@
 module;
 
 #include <cstdint>
+#include <limits>
 
 export module druid.graphics.Color;
-
-import std;
 
 export namespace druid::graphics
 {

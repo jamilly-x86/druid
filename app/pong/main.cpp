@@ -1,4 +1,11 @@
-import std;
+// Need to include headers prior to importing otherwise suffer the
+// consequences of a gcc 15.2 Internal Compiler Error.
+
+#include <chrono>
+#include <iostream>
+
+#include <magic_enum/magic_enum.hpp>
+
 import druid.core.Engine;
 import druid.core.Event;
 import druid.graphics.Color;
@@ -7,9 +14,6 @@ import druid.graphics.NodeRectangle;
 import druid.graphics.NodeText;
 import druid.graphics.Window;
 import druid.math.Vec2;
-
-#define MAGIC_ENUM_USE_STD_MODULE
-#include <magic_enum/magic_enum.hpp>
 
 auto main() -> int
 try
@@ -56,6 +60,7 @@ try
 	ball.set_position({width * 0.5, height * 0.5});
 	ball.set_size({24, 24});
 	ball.set_color(druid::graphics::Color::White);
+	ball.on_destroyed([] { std::cout << "Ball died!!\n"; });
 
 	engine.on_event_window([&engine](auto) { engine.quit(); });
 

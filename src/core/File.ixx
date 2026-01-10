@@ -1,6 +1,10 @@
-export module druid.core.File;
+module;
 
-import std;
+#include <filesystem>
+#include <fstream>
+#include <vector>
+
+export module druid.core.File;
 
 export namespace druid::core
 {

@@ -2,10 +2,12 @@ module;
 
 #include <raylib.h>
 #include <rlgl.h>
+#include <memory>
+#include <type_traits>
+#include <vector>
 
 export module druid.graphics.Node;
 
-import std;
 import druid.core.Object;
 import druid.core.Engine;
 import druid.core.Signal;

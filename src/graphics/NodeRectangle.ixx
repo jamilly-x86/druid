@@ -1,6 +1,9 @@
+module;
+
+#include <functional>
+
 export module druid.graphics.NodeRectangle;
 
-import std;
 import druid.core.Engine;
 import druid.graphics.Color;
 import druid.graphics.Node;

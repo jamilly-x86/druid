@@ -1,6 +1,12 @@
+module;
+
+#include <memory>
+#include <string_view>
+#include <type_traits>
+#include <vector>
+
 export module druid.core.Object;
 
-import std;
 import druid.core.Engine;
 import druid.core.NotNull;
 import druid.core.Signal;

@@ -1,10 +1,10 @@
 module;
 
 #include <raylib.h>
+#include <string>
 
 export module druid.graphics.renderer.Raylib;
 
-import std;
 import druid.graphics.Color;
 import druid.graphics.Renderer;
 

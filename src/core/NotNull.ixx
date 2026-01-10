@@ -1,6 +1,10 @@
-export module druid.core.NotNull;
+module;
 
-import std;
+#include <exception>
+#include <functional>
+#include <type_traits>
+
+export module druid.core.NotNull;
 
 export namespace druid::core
 {

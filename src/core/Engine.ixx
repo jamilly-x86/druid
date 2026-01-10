@@ -1,10 +1,11 @@
 module;
 
+#include <chrono>
 #include <cstdlib>
+#include <variant>
 
 export module druid.core.Engine;
 
-import std;
 import druid.core.Event;
 import druid.core.Signal;
 

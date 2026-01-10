@@ -1,6 +1,10 @@
+module;
+
+#include <functional>
+#include <string_view>
+
 export module druid.graphics.NodeText;
 
-import std;
 import druid.core.Engine;
 import druid.graphics.Color;
 import druid.graphics.Node;

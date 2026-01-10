@@ -1,6 +1,6 @@
 module;
 
-import std;
+#include <chrono>
 
 // Need to define a large max range for magic_enum
 // to support all of the raylib keys.
@@ -9,7 +9,6 @@ import std;
 
 // NOLINTNEXTLINE (cppcoreguidelines-macro-usage)
 #define MAGIC_ENUM_RANGE_MAX 400
-#define MAGIC_ENUM_USE_STD_MODULE
 #include <raylib.h>
 #include <magic_enum/magic_enum.hpp>
 

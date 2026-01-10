@@ -12,8 +12,16 @@
 // using druid::raylib::Arc;
 // using druid::raylib::Drawable;
 
+#include <functional>
+#include <new>
+#include <typeinfo>
+
+import briarthorn.Test;
+
 auto main() -> int
 {
+	Test<int()> test;
+	test.test_ = [] { return EXIT_SUCCESS; };
 	// NOLINTBEGIN
 	// flecs::world world;
 
@@ -55,5 +63,5 @@ auto main() -> int
 
 	// NOLINTEND
 
-	return EXIT_SUCCESS;
+	return test.test_();
 }

@@ -1,6 +1,8 @@
-export module druid.math.Vec3;
+module;
 
-import std;
+#include <cmath>
+
+export module druid.math.Vec3;
 
 export namespace druid::math
 {

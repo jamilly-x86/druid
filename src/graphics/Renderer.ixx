@@ -1,6 +1,9 @@
+module;
+
+#include <string>
+
 export module druid.graphics.Renderer;
 
-import std;
 import druid.graphics.Color;
 
 export namespace druid::graphics
