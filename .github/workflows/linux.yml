@@ -27,7 +27,7 @@ jobs:
             llvm-coverage: true
 
     runs-on: ubuntu-latest
-    container: ubuntu:25.10
+    container: ghcr.io/druidengine/images/ubuntu-dev:main
 
     env:
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/.vcpkg_cache
@@ -48,24 +48,6 @@ jobs:
           restore-keys: |
             vcpkg-${{ matrix.config.compiler }}-
 
-      - name: install-tools
-        run: |
-          apt update -y
-          apt upgrade -y
-          apt install -y curl tar git zip unzip make autoconf libtool ninja-build cmake
-          apt install -y clang-21 clang-tidy-21 clang-format-21 llvm-21-tools g++-15
-          apt install -y doxygen
-          update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 10
-          update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-15 10
-          update-alternatives --install /usr/bin/clang clang /usr/bin/clang-21 200
-          update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-21 200
-          update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-21 200
-          update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-21 200
-          update-alternatives --install /usr/bin/run-clang-tidy run-clang-tidy /usr/bin/run-clang-tidy-21 200
-
-      - name: install-raylib-dependencies
-        run: |
-          apt install -y libxinerama-dev libxcursor-dev xorg-dev libglu1-mesa-dev pkg-config libgl1-mesa-dev libx11-dev libxrandr-dev
       - name: cmake-configure
         run: cmake --preset ${{ matrix.config.preset }}
 
