@@ -6,12 +6,11 @@ export module druid.core.Engine;
 
 import std;
 import druid.core.Event;
-import druid.core.Object;
 import druid.core.Signal;
 
-namespace druid::core
+export namespace druid::core
 {
-	export class Engine;
+	class Engine;
 
 	/// @class Service
 	/// @brief Base class for engine services that participate in the main update loop.
@@ -22,7 +21,7 @@ namespace druid::core
 	///
 	/// @note Services are non-copyable and non-movable because they store a reference to the
 	///       owning engine.
-	export class Service
+	class Service
 	{
 	public:
 		/// @brief Construct a service bound to the given engine.
@@ -76,7 +75,7 @@ namespace druid::core
 
 	/// @concept ServiceType
 	/// @brief Constrains types to those derived from druid::core::Service.
-	export template <typename T>
+	template <typename T>
 	concept ServiceType = std::is_base_of_v<Service, T>;
 
 	/// @class Engine
@@ -91,7 +90,7 @@ namespace druid::core
 	/// Users can either:
 	/// - Create subclassed `Service` objects via `create_service<T>()`, or
 	/// - Subscribe callbacks to the signal channels (on_update, on_update_fixed, etc.)
-	export class Engine
+	class Engine
 	{
 	public:
 		/// @brief Default fixed update interval (10ms).
@@ -197,19 +196,6 @@ namespace druid::core
 		[[nodiscard]] auto running() const noexcept -> bool
 		{
 			return running_;
-		}
-
-		/// @brief Create an engine-owned object.
-		///
-		/// The default template argument creates a base `Object`. The object is returned
-		/// as a `std::unique_ptr` to allow the caller to own and manage its lifetime.
-		///
-		/// @tparam T Object type (must satisfy druid::core::ObjectType).
-		/// @return Newly created object instance.
-		template <druid::core::ObjectType T = Object>
-		[[nodiscard]] auto create_object() -> std::unique_ptr<T>
-		{
-			return std::make_unique<T>(*this);
 		}
 
 		/// @brief Create and register a service owned by the engine.

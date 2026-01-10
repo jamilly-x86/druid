@@ -2,20 +2,23 @@ module;
 
 #include <raylib.h>
 #include <rlgl.h>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/vec2.hpp>
 
 export module druid.graphics.Node;
 
 import std;
-import druid.core.Engine;
 import druid.core.Object;
+import druid.core.Engine;
 import druid.core.Signal;
 import druid.graphics.Renderer;
+import druid.math.Vec2;
+import druid.math.Vec3;
+import druid.math.Mat4;
 
+using druid::core::Engine;
 using druid::core::Signal;
+using druid::math::Mat4;
+using druid::math::Vec2;
+using druid::math::Vec3;
 
 export namespace druid::graphics
 {
@@ -43,9 +46,9 @@ export namespace druid::graphics
 	{
 	public:
 		/// @brief Default local position (0, 0).
-		static constexpr auto DefaultPosition = glm::vec2{0.0F, 0.0F};
+		static constexpr auto DefaultPosition = Vec2{0.0F, 0.0F};
 		/// @brief Default local scale (1, 1).
-		static constexpr auto DefaultScale = glm::vec2{1.0F, 1.0F};
+		static constexpr auto DefaultScale = Vec2{1.0F, 1.0F};
 		/// @brief Default local rotation (0 radians or degrees depending on implementation).
 		///
 		/// @note This header does not specify the unit; the implementation should document
@@ -54,7 +57,7 @@ export namespace druid::graphics
 
 		/// @brief Construct a node associated with the given engine.
 		/// @param x Owning engine instance.
-		Node(core::Engine& x) : Object{x}
+		Node(druid::core::Engine& x) : Object{x}
 		{
 			on_added([this](auto* parent) { parent_node_ = dynamic_cast<Node*>(parent); });
 			on_removed([this](auto*) { parent_node_ = nullptr; });
@@ -64,7 +67,7 @@ export namespace druid::graphics
 
 		/// @brief Set the local position of this node.
 		/// @param pos New local position.
-		auto set_position(const glm::vec2& pos) -> void
+		auto set_position(const Vec2& pos) -> void
 		{
 			position_ = pos;
 			update_transform();
@@ -72,7 +75,7 @@ export namespace druid::graphics
 
 		/// @brief Get the local position of this node.
 		/// @return Local position.
-		[[nodiscard]] auto get_position() const -> glm::vec2
+		[[nodiscard]] auto get_position() const -> Vec2
 		{
 			return position_;
 		}
@@ -83,18 +86,15 @@ export namespace druid::graphics
 		/// in world space (including parent transforms).
 		///
 		/// @return Global/world position.
-		[[nodiscard]] auto get_position_global() const -> glm::vec2
+		[[nodiscard]] auto get_position_global() const -> Vec2
 		{
-			// NOLINTNEXTLINE (cppcoreguidelines-pro-bounds-avoid-unchecked-container-access)
-			const auto pos = glm::vec3(transform_global()[3]);
-
-			// NOLINTNEXTLINE (cppcoreguidelines-pro-type-union-access,-warnings-as-errors)
-			return {pos.x, pos.y};
+			const auto& t = transform_global();
+			return {t[3][0], t[3][1]};
 		}
 
 		/// @brief Set the local scale of this node.
 		/// @param scale New local scale.
-		auto set_scale(const glm::vec2& scale) -> void
+		auto set_scale(const Vec2& scale) -> void
 		{
 			scale_ = scale;
 			update_transform();
@@ -102,7 +102,7 @@ export namespace druid::graphics
 
 		/// @brief Get the local scale of this node.
 		/// @return Local scale.
-		[[nodiscard]] auto get_scale() const -> glm::vec2
+		[[nodiscard]] auto get_scale() const -> Vec2
 		{
 			return scale_;
 		}
@@ -163,7 +163,7 @@ export namespace druid::graphics
 		/// The transform is derived from local position/scale/rotation.
 		///
 		/// @return Local transform matrix.
-		[[nodiscard]] auto transform() const -> glm::mat4
+		[[nodiscard]] auto transform() const -> Mat4
 		{
 			return transform_;
 		}
@@ -174,11 +174,10 @@ export namespace druid::graphics
 		/// ancestor transforms up to the root.
 		///
 		/// @return Global/world transform matrix.
-		[[nodiscard]] auto transform_global() const -> glm::mat4
+		[[nodiscard]] auto transform_global() const -> Mat4
 		{
 			if (parent() != nullptr)
 			{
-				// NOLINTNEXTLINE (cppcoreguidelines-pro-type-static-cast-downcast
 				return parent_node_->transform_global() * transform();
 			}
 
@@ -194,7 +193,7 @@ export namespace druid::graphics
 		auto draw(Renderer& x) const -> void
 		{
 			rlPushMatrix();
-			rlMultMatrixf(glm::value_ptr(transform_));
+			rlMultMatrixf(transform_.data());
 
 			on_draw_(x);
 
@@ -225,20 +224,19 @@ export namespace druid::graphics
 		/// @brief Recompute cached local transform from position/scale/rotation.
 		auto update_transform() -> void
 		{
-			// NOLINTBEGIN
-			transform_ = glm::identity<glm::mat4>();
-			transform_ = glm::translate(transform_, {position_.x, position_.y, 0.0F});
-			transform_ = glm::rotate(transform_, glm::radians(rotation_), {1.0F, 0.0F, 0.0F});
-			transform_ = glm::scale(transform_, {scale_.x, scale_.y, 1.0F});
-			// NOLINTEND
+			auto translation = Mat4::translate({position_.x, position_.y, 0.0F});
+			auto rotation = Mat4::rotate(druid::math::radians(rotation_), {1.0F, 0.0F, 0.0F});
+			auto scaling = Mat4::scale({scale_.x, scale_.y, 1.0F});
+
+			transform_ = translation * rotation * scaling;
 		}
 
 		std::vector<Node*> nodes_;
 		Node* parent_node_{nullptr};
 		Signal<void(Renderer&)> on_draw_;
-		glm::mat4 transform_{glm::identity<glm::mat4>()};
-		glm::vec2 position_{DefaultPosition};
-		glm::vec2 scale_{DefaultScale};
+		Mat4 transform_{Mat4::identity()};
+		Vec2 position_{DefaultPosition};
+		Vec2 scale_{DefaultScale};
 		float rotation_{DefaultRotation};
 	};
 }

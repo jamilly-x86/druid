@@ -1,19 +1,21 @@
-#pragma once
+export module druid.graphics.NodeRectangle;
 
+import std;
+import druid.core.Engine;
 import druid.graphics.Color;
 import druid.graphics.Node;
-#include <glm/vec2.hpp>
+import druid.math.Vec2;
 
-namespace druid::graphics
+export namespace druid::graphics
 {
 	/// @class NodeRectangle
 	/// @brief Scene-graph node that renders a filled axis-aligned rectangle.
 	///
 	/// `NodeRectangle` is a concrete `Node` that draws a rectangle using the
 	/// engine's `Renderer`. The rectangle is defined by a size vector and is
-	/// rendered relative to the node’s local origin.
+	/// rendered relative to the node's local origin.
 	///
-	/// The rectangle’s transform (position, scale, rotation) is inherited from
+	/// The rectangle's transform (position, scale, rotation) is inherited from
 	/// `Node` and applied before rendering.
 	class NodeRectangle : public Node
 	{
@@ -49,14 +51,14 @@ namespace druid::graphics
 		/// space before any node transform is applied.
 		///
 		/// @param x Size of the rectangle (width, height).
-		auto set_size(glm::vec2 x) -> void
+		auto set_size(druid::math::Vec2 x) -> void
 		{
 			size_ = x;
 		}
 
 		/// @brief Get the rectangle size.
 		/// @return Size of the rectangle (width, height).
-		[[nodiscard]] auto get_size() const -> glm::vec2
+		[[nodiscard]] auto get_size() const -> druid::math::Vec2
 		{
 			return size_;
 		}
@@ -81,7 +83,7 @@ namespace druid::graphics
 		/// top-left corner is computed as (-width/2, -height/2).
 		///
 		/// @return Local-space coordinates of the top-left corner.
-		[[nodiscard]] auto top_left() const -> glm::vec2
+		[[nodiscard]] auto top_left() const -> druid::math::Vec2
 		{
 			return {-size_.x * Half, -size_.y * Half};
 		}
@@ -89,14 +91,14 @@ namespace druid::graphics
 		/// @brief Get the bottom-right corner of the rectangle in local space.
 		///
 		/// @return Local-space coordinates of the bottom-right corner.
-		[[nodiscard]] auto bottom_right() const -> glm::vec2
+		[[nodiscard]] auto bottom_right() const -> druid::math::Vec2
 		{
 			return size_;
 		}
 
 	private:
-		static constexpr auto Half{0.5};
-		glm::vec2 size_{};
+		static constexpr auto Half{0.5F};
+		druid::math::Vec2 size_{};
 		Color color_{Color::White};
 	};
 }

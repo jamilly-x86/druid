@@ -1,5 +1,6 @@
 add_subdirectory(anchor)
 add_subdirectory(core)
 add_subdirectory(graphics)
+add_subdirectory(math)
 add_subdirectory(raylib)
 add_subdirectory(scene)

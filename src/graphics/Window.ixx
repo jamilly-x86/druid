@@ -1,5 +1,7 @@
 module;
 
+import std;
+
 // Need to define a large max range for magic_enum
 // to support all of the raylib keys.
 // NOLINTNEXTLINE (cppcoreguidelines-macro-usage)
@@ -7,12 +9,12 @@ module;
 
 // NOLINTNEXTLINE (cppcoreguidelines-macro-usage)
 #define MAGIC_ENUM_RANGE_MAX 400
+#define MAGIC_ENUM_USE_STD_MODULE
 #include <raylib.h>
 #include <magic_enum/magic_enum.hpp>
 
 export module druid.graphics.Window;
 
-import std;
 import druid.core.Engine;
 import druid.core.Event;
 import druid.graphics.Color;

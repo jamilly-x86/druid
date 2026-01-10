@@ -1,11 +1,11 @@
-#pragma once
+export module druid.graphics.NodeText;
 
+import std;
+import druid.core.Engine;
 import druid.graphics.Color;
 import druid.graphics.Node;
-#include <string>
-#include <string_view>
 
-namespace druid::graphics
+export namespace druid::graphics
 {
 	/// @class NodeText
 	/// @brief Scene-graph node that renders 2D text.
