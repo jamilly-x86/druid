@@ -1,6 +1,6 @@
 #pragma once
 
-#include <druid/graphics/Color.h>
+import druid.graphics.Color;
 import druid.graphics.Node;
 #include <string>
 #include <string_view>

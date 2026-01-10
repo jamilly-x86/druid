@@ -31,11 +31,11 @@ set(CMAKE_CXX_STANDARD 26)
 # set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+option(BUILD_ENABLE_HARDENED "Enable hardened compiler options" OFF)
+option(BUILD_TESTING "Enable building ${PROJECT_NAME} test applications." OFF)
+
 include(CTest)
 include(GoogleTest)
-
-option(BUILD_ENABLE_HARDENED "Enable hardened compiler options" OFF)
-option(BUILD_TESTING "Enable building ${PROJECT_NAME} test applications." ON)
 
 add_subdirectory(app)
 add_subdirectory(src)

@@ -1,20 +1,17 @@
 module;
 
-#include <druid/core/Event.h>
-#include <chrono>
 #include <cstdlib>
-#include <memory>
-#include <utility>
-#include <vector>
 
 export module druid.core.Engine;
 
+import std;
+import druid.core.Event;
 import druid.core.Object;
 import druid.core.Signal;
 
-export namespace druid::core
+namespace druid::core
 {
-	class Engine;
+	export class Engine;
 
 	/// @class Service
 	/// @brief Base class for engine services that participate in the main update loop.
@@ -25,7 +22,7 @@ export namespace druid::core
 	///
 	/// @note Services are non-copyable and non-movable because they store a reference to the
 	///       owning engine.
-	class Service
+	export class Service
 	{
 	public:
 		/// @brief Construct a service bound to the given engine.
@@ -79,7 +76,7 @@ export namespace druid::core
 
 	/// @concept ServiceType
 	/// @brief Constrains types to those derived from druid::core::Service.
-	template <typename T>
+	export template <typename T>
 	concept ServiceType = std::is_base_of_v<Service, T>;
 
 	/// @class Engine
@@ -94,7 +91,7 @@ export namespace druid::core
 	/// Users can either:
 	/// - Create subclassed `Service` objects via `create_service<T>()`, or
 	/// - Subscribe callbacks to the signal channels (on_update, on_update_fixed, etc.)
-	class Engine
+	export class Engine
 	{
 	public:
 		/// @brief Default fixed update interval (10ms).

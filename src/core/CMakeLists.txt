@@ -7,12 +7,6 @@ target_sources(${PROJECT_NAME} PUBLIC
     BASE_DIRS ${CMAKE_SOURCE_DIR}/include
     FILES
         ${CMAKE_SOURCE_DIR}/include/druid/core/Concepts.h
-        ${CMAKE_SOURCE_DIR}/include/druid/core/Event.h
-        ${CMAKE_SOURCE_DIR}/include/druid/core/File.h
-)
-
-target_sources(${PROJECT_NAME} PRIVATE
-    File.cpp
 )
 
 target_sources(${PROJECT_NAME} PUBLIC
@@ -20,6 +14,8 @@ target_sources(${PROJECT_NAME} PUBLIC
         Components.ixx
         Engine.ixx
         EnumMask.ixx
+        Event.ixx
+        File.ixx
         NotNull.ixx
         Object.ixx
         Signal.ixx

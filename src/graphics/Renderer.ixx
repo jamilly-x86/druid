@@ -1,9 +1,9 @@
-#pragma once
+export module druid.graphics.Renderer;
 
-#include <druid/graphics/Color.h>
-#include <string>
+import std;
+import druid.graphics.Color;
 
-namespace druid::graphics
+export namespace druid::graphics
 {
 	/// @class Renderer
 	/// @brief Abstract interface for issuing graphics draw commands.

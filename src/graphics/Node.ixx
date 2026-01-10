@@ -1,6 +1,5 @@
 module;
 
-#include <druid/graphics/Renderer.h>
 #include <raylib.h>
 #include <rlgl.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -11,8 +10,10 @@ module;
 export module druid.graphics.Node;
 
 import std;
+import druid.core.Engine;
 import druid.core.Object;
 import druid.core.Signal;
+import druid.graphics.Renderer;
 
 using druid::core::Signal;
 

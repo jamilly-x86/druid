@@ -4,15 +4,14 @@ import std;
 import druid.core.NotNull;
 import druid.core.Signal;
 
-export namespace druid::core
+namespace druid::core
 {
 	class Engine;
-
-	class Object;
+	export class Object;
 
 	/// @concept ObjectType
 	/// @brief Constrains a type to those derived from druid::core::Object.
-	template <typename T>
+	export template <typename T>
 	concept ObjectType = std::is_base_of_v<Object, T>;
 
 	/// @class Object
@@ -26,7 +25,7 @@ export namespace druid::core
 	/// - Can emit lifecycle signals when it is added, removed, or destroyed.
 	///
 	/// Objects are non-copyable and non-movable to preserve hierarchy integrity.
-	class Object
+	export class Object
 	{
 	public:
 		/// @brief Construct an object associated with the given engine.

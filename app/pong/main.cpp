@@ -9,12 +9,12 @@
 #include <magic_enum/magic_enum.hpp>
 
 import druid.core.Engine;
-#include <druid/core/Event.h>
-#include <druid/graphics/Color.h>
+import druid.core.Event;
+import druid.graphics.Color;
 import druid.graphics.Node;
 #include <druid/graphics/NodeRectangle.h>
 #include <druid/graphics/NodeText.h>
-#include <druid/graphics/Window.h>
+import druid.graphics.Window;
 
 auto main() -> int
 try

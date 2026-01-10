@@ -1,9 +1,12 @@
-#pragma once
+module;
 
 #include <cstdint>
-#include <limits>
 
-namespace druid::graphics
+export module druid.graphics.Color;
+
+import std;
+
+export namespace druid::graphics
 {
 	/// @struct Rgba
 	/// @brief 8-bit per-channel RGBA color representation.
@@ -79,39 +82,66 @@ namespace druid::graphics
 
 		/// @brief Get the red channel as an 8-bit integer.
 		/// @return Red channel value in [0, 255].
-		[[nodiscard]] auto red() const -> uint8_t;
+		[[nodiscard]] auto red() const -> uint8_t
+		{
+			return rgba_.r;
+		}
 
 		/// @brief Get the red channel as a normalized float.
 		/// @return Red channel value in [0.0, 1.0].
-		[[nodiscard]] auto red_f() const -> float;
+		[[nodiscard]] auto red_f() const -> float
+		{
+			return static_cast<float>(rgba_.r) * Color::Scalar;
+		}
 
 		/// @brief Get the green channel as an 8-bit integer.
 		/// @return Green channel value in [0, 255].
-		[[nodiscard]] auto green() const -> uint8_t;
+		[[nodiscard]] auto green() const -> uint8_t
+		{
+			return rgba_.g;
+		}
 
 		/// @brief Get the green channel as a normalized float.
 		/// @return Green channel value in [0.0, 1.0].
-		[[nodiscard]] auto green_f() const -> float;
+		[[nodiscard]] auto green_f() const -> float
+		{
+			return static_cast<float>(rgba_.g) * Color::Scalar;
+		}
 
 		/// @brief Get the blue channel as an 8-bit integer.
 		/// @return Blue channel value in [0, 255].
-		[[nodiscard]] auto blue() const -> uint8_t;
+		[[nodiscard]] auto blue() const -> uint8_t
+		{
+			return rgba_.b;
+		}
 
 		/// @brief Get the blue channel as a normalized float.
 		/// @return Blue channel value in [0.0, 1.0].
-		[[nodiscard]] auto blue_f() const -> float;
+		[[nodiscard]] auto blue_f() const -> float
+		{
+			return static_cast<float>(rgba_.b) * Color::Scalar;
+		}
 
 		/// @brief Get the alpha channel as an 8-bit integer.
 		/// @return Alpha channel value in [0, 255].
-		[[nodiscard]] auto alpha() const -> uint8_t;
+		[[nodiscard]] auto alpha() const -> uint8_t
+		{
+			return rgba_.a;
+		}
 
 		/// @brief Get the alpha channel as a normalized float.
 		/// @return Alpha channel value in [0.0, 1.0].
-		[[nodiscard]] auto alpha_f() const -> float;
+		[[nodiscard]] auto alpha_f() const -> float
+		{
+			return static_cast<float>(rgba_.a) * Color::Scalar;
+		}
 
 		/// @brief Get the full color as a normalized floating-point RGBA value.
 		/// @return RGBA color with normalized components.
-		[[nodiscard]] auto rgba_f() const -> RgbaF;
+		[[nodiscard]] auto rgba_f() const -> RgbaF
+		{
+			return {.r = this->red_f(), .g = this->green_f(), .b = this->blue_f(), .a = this->alpha_f()};
+		}
 
 	private:
 		/// @brief Scalar used to convert 8-bit channels to normalized floats.
@@ -119,4 +149,12 @@ namespace druid::graphics
 		/// @brief Underlying 8-bit RGBA storage.
 		Rgba rgba_{};
 	};
+
+	inline const Color Color::Druid{{.r = 53, .g = 39, .b = 39}};
+	inline const Color Color::Red{{.r = Rgba::Max}};
+	inline const Color Color::Green{{.g = Rgba::Max}};
+	inline const Color Color::Blue{{.b = Rgba::Max}};
+	inline const Color Color::White{{.r = Rgba::Max, .g = Rgba::Max, .b = Rgba::Max}};
+	inline const Color Color::Black{{}};
+	inline const Color Color::Transparent{{.a = 0U}};
 }

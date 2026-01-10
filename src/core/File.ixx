@@ -1,6 +1,8 @@
-#include <druid/core/File.h>
+export module druid.core.File;
 
-namespace druid::core
+import std;
+
+export namespace druid::core
 {
 	auto ReadFile(const std::filesystem::path& x) -> std::vector<std::byte>
 	{
