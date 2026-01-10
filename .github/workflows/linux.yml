@@ -55,6 +55,13 @@ jobs:
           apt install -y curl tar git zip unzip make autoconf libtool ninja-build cmake
           apt install -y clang clang-tidy clang-format llvm g++-15
           apt install -y doxygen
+          update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 10
+          update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-15 10
+          update-alternatives --install /usr/bin/clang clang /usr/bin/clang-20 200
+          update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-20 200
+          update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-20 200
+          update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-20 200
+          update-alternatives --install /usr/bin/run-clang-tidy run-clang-tidy /usr/bin/run-clang-tidy-20 200
 
       - name: install-raylib-dependencies
         run: |
