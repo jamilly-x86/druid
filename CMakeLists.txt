@@ -28,8 +28,11 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/installed)
 set(CMAKE_CXX_STANDARD 26)
-# set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# This needs to be on to match the gnu extensions used to compile the std.pcm
+# on ubuntu 25.10 for import std; to work with clang.
+set(CMAKE_CXX_EXTENSIONS ON)
 
 option(BUILD_ENABLE_HARDENED "Enable hardened compiler options" OFF)
 option(BUILD_TESTING "Enable building ${PROJECT_NAME} test applications." OFF)
@@ -48,41 +51,45 @@ add_subdirectory(src)
 # install(FILES ${PROJECT_CONFIG_VERSION} DESTINATION ${CMAKE_INSTALL_DATAROOTDIR})
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    include(ProcessorCount)
-    ProcessorCount(NPROC)
-    add_custom_target(clang-tidy
-        COMMAND run-clang-tidy -p ${CMAKE_BINARY_DIR} -j ${NPROC} -source-filter="^${CMAKE_SOURCE_DIR}/\(app|src\)/.*"
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Running clang-tidy on all files"
-    )
+    find_program(LLVM_PROFDATA llvm-profdata)
+    find_program(LLVM_COV llvm-cov)
 
-    find_program(LLVM_PROFDATA llvm-profdata REQUIRED)
-    find_program(LLVM_COV llvm-cov REQUIRED)
+    if(LLVM_PROFDATA AND LLVM_COV)
+        include(ProcessorCount)
+        ProcessorCount(NPROC)
+        add_custom_target(clang-tidy
+            COMMAND run-clang-tidy -p ${CMAKE_BINARY_DIR} -j ${NPROC} -source-filter="^${CMAKE_SOURCE_DIR}/\(app|src\)/.*"
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            COMMENT "Running clang-tidy on all files"
+        )
 
-    get_property(PROJECT_LIB_TARGETS GLOBAL PROPERTY PROJECT_LIB_TARGETS)
+        get_property(PROJECT_LIB_TARGETS GLOBAL PROPERTY PROJECT_LIB_TARGETS)
 
-    foreach(lib ${PROJECT_LIB_TARGETS})
-        list(APPEND LLVM_COV_OBJECTS -object $<TARGET_FILE:${lib}>)
-    endforeach()
+        foreach(lib ${PROJECT_LIB_TARGETS})
+            list(APPEND LLVM_COV_OBJECTS -object $<TARGET_FILE:${lib}>)
+        endforeach()
 
-    message(STATUS "Targets: ${LLVM_COV_OBJECTS}")
+        message(STATUS "Targets: ${LLVM_COV_OBJECTS}")
 
-    add_custom_target(llvm-coverage
-        # Merge raw profiles.
-        COMMAND ${LLVM_PROFDATA} merge -sparse
-                ${CMAKE_BINARY_DIR}/coverage/*.profraw
-                -o ${CMAKE_BINARY_DIR}/coverage/merged.profdata
+        add_custom_target(llvm-coverage
+            # Merge raw profiles.
+            COMMAND ${LLVM_PROFDATA} merge -sparse
+                    ${CMAKE_BINARY_DIR}/coverage/*.profraw
+                    -o ${CMAKE_BINARY_DIR}/coverage/merged.profdata
 
-        COMMAND ${LLVM_COV} report
-            -instr-profile=${CMAKE_BINARY_DIR}/coverage/merged.profdata
-            ${LLVM_COV_OBJECTS}
+            COMMAND ${LLVM_COV} report
+                -instr-profile=${CMAKE_BINARY_DIR}/coverage/merged.profdata
+                ${LLVM_COV_OBJECTS}
 
-        COMMAND ${LLVM_COV} show
-            -format=html
-            -output-dir=${CMAKE_BINARY_DIR}/coverage/html
-            -instr-profile=${CMAKE_BINARY_DIR}/coverage/merged.profdata
-            ${LLVM_COV_OBJECTS}
-    )
+            COMMAND ${LLVM_COV} show
+                -format=html
+                -output-dir=${CMAKE_BINARY_DIR}/coverage/html
+                -instr-profile=${CMAKE_BINARY_DIR}/coverage/merged.profdata
+                ${LLVM_COV_OBJECTS}
+        )
+    else()
+        message(WARNING "llvm-profdata and llvm-cov executable(s) not found - clang-tidy target will be skipped.")
+    endif()
 endif()
 
 find_program(CLANG_FORMAT_EXECUTABLE clang-format QUIET)
