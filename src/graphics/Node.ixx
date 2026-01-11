@@ -57,13 +57,23 @@ export namespace druid::graphics
 		/// @param x Owning engine instance.
 		Node(Engine& x) : Object{x}
 		{
-			on_added([this](auto* parent) { parent_node_ = dynamic_cast<Node*>(parent); });
-			on_removed([this](auto*) { parent_node_ = nullptr; });
+			on_added(
+				[this](auto* parent)
+				{
+					parent_node_ = dynamic_cast<Node*>(parent);
+					transform_global_dirty_ = true;
+					invalidate_children_global_transform();
+				});
+			on_removed(
+				[this](auto*)
+				{
+					parent_node_ = nullptr;
+					transform_global_dirty_ = true;
+					invalidate_children_global_transform();
+				});
 			on_child_added([this](auto* child) { nodes_.emplace_back(dynamic_cast<Node*>(child)); });
 			on_child_removed([this](auto* child) { std::erase(nodes_, child); });
-		}
-
-		/// @brief Set the local position of this node.
+		} /// @brief Set the local position of this node.
 		/// @param pos New local position.
 		auto set_position(const glm::vec2& pos) -> void
 		{
@@ -166,6 +176,14 @@ export namespace druid::graphics
 		/// @return Local transform matrix.
 		[[nodiscard]] auto transform() const -> glm::mat4
 		{
+			if (transform_dirty_)
+			{
+				auto translation = glm::translate(glm::mat4(1.0F), glm::vec3(position_.x, position_.y, 0.0F));
+				auto rotation = glm::rotate(glm::mat4(1.0F), glm::radians(rotation_), glm::vec3(0.0F, 0.0F, 1.0F));
+				auto scaling = glm::scale(glm::mat4(1.0F), glm::vec3(scale_.x, scale_.y, 1.0F));
+				transform_ = translation * rotation * scaling;
+				transform_dirty_ = false;
+			}
 			return transform_;
 		}
 
@@ -177,12 +195,21 @@ export namespace druid::graphics
 		/// @return Global/world transform matrix.
 		[[nodiscard]] auto transform_global() const -> glm::mat4
 		{
-			if (parent() != nullptr)
+			if (transform_global_dirty_)
 			{
-				return parent_node_->transform_global() * transform();
+				if (parent_node_ != nullptr)
+				{
+					transform_global_cached_ = parent_node_->transform_global() * transform();
+				}
+				else
+				{
+					transform_global_cached_ = transform();
+				}
+
+				transform_global_dirty_ = false;
 			}
 
-			return transform();
+			return transform_global_cached_;
 		}
 
 		/// @brief Draw this node using the provided renderer.
@@ -222,20 +249,31 @@ export namespace druid::graphics
 		/// @brief Hide Object::create_child to only allow Node creation APIs.
 		using Object::create_child;
 
-		/// @brief Recompute cached local transform from position/scale/rotation.
+		/// @brief Mark transforms as dirty and invalidate children.
 		auto update_transform() -> void
 		{
-			auto translation = glm::translate(glm::mat4(1.0F), glm::vec3(position_.x, position_.y, 0.0F));
-			auto rotation = glm::rotate(glm::mat4(1.0F), glm::radians(rotation_), glm::vec3(1.0F, 0.0F, 0.0F));
-			auto scaling = glm::scale(glm::mat4(1.0F), glm::vec3(scale_.x, scale_.y, 1.0F));
+			transform_dirty_ = true;
+			transform_global_dirty_ = true;
+			invalidate_children_global_transform();
+		}
 
-			transform_ = translation * rotation * scaling;
+		/// @brief Recursively invalidate global transforms of all children.
+		auto invalidate_children_global_transform() -> void
+		{
+			for (auto* child : nodes_)
+			{
+				child->transform_global_dirty_ = true;
+				child->invalidate_children_global_transform();
+			}
 		}
 
 		std::vector<Node*> nodes_;
 		Node* parent_node_{nullptr};
 		Signal<void(Renderer&)> on_draw_;
-		glm::mat4 transform_{glm::mat4(1.0F)};
+		mutable glm::mat4 transform_{glm::mat4(1.0F)};
+		mutable glm::mat4 transform_global_cached_{glm::mat4(1.0F)};
+		mutable bool transform_dirty_{true};
+		mutable bool transform_global_dirty_{true};
 		glm::vec2 position_{DefaultPosition};
 		glm::vec2 scale_{DefaultScale};
 		float rotation_{DefaultRotation};
