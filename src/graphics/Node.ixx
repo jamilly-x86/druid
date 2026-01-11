@@ -55,7 +55,7 @@ export namespace druid::graphics
 
 		/// @brief Construct a node associated with the given engine.
 		/// @param x Owning engine instance.
-		Node(druid::core::Engine& x) : Object{x}
+		Node(Engine& x) : Object{x}
 		{
 			on_added([this](auto* parent) { parent_node_ = dynamic_cast<Node*>(parent); });
 			on_removed([this](auto*) { parent_node_ = nullptr; });
