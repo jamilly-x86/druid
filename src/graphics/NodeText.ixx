@@ -1,6 +1,7 @@
 module;
 
 #include <functional>
+#include <string>
 #include <string_view>
 
 export module druid.graphics.NodeText;
