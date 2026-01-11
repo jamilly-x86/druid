@@ -307,8 +307,6 @@ export namespace druid::graphics
 		///
 		/// Typically performs per-frame window polling (input/events), prepares
 		/// the renderer, and triggers draw traversal starting from `root_node()`.
-		///
-		/// @param x Frame delta time since the previous update.
 		auto update(std::chrono::steady_clock::duration /*x*/) -> void override
 		{
 			if (WindowShouldClose())

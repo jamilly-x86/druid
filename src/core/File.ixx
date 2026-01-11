@@ -8,6 +8,10 @@ export module druid.core.File;
 
 export namespace druid::core
 {
+	/// @brief Read the entire contents of a file into a byte vector.
+	///
+	/// @param x Path to the file to read.
+	/// @return Vector containing the file's contents as bytes, or empty vector on failure.
 	auto ReadFile(const std::filesystem::path& x) -> std::vector<std::byte>
 	{
 		std::vector<std::byte> v;
