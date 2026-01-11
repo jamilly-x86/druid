@@ -35,8 +35,8 @@ jobs:
 
       - name: install-tools-macos
         run: |
-          brew install llvm@22 ninja cmake doxygen
-          echo "/opt/homebrew/opt/llvm@22/bin" >> $GITHUB_PATH
+          brew install llvm@20 ninja cmake doxygen
+          echo "/opt/homebrew/opt/llvm@20/bin" >> $GITHUB_PATH
 
       - name: cmake-configure
         run: cmake --preset ${{ matrix.config.preset }}
