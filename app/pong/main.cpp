@@ -3,6 +3,8 @@
 
 #include <chrono>
 #include <iostream>
+#include <string>
+#include <string_view>
 
 #include <glm/glm.hpp>
 #include <magic_enum/magic_enum.hpp>
@@ -78,11 +80,16 @@ try
 			paddle1_move_down = x.type == EventKeyboard::Type::KeyPressed and x.key == Key::Down;
 		});
 
+	auto velocity_ball = glm::vec2(200.0F, 150.0F);
+	auto score_player1 = 0;
+	auto score_player2 = 0;
+	auto score_player1_str = std::string{};
+	auto score_player2_str = std::string{};
+
 	engine.on_update_fixed(
-		[&paddle1, &paddle2, &ball, &paddle1_move_up, &paddle1_move_down](std::chrono::steady_clock::duration dt)
+		[&](std::chrono::steady_clock::duration dt)
 		{
-			auto velocity_ball = glm::vec2(50.0F, 0.0F);
-			auto velocity_paddle = glm::vec2(0.0F, 150.0F);
+			auto velocity_paddle = glm::vec2(0.0F, 300.0F);
 
 			// Move Ball
 			using seconds = std::chrono::duration<float>;
@@ -90,10 +97,31 @@ try
 			auto position = velocity_ball * dt_seconds;
 			ball.set_position(position + ball.get_position());
 
-			// Move Paddle
+			// Move Paddle 1 (Player)
 			velocity_paddle.y *= paddle1_move_up ? -1 : paddle1_move_down ? 1 : 0;
 			position = velocity_paddle * dt_seconds;
 			paddle1.set_position(paddle1.get_position() + position);
+
+			// Move Paddle 2 (AI)
+			const auto ball_center_y = ball.get_position().y + ball.get_size().y * 0.5F;
+			const auto paddle2_center_y = paddle2.get_position().y + paddle2.get_size().y * 0.5F;
+			auto paddle2_velocity = glm::vec2(0.0F, 300.0F);
+
+			if (ball_center_y < paddle2_center_y - 5.0F)
+			{
+				paddle2_velocity.y = -300.0F;
+			}
+			else if (ball_center_y > paddle2_center_y + 5.0F)
+			{
+				paddle2_velocity.y = 300.0F;
+			}
+			else
+			{
+				paddle2_velocity.y = 0.0F;
+			}
+
+			position = paddle2_velocity * dt_seconds;
+			paddle2.set_position(paddle2.get_position() + position);
 
 			const auto ball_top_left = ball.top_left() + ball.get_position();
 			const auto ball_bottom_right = ball.bottom_right() + ball.get_position();
@@ -102,26 +130,45 @@ try
 			const auto paddle2_top_left = paddle2.top_left() + paddle2.get_position();
 			const auto paddle2_bottom_right = paddle2.bottom_right() + paddle2.get_position();
 
-			// Check Collisions with window borders
-			if (ball_top_left.x < 0 || ball_bottom_right.x > width)
+			// Check Collisions with left/right walls (score points)
+			if (ball_top_left.x < 0)
 			{
-				velocity_ball.x = -velocity_ball.x;
+				// Player 2 scores
+				score_player2++;
+				score_player2_str = std::to_string(score_player2);
+				scoreRight.set_text(score_player2_str);
+				ball.set_position({width * 0.5F, height * 0.5F});
+				velocity_ball = glm::vec2(200.0F, 150.0F);
+			}
+			else if (ball_bottom_right.x > width)
+			{
+				// Player 1 scores
+				score_player1++;
+				score_player1_str = std::to_string(score_player1);
+				scoreLeft.set_text(score_player1_str);
+				ball.set_position({width * 0.5F, height * 0.5F});
+				velocity_ball = glm::vec2(-200.0F, 150.0F);
 			}
 
+			// Check Collisions with top/bottom walls
 			if (ball_top_left.y < 0 || ball_bottom_right.y > height)
 			{
 				velocity_ball.y = -velocity_ball.y;
 			}
 
-			// Check Collisions with paddles
-			if (ball_top_left.x < paddle1_bottom_right.x && ball_bottom_right.y > paddle1_top_left.y && ball_top_left.y < paddle1_bottom_right.y)
+			// Check Collisions with paddles (AABB collision detection)
+			if (ball_top_left.x < paddle1_bottom_right.x && ball_bottom_right.x > paddle1_top_left.x && ball_top_left.y < paddle1_bottom_right.y
+				&& ball_bottom_right.y > paddle1_top_left.y)
 			{
 				velocity_ball.x = -velocity_ball.x;
+				velocity_ball *= 1.1F;
 			}
 
-			if (ball_bottom_right.x > paddle2_top_left.x && ball_bottom_right.y > paddle2_top_left.y && ball_top_left.y < paddle2_bottom_right.y)
+			if (ball_top_left.x < paddle2_bottom_right.x && ball_bottom_right.x > paddle2_top_left.x && ball_top_left.y < paddle2_bottom_right.y
+				&& ball_bottom_right.y > paddle2_top_left.y)
 			{
 				velocity_ball.x = -velocity_ball.x;
+				velocity_ball *= 1.1F;
 			}
 		});
 
