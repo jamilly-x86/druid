@@ -1,6 +1,7 @@
 module;
 
 #include <algorithm>
+#include <gsl/pointers>
 #include <memory>
 #include <string_view>
 #include <type_traits>
@@ -9,7 +10,6 @@ module;
 export module druid.core.Object;
 
 import druid.core.Engine;
-import druid.core.NotNull;
 import druid.core.Signal;
 
 export namespace druid::core
@@ -243,7 +243,7 @@ export namespace druid::core
 		std::vector<std::unique_ptr<Object>> children_;
 		std::string name_;
 		Object* parent_{};
-		not_null<Engine*> engine_;
+		gsl::strict_not_null<Engine*> engine_;
 
 		Signal<void()> on_destroyed_;
 		Signal<void(Object*)> on_added_;

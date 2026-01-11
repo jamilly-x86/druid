@@ -1,5 +1,7 @@
 project(druid-core)
 
+find_package(Microsoft.GSL CONFIG REQUIRED)
+
 project_add_library(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PUBLIC
@@ -10,7 +12,10 @@ target_sources(${PROJECT_NAME} PUBLIC
         EnumMask.ixx
         Event.ixx
         File.ixx
-        NotNull.ixx
         Object.ixx
         Signal.ixx
+)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC
+    Microsoft.GSL::GSL
 )
