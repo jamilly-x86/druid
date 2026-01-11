@@ -51,7 +51,7 @@ add_subdirectory(src)
 # install(FILES ${PROJECT_CONFIG_VERSION} DESTINATION ${CMAKE_INSTALL_DATAROOTDIR})
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    find_program(CLANG_TIDY clang-tidy)
+    find_program(CLANG_TIDY clang-tidy QUIET)
 
     if(CLANG_TIDY)
         include(ProcessorCount)
@@ -65,8 +65,8 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         message(WARNING "clang-tidy executable not found - clang-tidy target will be skipped.")
     endif()
 
-    find_program(LLVM_PROFDATA llvm-profdata)
-    find_program(LLVM_COV llvm-cov)
+    find_program(LLVM_PROFDATA llvm-profdata QUIET)
+    find_program(LLVM_COV llvm-cov QUIET)
 
     if(LLVM_PROFDATA AND LLVM_COV)
         get_property(PROJECT_LIB_TARGETS GLOBAL PROPERTY PROJECT_LIB_TARGETS)
@@ -99,10 +99,10 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 endif()
 
 find_program(CLANG_FORMAT_EXECUTABLE clang-format QUIET)
+
 if(CLANG_FORMAT_EXECUTABLE)
     file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS
         ${CMAKE_SOURCE_DIR}/app/*
-        ${CMAKE_SOURCE_DIR}/include/*
         ${CMAKE_SOURCE_DIR}/src/*
     )
 
@@ -126,6 +126,7 @@ else()
 endif()
 
 find_program(DOXYGEN_EXECUTABLE doxygen QUIET)
+
 if(DOXYGEN_EXECUTABLE)
     set(DOXYGEN_IN ${CMAKE_SOURCE_DIR}/docs/doxygen/.doxyfile)
     set(DOXYGEN_OUT ${CMAKE_BINARY_DIR}/.doxyfile)
