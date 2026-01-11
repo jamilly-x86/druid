@@ -4,8 +4,8 @@
 #include <chrono>
 #include <iostream>
 
-#include <magic_enum/magic_enum.hpp>
 #include <glm/glm.hpp>
+#include <magic_enum/magic_enum.hpp>
 
 import druid.core.Engine;
 import druid.core.Event;

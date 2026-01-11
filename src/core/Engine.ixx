@@ -3,6 +3,7 @@ module;
 #include <chrono>
 #include <cstdlib>
 #include <variant>
+#include <vector>
 
 export module druid.core.Engine;
 

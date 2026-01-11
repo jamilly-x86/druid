@@ -2,11 +2,11 @@ module;
 
 #include <raylib.h>
 #include <rlgl.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <memory>
 #include <type_traits>
 #include <vector>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 export module druid.graphics.Node;
 
