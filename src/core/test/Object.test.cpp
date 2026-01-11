@@ -9,7 +9,7 @@ using druid::core::Object;
 TEST(Object, name)
 {
 	Engine engine;
-	auto object = engine.create_object();
+	auto object = std::make_unique<Object>(engine);
 	object->set_name("test");
 	EXPECT_EQ(object->get_name(), "test");
 }
@@ -17,14 +17,14 @@ TEST(Object, name)
 TEST(Object, addChild)
 {
 	Engine engine;
-	auto object = engine.create_object();
+	auto object = std::make_unique<Object>(engine);
 	EXPECT_NO_THROW(object->add_child(std::make_unique<Object>(engine)));
 }
 
 TEST(Object, create_child)
 {
 	Engine engine;
-	auto object = engine.create_object();
+	auto object = std::make_unique<Object>(engine);
 	auto& child = object->create_child("test");
 	EXPECT_EQ(child.get_name(), "test");
 }
@@ -32,7 +32,7 @@ TEST(Object, create_child)
 TEST(Object, remove)
 {
 	Engine engine;
-	auto object = engine.create_object();
+	auto object = std::make_unique<Object>(engine);
 	EXPECT_EQ(object->remove(), nullptr);
 
 	(void)object->create_child("one");
@@ -52,7 +52,7 @@ TEST(Object, remove)
 TEST(Object, find_child)
 {
 	Engine engine;
-	auto object = engine.create_object();
+	auto object = std::make_unique<Object>(engine);
 	auto& one = object->create_child("one");
 	auto& two = object->create_child("two");
 	auto& three = object->create_child("three");

@@ -15,10 +15,11 @@ target_sources(${PROJECT_NAME} PUBLIC
 
 find_package(raylib CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
     druid-core
-    druid-math
+    glm::glm
     raylib
     glfw
 )

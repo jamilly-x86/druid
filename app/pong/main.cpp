@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include <magic_enum/magic_enum.hpp>
+#include <glm/glm.hpp>
 
 import druid.core.Engine;
 import druid.core.Event;
@@ -13,7 +14,6 @@ import druid.graphics.Node;
 import druid.graphics.NodeRectangle;
 import druid.graphics.NodeText;
 import druid.graphics.Window;
-import druid.math.Vec2;
 
 auto main() -> int
 try
@@ -81,13 +81,13 @@ try
 	engine.on_update_fixed(
 		[&paddle1, &paddle2, &ball, &paddle1_move_up, &paddle1_move_down](std::chrono::steady_clock::duration dt)
 		{
-			auto velocity_ball = druid::math::Vec2{.x = 50.0F, .y = 0.0F};
-			auto velocity_paddle = druid::math::Vec2{.x = 0.0F, .y = 150.0F};
+			auto velocity_ball = glm::vec2(50.0F, 0.0F);
+			auto velocity_paddle = glm::vec2(0.0F, 150.0F);
 
 			// Move Ball
 			using seconds = std::chrono::duration<float>;
 			const auto dt_seconds = std::chrono::duration_cast<seconds>(dt).count();
-			auto position = druid::math::Vec2{velocity_ball.x, velocity_ball.y} * dt_seconds;
+			auto position = velocity_ball * dt_seconds;
 			ball.set_position(position + ball.get_position());
 
 			// Move Paddle

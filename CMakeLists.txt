@@ -35,7 +35,7 @@ set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(BUILD_ENABLE_HARDENED "Enable hardened compiler options" OFF)
-option(BUILD_TESTING "Enable building ${PROJECT_NAME} test applications." OFF)
+option(BUILD_TESTING "Enable building ${PROJECT_NAME} test applications." ON)
 
 include(CTest)
 include(GoogleTest)

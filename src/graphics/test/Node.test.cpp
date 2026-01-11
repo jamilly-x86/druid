@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <glm/vec2.hpp>
+#include <glm/glm.hpp>
 
 import druid.core.Engine;
 import druid.graphics.Node;
@@ -10,7 +10,7 @@ using druid::graphics::Node;
 TEST(Node, default_constructor)
 {
 	Engine engine;
-	auto node = engine.create_object<Node>();
+	auto node = std::make_unique<Node>(engine);
 
 	EXPECT_EQ(node->get_position(), Node::DefaultPosition);
 	EXPECT_EQ(node->get_scale(), Node::DefaultScale);
@@ -21,7 +21,7 @@ TEST(Node, default_constructor)
 TEST(Node, create_node)
 {
 	Engine engine;
-	auto root = engine.create_object<Node>();
+	auto root = std::make_unique<Node>(engine);
 	auto& node1 = root->create_node();
 	auto& node2 = root->create_node();
 
@@ -34,7 +34,7 @@ TEST(Node, create_node)
 TEST(Node, remove_node)
 {
 	Engine engine;
-	auto root = engine.create_object<Node>();
+	auto root = std::make_unique<Node>(engine);
 	auto& one = root->create_node();
 	auto& two = root->create_node();
 	auto& three = root->create_node();
@@ -58,7 +58,7 @@ TEST(Node, remove_node)
 TEST(Node, get_position_global)
 {
 	Engine engine;
-	auto root = engine.create_object<Node>();
+	auto root = std::make_unique<Node>(engine);
 	Node& child1 = root->create_node();
 	Node& child2 = child1.create_node();
 	Node& child3 = child2.create_node();
@@ -84,8 +84,8 @@ TEST(Node, get_position_global)
 TEST(Node, set_and_get_scale)
 {
 	Engine engine;
-	auto node = engine.create_object<Node>();
-	constexpr auto test{glm::vec2{2.0F, 3.0F}};
+	auto node = std::make_unique<Node>(engine);
+	const auto test = glm::vec2(std::numeric_limits<float>::max(), std::numeric_limits<float>::min());
 	node->set_scale(test);
 
 	// NOLINTBEGIN
@@ -97,7 +97,7 @@ TEST(Node, set_and_get_scale)
 TEST(Node, set_and_get_rotation)
 {
 	Engine engine;
-	auto node = engine.create_object<Node>();
+	auto node = std::make_unique<Node>(engine);
 
 	constexpr auto test{45.0F};
 	node->set_rotation(test);
