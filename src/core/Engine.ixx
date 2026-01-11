@@ -225,11 +225,13 @@ export namespace druid::core
 		///   [](const EventKeyboard&){},
 		/// }, event_variant);
 		/// @endcode
+		// NOLINTBEGIN(misc-multiple-inheritance)
 		template <typename... Ts>
 		struct Overloaded : Ts...
 		{
 			using Ts::operator()...;
 		};
+		// NOLINTEND(misc-multiple-inheritance)
 
 		/// @brief Dispatch an event to the appropriate event signal channel.
 		///

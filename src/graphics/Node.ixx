@@ -44,9 +44,9 @@ export namespace druid::graphics
 	{
 	public:
 		/// @brief Default local position (0, 0).
-		static inline const auto DefaultPosition = glm::vec2(0.0F, 0.0F);
+		static constexpr auto DefaultPosition = glm::vec2{0.0F, 0.0F};
 		/// @brief Default local scale (1, 1).
-		static inline const auto DefaultScale = glm::vec2(1.0F, 1.0F);
+		static constexpr auto DefaultScale = glm::vec2{1.0F, 1.0F};
 		/// @brief Default local rotation (0 radians or degrees depending on implementation).
 		///
 		/// @note This header does not specify the unit; the implementation should document
@@ -86,8 +86,11 @@ export namespace druid::graphics
 		/// @return Global/world position.
 		[[nodiscard]] auto get_position_global() const -> glm::vec2
 		{
-			const auto& t = transform_global();
-			return {t[3][0], t[3][1]};
+			// NOLINTNEXTLINE (cppcoreguidelines-pro-bounds-avoid-unchecked-container-access)
+			const auto pos = glm::vec3{transform_global()[3]};
+
+			// NOLINTNEXTLINE (cppcoreguidelines-pro-type-union-access,-warnings-as-errors)
+			return {pos.x, pos.y};
 		}
 
 		/// @brief Set the local scale of this node.

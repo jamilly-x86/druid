@@ -51,10 +51,9 @@ add_subdirectory(src)
 # install(FILES ${PROJECT_CONFIG_VERSION} DESTINATION ${CMAKE_INSTALL_DATAROOTDIR})
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    find_program(LLVM_PROFDATA llvm-profdata)
-    find_program(LLVM_COV llvm-cov)
+    find_program(CLANG_TIDY clang-tidy)
 
-    if(LLVM_PROFDATA AND LLVM_COV)
+    if(CLANG_TIDY)
         include(ProcessorCount)
         ProcessorCount(NPROC)
         add_custom_target(clang-tidy
@@ -62,7 +61,14 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
             COMMENT "Running clang-tidy on all files"
         )
+    else()
+        message(WARNING "clang-tidy executable not found - clang-tidy target will be skipped.")
+    endif()
 
+    find_program(LLVM_PROFDATA llvm-profdata)
+    find_program(LLVM_COV llvm-cov)
+
+    if(LLVM_PROFDATA AND LLVM_COV)
         get_property(PROJECT_LIB_TARGETS GLOBAL PROPERTY PROJECT_LIB_TARGETS)
 
         foreach(lib ${PROJECT_LIB_TARGETS})
@@ -88,7 +94,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
                 ${LLVM_COV_OBJECTS}
         )
     else()
-        message(WARNING "llvm-profdata and llvm-cov executable(s) not found - clang-tidy target will be skipped.")
+        message(WARNING "llvm-profdata and llvm-cov executable(s) not found - llvm-coverage target will be skipped.")
     endif()
 endif()
 
