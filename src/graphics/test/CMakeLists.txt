@@ -4,6 +4,7 @@ project_add_executable(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
     Node.test.cpp
+    NodeRectangle.test.cpp
 )
 
 enable_testing()

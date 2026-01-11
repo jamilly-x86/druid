@@ -35,8 +35,7 @@ export namespace druid::graphics
 				[this](auto& renderer)
 				{
 					const auto tl = top_left();
-					const auto br = bottom_right();
-					renderer.draw_rectangle(tl.x, tl.y, br.x, br.y, color_);
+					renderer.draw_rectangle(tl.x, tl.y, size_.x, size_.y, color_);
 				});
 		}
 
@@ -96,7 +95,7 @@ export namespace druid::graphics
 		/// @return Local-space coordinates of the bottom-right corner.
 		[[nodiscard]] auto bottom_right() const -> glm::vec2
 		{
-			return size_;
+			return size_ * Half;
 		}
 
 	private:
