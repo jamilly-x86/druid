@@ -1,10 +1,10 @@
-#pragma once
+module;
 
-#include <exception>
 #include <functional>
-#include <typeinfo>
 
-namespace druid::core
+export module druid.core.Signal;
+
+export namespace druid::core
 {
 	/// @brief Primary template declaration for Signal.
 	///

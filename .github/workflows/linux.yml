@@ -68,6 +68,7 @@ jobs:
       - name: install-raylib-dependencies
         run: |
           apt install -y libxinerama-dev libxcursor-dev xorg-dev libglu1-mesa-dev pkg-config libgl1-mesa-dev libx11-dev libxrandr-dev
+
       - name: cmake-configure
         run: cmake --preset ${{ matrix.config.preset }}
 

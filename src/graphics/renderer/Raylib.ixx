@@ -1,10 +1,14 @@
-#pragma once
+module;
 
-#include <druid/graphics/Renderer.h>
 #include <raylib.h>
 #include <string>
 
-namespace druid::graphics::renderer
+export module druid.graphics.renderer.Raylib;
+
+import druid.graphics.Color;
+import druid.graphics.Renderer;
+
+export namespace druid::graphics::renderer
 {
 	/// @class Raylib
 	/// @brief Raylib-backed implementation of the Renderer interface.

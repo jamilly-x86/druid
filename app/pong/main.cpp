@@ -1,20 +1,19 @@
+// Need to include headers prior to importing otherwise suffer the
+// consequences of a gcc 15.2 Internal Compiler Error.
+
 #include <chrono>
-#include <exception>
-#include <glm/ext/vector_float2.hpp>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/matrix.hpp>
 #include <iostream>
+
+#include <glm/glm.hpp>
 #include <magic_enum/magic_enum.hpp>
 
-#include <druid/core/Engine.h>
-#include <druid/core/Event.h>
-#include <druid/graphics/Color.h>
-#include <druid/graphics/Node.h>
-#include <druid/graphics/NodeRectangle.h>
-#include <druid/graphics/NodeText.h>
-#include <druid/graphics/Window.h>
+import druid.core.Engine;
+import druid.core.Event;
+import druid.graphics.Color;
+import druid.graphics.Node;
+import druid.graphics.NodeRectangle;
+import druid.graphics.NodeText;
+import druid.graphics.Window;
 
 auto main() -> int
 try
@@ -61,6 +60,7 @@ try
 	ball.set_position({width * 0.5, height * 0.5});
 	ball.set_size({24, 24});
 	ball.set_color(druid::graphics::Color::White);
+	ball.on_destroyed([] { std::cout << "Ball died!!\n"; });
 
 	engine.on_event_window([&engine](auto) { engine.quit(); });
 
@@ -81,13 +81,13 @@ try
 	engine.on_update_fixed(
 		[&paddle1, &paddle2, &ball, &paddle1_move_up, &paddle1_move_down](std::chrono::steady_clock::duration dt)
 		{
-			auto velocity_ball = glm::vec2{50.0F, 0.0F};
-			auto velocity_paddle = glm::vec2{0.0F, 150.0F};
+			auto velocity_ball = glm::vec2(50.0F, 0.0F);
+			auto velocity_paddle = glm::vec2(0.0F, 150.0F);
 
 			// Move Ball
 			using seconds = std::chrono::duration<float>;
 			const auto dt_seconds = std::chrono::duration_cast<seconds>(dt).count();
-			auto position = glm::vec2{velocity_ball.x * dt_seconds, velocity_ball.y * dt_seconds};
+			auto position = velocity_ball * dt_seconds;
 			ball.set_position(position + ball.get_position());
 
 			// Move Paddle
@@ -132,5 +132,5 @@ try
 catch (const std::exception& e)
 {
 	std::cerr << "Exception: " << e.what() << "\n";
-	return EXIT_FAILURE;
+	return -1;
 }

@@ -1,0 +1,11 @@
+CompileFlags:
+  CompilationDatabase: build
+  Add:
+    - "-std=c++26"
+
+Diagnostics:
+  UnusedIncludes: Strict
+  MissingIncludes: Strict
+  
+Index:
+  StandardLibrary: Yes

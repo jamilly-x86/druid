@@ -1,5 +1,6 @@
-#include <druid/graphics/Window.h>
-#include <druid/graphics/renderer/Raylib.h>
+module;
+
+#include <chrono>
 
 // Need to define a large max range for magic_enum
 // to support all of the raylib keys.
@@ -8,7 +9,17 @@
 
 // NOLINTNEXTLINE (cppcoreguidelines-macro-usage)
 #define MAGIC_ENUM_RANGE_MAX 400
+#include <raylib.h>
 #include <magic_enum/magic_enum.hpp>
+
+export module druid.graphics.Window;
+
+import druid.core.Engine;
+import druid.core.Event;
+import druid.graphics.Color;
+import druid.graphics.Node;
+import druid.graphics.Renderer;
+import druid.graphics.renderer.Raylib;
 
 namespace
 {
@@ -244,71 +255,132 @@ namespace
 	}
 }
 
-namespace druid::graphics
+export namespace druid::graphics
 {
-	Window::Window(druid::core::Engine& x) : Service{x}, root_node_{x}, renderer_{std::make_unique<renderer::Raylib>()}
+	/// @class Window
+	/// @brief Graphics service responsible for window management and rendering.
+	///
+	/// `Window` is an engine `Service` that typically:
+	/// - Creates and owns the graphics window and rendering backend (`Renderer`).
+	/// - Drives per-frame rendering during `update()` and end-of-frame presentation
+	///   during `update_end()`.
+	/// - Provides a root scene-graph `Node` as the entry point for rendering content.
+	///
+	/// The exact backend implementation (e.g., Raylib/rlgl) is encapsulated by
+	/// `Renderer` and configured internally by this service.
+	class Window : public druid::core::Service
 	{
-		InitWindow(width_, height_, title_.c_str());
-		SetWindowState(FLAG_WINDOW_RESIZABLE);
-	}
+	public:
+		/// @brief Default window title.
+		static constexpr auto DefaultTitle{"Druid"};
+		/// @brief Default window width in pixels.
+		static constexpr auto DefaultWidth{1280};
+		/// @brief Default window height in pixels.
+		static constexpr auto DefaultHeight{720};
 
-	Window::~Window()
-	{
-		CloseWindow();
-	}
-
-	auto Window::update(std::chrono::steady_clock::duration /*x*/) -> void
-	{
-		if (WindowShouldClose())
+		/// @brief Construct the window service and bind it to the engine.
+		///
+		/// Implementations typically allocate the renderer, open a native window,
+		/// and initialize any graphics state required for drawing.
+		///
+		/// @param x Owning engine instance.
+		explicit Window(druid::core::Engine& x) : Service{x}, root_node_{x}, renderer_{std::make_unique<renderer::Raylib>()}
 		{
-			using druid::core::EventWindow;
-			EventWindow e{.type = EventWindow::Type::Closed};
-			engine().event(e);
+			InitWindow(width_, height_, title_.c_str());
+			SetWindowState(FLAG_WINDOW_RESIZABLE);
 		}
 
-		const auto keys = magic_enum::enum_values<KeyboardKey>();
-
-		for (auto key : keys)
+		/// @brief Destroy the window service.
+		///
+		/// Implementations should release renderer resources and close the window.
+		~Window() override
 		{
-			using druid::core::EventKeyboard;
+			CloseWindow();
+		}
 
-			if (IsKeyPressed(key))
+		Window(const Window&) = delete;
+		Window(Window&&) noexcept = delete;
+		auto operator=(const Window&) -> Window& = delete;
+		auto operator=(Window&&) noexcept -> Window& = delete;
+
+		/// @brief Per-frame update hook.
+		///
+		/// Typically performs per-frame window polling (input/events), prepares
+		/// the renderer, and triggers draw traversal starting from `root_node()`.
+		auto update(std::chrono::steady_clock::duration /*x*/) -> void override
+		{
+			if (WindowShouldClose())
 			{
-				EventKeyboard e{.type = EventKeyboard::Type::KeyPressed, .key = ConvertRayLibKey(key)};
+				using druid::core::EventWindow;
+				EventWindow e{.type = EventWindow::Type::Closed};
 				engine().event(e);
 			}
-			else if (IsKeyReleased(key))
+
+			const auto keys = magic_enum::enum_values<KeyboardKey>();
+
+			for (auto key : keys)
 			{
-				EventKeyboard e{.type = EventKeyboard::Type::KeyReleased, .key = ConvertRayLibKey(key)};
-				engine().event(e);
+				using druid::core::EventKeyboard;
+
+				if (IsKeyPressed(key))
+				{
+					EventKeyboard e{.type = EventKeyboard::Type::KeyPressed, .key = ConvertRayLibKey(key)};
+					engine().event(e);
+				}
+				else if (IsKeyReleased(key))
+				{
+					EventKeyboard e{.type = EventKeyboard::Type::KeyReleased, .key = ConvertRayLibKey(key)};
+					engine().event(e);
+				}
 			}
 		}
-	}
 
-	auto Window::update_end() -> void
-	{
-		// Render the scene
-		if (renderer_)
+		/// @brief End-of-frame hook.
+		///
+		/// Typically finalizes rendering for the frame (e.g., present/swap buffers),
+		/// and performs any end-of-frame housekeeping.
+		auto update_end() -> void override
 		{
-			renderer_->begin(Color::Black);
-			root_node_.draw(*renderer_);
-			renderer_->end();
+			// Render the scene
+			if (renderer_)
+			{
+				renderer_->begin(Color::Black);
+				root_node_.draw(*renderer_);
+				renderer_->end();
+			}
 		}
-	}
 
-	auto Window::set_title(std::string_view x) -> void
-	{
-		title_ = x;
-		SetWindowTitle(title_.c_str());
-	}
+		/// @brief Get the root node of the window's scene graph.
+		///
+		/// Rendering typically traverses from this node. Users can attach child
+		/// nodes to build a renderable hierarchy.
+		///
+		/// @return Reference to the root node.
+		[[nodiscard]] auto root_node() -> Node&
+		{
+			return root_node_;
+		}
 
-	auto Window::get_title() -> std::string_view
-	{
-		return title_;
-	}
+		/// @brief Set the window title.
+		/// @param x New title string.
+		auto set_title(std::string_view x) -> void
+		{
+			title_ = x;
+			SetWindowTitle(title_.c_str());
+		}
 
-	auto Window::root_node() -> Node&
-	{
-		return root_node_;
-	}
+		/// @brief Get the current window title.
+		/// @return Current title string view.
+		[[nodiscard]] auto get_title() -> std::string_view
+		{
+			return title_;
+		}
+
+	private:
+		Node root_node_;
+		std::unique_ptr<Renderer> renderer_;
+		std::string title_{DefaultTitle};
+		int width_{DefaultWidth};
+		int height_{DefaultHeight};
+	};
 }

@@ -1,9 +1,11 @@
-#pragma once
+module;
 
 #include <cstdint>
 #include <variant>
 
-namespace druid::core
+export module druid.core.Event;
+
+export namespace druid::core
 {
 	/// @struct EventKeyboard
 	/// @brief Keyboard event payload for the engine event system.
@@ -191,7 +193,7 @@ namespace druid::core
 	/// @brief Unified engine event type.
 	///
 	/// The engine uses a tagged union (`std::variant`) to represent events from
-	/// multiple domains in a single type. `std::monostate` represents “no event”.
+	/// multiple domains in a single type. `std::monostate` represents "no event".
 	///
 	/// Typical usage:
 	/// @code

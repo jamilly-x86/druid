@@ -9,7 +9,6 @@
     "gtest",
     "magic-enum",
     "ms-gsl",
-    "raylib",
-    "flecs"
+    "raylib"
   ]
 }

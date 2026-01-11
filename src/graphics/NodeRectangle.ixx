@@ -1,19 +1,24 @@
-#pragma once
+module;
 
-#include <druid/graphics/Color.h>
-#include <druid/graphics/Node.h>
-#include <glm/vec2.hpp>
+#include <functional>
+#include <glm/glm.hpp>
 
-namespace druid::graphics
+export module druid.graphics.NodeRectangle;
+
+import druid.core.Engine;
+import druid.graphics.Color;
+import druid.graphics.Node;
+
+export namespace druid::graphics
 {
 	/// @class NodeRectangle
 	/// @brief Scene-graph node that renders a filled axis-aligned rectangle.
 	///
 	/// `NodeRectangle` is a concrete `Node` that draws a rectangle using the
 	/// engine's `Renderer`. The rectangle is defined by a size vector and is
-	/// rendered relative to the node’s local origin.
+	/// rendered relative to the node's local origin.
 	///
-	/// The rectangle’s transform (position, scale, rotation) is inherited from
+	/// The rectangle's transform (position, scale, rotation) is inherited from
 	/// `Node` and applied before rendering.
 	class NodeRectangle : public Node
 	{
@@ -95,7 +100,7 @@ namespace druid::graphics
 		}
 
 	private:
-		static constexpr auto Half{0.5};
+		static constexpr auto Half{0.5F};
 		glm::vec2 size_{};
 		Color color_{Color::White};
 	};

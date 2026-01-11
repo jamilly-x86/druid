@@ -1,8 +1,10 @@
-#pragma once
+module;
 
 #include <type_traits>
 
-namespace druid::core
+export module druid.core.Concepts;
+
+export namespace druid::core
 {
 	template <typename T>
 	concept TypeEnum = std::is_enum_v<T>;

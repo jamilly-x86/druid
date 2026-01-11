@@ -1,14 +1,16 @@
-#pragma once
+module;
 
-#include <druid/core/Event.h>
-#include <druid/core/Object.h>
-#include <druid/core/Signal.h>
 #include <chrono>
-#include <memory>
-#include <utility>
+#include <cstdlib>
+#include <variant>
 #include <vector>
 
-namespace druid::core
+export module druid.core.Engine;
+
+import druid.core.Event;
+import druid.core.Signal;
+
+export namespace druid::core
 {
 	class Engine;
 
@@ -26,7 +28,9 @@ namespace druid::core
 	public:
 		/// @brief Construct a service bound to the given engine.
 		/// @param x Owning engine instance.
-		Service(Engine& x);
+		Service(Engine& x) : engine_{x}
+		{
+		}
 
 		/// @brief Virtual destructor for polymorphic deletion.
 		virtual ~Service() = default;
@@ -40,23 +44,32 @@ namespace druid::core
 		///
 		/// Called once per engine frame with the frame delta time.
 		/// Default implementation does nothing.
-		virtual auto update(std::chrono::steady_clock::duration /*x*/) -> void;
+		virtual auto update(std::chrono::steady_clock::duration /*x*/) -> void
+		{
+		}
 
 		/// @brief Fixed-timestep update hook.
 		///
 		/// Called zero or more times per frame depending on the accumulated time and the
 		/// fixed update interval configured on the engine. Default implementation does nothing.
-		virtual auto update_fixed(std::chrono::steady_clock::duration /*x*/) -> void;
+		virtual auto update_fixed(std::chrono::steady_clock::duration /*x*/) -> void
+		{
+		}
 
 		/// @brief End-of-frame hook.
 		///
 		/// Called once at the end of each frame after all update and fixed update work for
 		/// that frame is complete. Default implementation does nothing.
-		virtual auto update_end() -> void;
+		virtual auto update_end() -> void
+		{
+		}
 
 		/// @brief Access the owning engine.
 		/// @return Reference to the engine that owns this service.
-		[[nodiscard]] auto engine() -> Engine&;
+		[[nodiscard]] auto engine() -> Engine&
+		{
+			return engine_;
+		}
 
 	private:
 		Engine& engine_;
@@ -90,38 +103,101 @@ namespace druid::core
 		static constexpr auto DefaultUpdateFixedLimit{5};
 
 		/// @brief Construct an engine with default timing configuration.
-		Engine();
+		Engine()
+		{
+			on_update(
+				[this](auto x)
+				{
+					for (auto& service : services_)
+					{
+						service->update(x);
+					}
+				});
+
+			on_update_fixed(
+				[this](auto x)
+				{
+					for (auto& service : services_)
+					{
+						service->update_fixed(x);
+					}
+				});
+
+			on_update_end(
+				[this]
+				{
+					for (auto& service : services_)
+					{
+						service->update_end();
+					}
+				});
+		}
 
 		/// @brief Set the interval at which the fixed update function is called.
 		/// @param x The new fixed update interval.
-		auto set_interval_fixed(std::chrono::steady_clock::duration x) -> void;
+		auto set_interval_fixed(std::chrono::steady_clock::duration x) -> void
+		{
+			interval_fixed_ = x;
+		}
 
 		/// @brief Get the current fixed update interval.
 		/// @return The current fixed update interval.
-		[[nodiscard]] auto get_interval_fixed() const noexcept -> std::chrono::steady_clock::duration;
+		[[nodiscard]] auto get_interval_fixed() const noexcept -> std::chrono::steady_clock::duration
+		{
+			return interval_fixed_;
+		}
 
 		/// @brief Run the main loop of the engine. This will block until quit() is called.
 		/// @return The exit code of the engine.
-		auto run() -> int;
+		auto run() -> int
+		{
+			try
+			{
+				running_ = true;
+
+				start_ = std::chrono::steady_clock::now();
+
+				while (running_)
+				{
+					const auto now = std::chrono::steady_clock::now();
+					const auto delta = now - start_;
+					start_ = now;
+					accumulate_ += delta;
+
+					on_update_(delta);
+
+					auto count = 0;
+
+					while (accumulate_ >= interval_fixed_ && count < update_fixed_limit_)
+					{
+						accumulate_ -= interval_fixed_;
+						count++;
+
+						on_update_fixed_(interval_fixed_);
+					}
+
+					on_update_end_();
+				}
+
+				return EXIT_SUCCESS;
+			}
+			catch (...)
+			{
+				return EXIT_FAILURE;
+			}
+		}
 
 		/// @brief Quit the main loop of the engine.
-		auto quit() -> void;
+		auto quit() -> void
+		{
+			running_ = false;
+		}
 
 		/// @brief Tells whether the engine is currently running.
 		/// @return True if the engine is running, false otherwise.
-		[[nodiscard]] auto running() const noexcept -> bool;
-
-		/// @brief Create an engine-owned object.
-		///
-		/// The default template argument creates a base `Object`. The object is returned
-		/// as a `std::unique_ptr` to allow the caller to own and manage its lifetime.
-		///
-		/// @tparam T Object type (must satisfy druid::core::ObjectType).
-		/// @return Newly created object instance.
-		template <druid::core::ObjectType T = Object>
-		[[nodiscard]] auto create_object() -> std::unique_ptr<T>
+		[[nodiscard]] auto running() const noexcept -> bool
 		{
-			return std::make_unique<T>(*this);
+			return running_;
 		}
 
 		/// @brief Create and register a service owned by the engine.
@@ -149,11 +225,13 @@ namespace druid::core
 		///   [](const EventKeyboard&){},
 		/// }, event_variant);
 		/// @endcode
+		// NOLINTBEGIN(misc-multiple-inheritance)
 		template <typename... Ts>
 		struct Overloaded : Ts...
 		{
 			using Ts::operator()...;
 		};
+		// NOLINTEND(misc-multiple-inheritance)
 
 		/// @brief Dispatch an event to the appropriate event signal channel.
 		///
@@ -161,7 +239,17 @@ namespace druid::core
 		/// (e.g., window vs keyboard vs mouse).
 		///
 		/// @param x Event instance to dispatch.
-		auto event(const Event& x) -> void;
+		auto event(const Event& x) -> void
+		{
+			std::visit(
+				Overloaded{
+					[this](const EventWindow& x) { on_event_window_(x); },
+					[this](const EventKeyboard& x) { on_event_keyboard_(x); },
+					[this](const EventMouse& x) { on_event_mouse_(x); },
+					[](auto) {},
+				},
+				x);
+		}
 
 		/// @brief Subscribe a callback to window events.
 		/// @tparam Callback Callable type with signature `void(const EventWindow&)`.
