@@ -129,21 +129,6 @@ export namespace druid::graphics
 			return position_;
 		}
 
-		/// @brief Get the global position of this node.
-		///
-		/// Computed from the global transform and represents the node's position
-		/// in world space (including parent transforms).
-		///
-		/// @return Global/world position.
-		[[nodiscard]] auto get_position_global() const -> glm::vec2
-		{
-			// NOLINTNEXTLINE (cppcoreguidelines-pro-bounds-avoid-unchecked-container-access)
-			const auto pos = glm::vec3{transform_global()[3]};
-
-			// NOLINTNEXTLINE (cppcoreguidelines-pro-type-union-access,-warnings-as-errors)
-			return {pos.x, pos.y};
-		}
-
 		/// @brief Set the local scale of this node.
 		/// @param scale New local scale.
 		auto set_scale(const glm::vec2& scale) -> void
@@ -207,38 +192,13 @@ export namespace druid::graphics
 		{
 			if (transform_dirty_)
 			{
-				auto translation = glm::translate(glm::mat4(1.0F), glm::vec3(position_.x, position_.y, 0.0F));
-				auto rotation = glm::rotate(glm::mat4(1.0F), glm::radians(rotation_), glm::vec3(0.0F, 0.0F, 1.0F));
-				auto scaling = glm::scale(glm::mat4(1.0F), glm::vec3(scale_.x, scale_.y, 1.0F));
+				const auto translation = glm::translate(glm::mat4(1.0F), glm::vec3(position_.x, position_.y, 0.0F));
+				const auto rotation = glm::rotate(glm::mat4(1.0F), glm::radians(rotation_), glm::vec3(0.0F, 0.0F, 1.0F));
+				const auto scaling = glm::scale(glm::mat4(1.0F), glm::vec3(scale_.x, scale_.y, 1.0F));
 				transform_ = translation * rotation * scaling;
 				transform_dirty_ = false;
 			}
 			return transform_;
-		}
-
-		/// @brief Get the global transform matrix.
-		///
-		/// The global transform composes this node's local transform with all
-		/// ancestor transforms up to the root.
-		///
-		/// @return Global/world transform matrix.
-		[[nodiscard]] auto transform_global() const -> glm::mat4
-		{
-			if (transform_global_dirty_)
-			{
-				if (parent_node_ != nullptr)
-				{
-					transform_global_ = parent_node_->transform_global() * transform();
-				}
-				else
-				{
-					transform_global_ = transform();
-				}
-
-				transform_global_dirty_ = false;
-			}
-
-			return transform_global_;
 		}
 
 		/// @brief Draw this node using the provided renderer.
@@ -279,7 +239,6 @@ export namespace druid::graphics
 		auto dirty() -> void
 		{
 			transform_dirty_ = true;
-			transform_global_dirty_ = true;
 			for (auto& child : children_)
 			{
 				child->dirty();
@@ -290,11 +249,9 @@ export namespace druid::graphics
 		Node* parent_node_{nullptr};
 		Signal<void(Renderer&)> on_draw_;
 		mutable glm::mat4 transform_{glm::mat4(1.0F)};
-		mutable glm::mat4 transform_global_{glm::mat4(1.0F)};
-		mutable bool transform_dirty_{true};
-		mutable bool transform_global_dirty_{true};
 		glm::vec2 position_{DefaultPosition};
 		glm::vec2 scale_{DefaultScale};
 		float rotation_{DefaultRotation};
+		mutable bool transform_dirty_{true};
 	};
 }
