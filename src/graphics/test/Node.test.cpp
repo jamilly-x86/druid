@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include <glm/glm.hpp>
 
-import druid.core.Engine;
 import druid.graphics.Node;
 
 using druid::core::Engine;
@@ -11,7 +10,6 @@ using druid::graphics::Node;
 
 TEST(Node, default_constructor)
 {
-	Engine engine;
 	auto node = std::make_unique<Node>();
 
 	EXPECT_EQ(node->get_position(), Node::DefaultPosition);
@@ -22,7 +20,6 @@ TEST(Node, default_constructor)
 
 TEST(Node, create_node)
 {
-	Engine engine;
 	auto root = std::make_unique<Node>();
 	auto& node1 = root->create_node();
 	auto& node2 = root->create_node();
@@ -34,7 +31,6 @@ TEST(Node, create_node)
 
 TEST(Node, remove_node)
 {
-	Engine engine;
 	auto root = std::make_unique<Node>();
 	auto& one = root->create_node();
 	auto& two = root->create_node();
@@ -58,7 +54,6 @@ TEST(Node, remove_node)
 
 TEST(Node, get_position_global)
 {
-	Engine engine;
 	auto root = std::make_unique<Node>();
 	Node& child1 = root->create_node();
 	Node& child2 = child1.create_node();
@@ -84,7 +79,6 @@ TEST(Node, get_position_global)
 
 TEST(Node, set_and_get_scale)
 {
-	Engine engine;
 	auto node = std::make_unique<Node>();
 	const auto test = glm::vec2(std::numeric_limits<float>::max(), std::numeric_limits<float>::min());
 	node->set_scale(test);
@@ -97,7 +91,6 @@ TEST(Node, set_and_get_scale)
 
 TEST(Node, set_and_get_rotation)
 {
-	Engine engine;
 	auto node = std::make_unique<Node>();
 
 	constexpr auto test{45.0F};
@@ -107,7 +100,6 @@ TEST(Node, set_and_get_rotation)
 
 TEST(Node, transform_cache_invalidation_on_parent_change)
 {
-	Engine engine;
 	auto root = std::make_unique<Node>();
 	Node& child = root->create_node();
 	Node& grandchild = child.create_node();
@@ -140,7 +132,6 @@ TEST(Node, transform_cache_invalidation_on_parent_change)
 
 TEST(Node, transform_consistency_after_removing_node)
 {
-	Engine engine;
 	auto root = std::make_unique<Node>();
 	Node& child1 = root->create_node();
 	Node& child2 = root->create_node();
@@ -174,7 +165,6 @@ TEST(Node, transform_consistency_after_removing_node)
 
 TEST(Node, transform_consistency_after_adding_node)
 {
-	Engine engine;
 	auto root = std::make_unique<Node>();
 	auto orphan_parent = std::make_unique<Node>();
 	Node& orphan_child = orphan_parent->create_node();
@@ -204,7 +194,6 @@ TEST(Node, transform_consistency_after_adding_node)
 
 TEST(Node, multiple_property_changes_cache_correctly)
 {
-	Engine engine;
 	auto root = std::make_unique<Node>();
 	Node& child = root->create_node();
 
@@ -233,7 +222,6 @@ TEST(Node, multiple_property_changes_cache_correctly)
 
 TEST(Node, deep_hierarchy_transform_propagation)
 {
-	Engine engine;
 	auto root = std::make_unique<Node>();
 
 	// Create a deep hierarchy
@@ -261,7 +249,6 @@ TEST(Node, deep_hierarchy_transform_propagation)
 
 TEST(Node, scale_affects_child_global_position)
 {
-	Engine engine;
 	auto root = std::make_unique<Node>();
 	Node& child = root->create_node();
 

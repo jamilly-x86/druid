@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include <glm/glm.hpp>
 
-import druid.core.Engine;
 import druid.graphics.NodeRectangle;
 
 using druid::core::Engine;
@@ -12,7 +11,6 @@ using druid::graphics::NodeRectangle;
 // Test that a centered rectangle has correct local-space bounds
 TEST(NodeRectangle, centered_bounds)
 {
-	Engine engine;
 	auto rect = std::make_unique<NodeRectangle>();
 
 	rect->set_size({100.0F, 50.0F});
@@ -32,7 +30,6 @@ TEST(NodeRectangle, centered_bounds)
 // Test AABB collision detection with two rectangles
 TEST(NodeRectangle, collision_detection_overlapping)
 {
-	Engine engine;
 	auto rect1 = std::make_unique<NodeRectangle>();
 	auto rect2 = std::make_unique<NodeRectangle>();
 
@@ -59,7 +56,6 @@ TEST(NodeRectangle, collision_detection_overlapping)
 // Test AABB collision detection with non-overlapping rectangles
 TEST(NodeRectangle, collision_detection_not_overlapping)
 {
-	Engine engine;
 	auto rect1 = std::make_unique<NodeRectangle>();
 	auto rect2 = std::make_unique<NodeRectangle>();
 
@@ -86,7 +82,6 @@ TEST(NodeRectangle, collision_detection_not_overlapping)
 // Test edge-touching rectangles (should not collide)
 TEST(NodeRectangle, collision_detection_edge_touching)
 {
-	Engine engine;
 	auto rect1 = std::make_unique<NodeRectangle>();
 	auto rect2 = std::make_unique<NodeRectangle>();
 
@@ -119,7 +114,6 @@ TEST(NodeRectangle, collision_detection_edge_touching)
 // Test pong-like scenario: ball hitting paddle
 TEST(NodeRectangle, pong_ball_paddle_collision)
 {
-	Engine engine;
 	auto paddle = std::make_unique<NodeRectangle>();
 	auto ball = std::make_unique<NodeRectangle>();
 
