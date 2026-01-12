@@ -62,7 +62,6 @@ try
 	ball.set_position({width * 0.5, height * 0.5});
 	ball.set_size({24, 24});
 	ball.set_color(druid::graphics::Color::White);
-	ball.on_destroyed([] { std::cout << "Ball died!!\n"; });
 
 	engine.on_event_window([&engine](auto) { engine.quit(); });
 

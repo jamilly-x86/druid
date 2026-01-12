@@ -5,7 +5,6 @@ module;
 
 export module druid.graphics.NodeRectangle;
 
-import druid.core.Engine;
 import druid.graphics.Color;
 import druid.graphics.Node;
 
@@ -23,13 +22,11 @@ export namespace druid::graphics
 	class NodeRectangle : public Node
 	{
 	public:
-		/// @brief Construct a rectangle node associated with the given engine.
+		/// @brief Construct a rectangle node.
 		///
 		/// Registers an internal draw callback that renders a rectangle using the
 		/// current size and color.
-		///
-		/// @param x Owning engine instance.
-		explicit NodeRectangle(druid::core::Engine& x) : Node{x}
+		explicit NodeRectangle() : Node{}
 		{
 			on_draw(
 				[this](auto& renderer)

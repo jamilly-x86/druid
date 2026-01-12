@@ -2,6 +2,7 @@ module;
 
 #include <raylib.h>
 #include <rlgl.h>
+#include <algorithm>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <memory>
@@ -10,12 +11,9 @@ module;
 
 export module druid.graphics.Node;
 
-import druid.core.Object;
-import druid.core.Engine;
 import druid.core.Signal;
 import druid.graphics.Renderer;
 
-using druid::core::Engine;
 using druid::core::Signal;
 
 export namespace druid::graphics
@@ -30,17 +28,18 @@ export namespace druid::graphics
 	/// @class Node
 	/// @brief Scene-graph node with local transform and draw callback support.
 	///
-	/// `Node` extends `druid::core::Object` to provide spatial transform data
-	/// (position/scale/rotation) and hierarchical transform composition.
-	/// Nodes can be arranged in a tree; each node can compute its local transform
-	/// and its global transform (including ancestors).
+	/// `Node` provides spatial transform data (position/scale/rotation) and
+	/// hierarchical transform composition. Nodes can be arranged in a tree;
+	/// each node can compute its local transform and its global transform
+	/// (including ancestors).
 	///
 	/// Rendering is performed via `draw(Renderer&)`, which typically invokes the
 	/// `on_draw` signal so that node subclasses or external systems can attach
 	/// render behavior without tightly coupling to the node type.
 	///
-	/// @note `Node` hides `Object::create_child` to ensure children are also `Node`s.
-	class Node : public core::Object
+	/// Each node owns its children via `std::unique_ptr`, ensuring clear ownership
+	/// and automatic cleanup.
+	class Node
 	{
 	public:
 		/// @brief Default local position (0, 0).
@@ -53,32 +52,74 @@ export namespace druid::graphics
 		///       whether rotation is in radians or degrees and remain consistent across systems.
 		static constexpr auto DefaultRotation = 0.0F;
 
-		/// @brief Construct a node associated with the given engine.
-		/// @param x Owning engine instance.
-		Node(Engine& x) : Object{x}
+		/// @brief Construct a node.
+		explicit Node() = default;
+
+		/// @brief Virtual destructor for proper cleanup in hierarchies.
+		virtual ~Node() noexcept = default;
+
+		Node(const Node&) = delete;
+		auto operator=(const Node&) -> Node& = delete;
+		Node(Node&&) noexcept = delete;
+		auto operator=(Node&&) noexcept -> Node& = delete;
+
+		/// @brief Add a child node to this node.
+		/// @param child The child node to add (ownership transferred).
+		auto add_child(std::unique_ptr<Node> child) -> void
 		{
-			on_added(
-				[this](auto* parent)
-				{
-					parent_node_ = dynamic_cast<Node*>(parent);
-					transform_global_dirty_ = true;
-					invalidate_children_global_transform();
-				});
-			on_removed(
-				[this](auto*)
-				{
-					parent_node_ = nullptr;
-					transform_global_dirty_ = true;
-					invalidate_children_global_transform();
-				});
-			on_child_added([this](auto* child) { nodes_.emplace_back(dynamic_cast<Node*>(child)); });
-			on_child_removed([this](auto* child) { std::erase(nodes_, child); });
-		} /// @brief Set the local position of this node.
+			if (child == nullptr)
+			{
+				return;
+			}
+
+			child->parent_node_ = this;
+			child->dirty();
+			children_.emplace_back(std::move(child));
+		}
+
+		/// @brief Remove this node from its parent if it has one.
+		/// @return The owning unique_ptr of this node, or nullptr if no parent.
+		[[nodiscard]] auto remove() -> std::unique_ptr<Node>
+		{
+			if (parent_node_ == nullptr)
+			{
+				return nullptr;
+			}
+
+			auto it = std::ranges::find_if(parent_node_->children_, [this](const auto& node) { return this == node.get(); });
+
+			if (it == std::end(parent_node_->children_))
+			{
+				return nullptr;
+			}
+
+			auto node = std::move(*it);
+			auto* parent = parent_node_;
+			parent_node_ = nullptr;
+			dirty();
+			parent->children_.erase(it);
+			return node;
+		}
+
+		/// @brief Get the parent node.
+		/// @return Pointer to parent node, or nullptr if this is a root node.
+		[[nodiscard]] auto parent() const noexcept -> Node*
+		{
+			return parent_node_;
+		}
+
+		/// @brief Get the list of children this node owns.
+		/// @return Read-only vector of child nodes.
+		[[nodiscard]] auto children() const noexcept -> const std::vector<std::unique_ptr<Node>>&
+		{
+			return children_;
+		}
+		/// @brief Set the local position of this node.
 		/// @param pos New local position.
 		auto set_position(const glm::vec2& pos) -> void
 		{
 			position_ = pos;
-			update_transform();
+			dirty();
 		}
 
 		/// @brief Get the local position of this node.
@@ -108,7 +149,7 @@ export namespace druid::graphics
 		auto set_scale(const glm::vec2& scale) -> void
 		{
 			scale_ = scale;
-			update_transform();
+			dirty();
 		}
 
 		/// @brief Get the local scale of this node.
@@ -123,7 +164,7 @@ export namespace druid::graphics
 		auto set_rotation(float rotation) -> void
 		{
 			rotation_ = rotation;
-			update_transform();
+			dirty();
 		}
 
 		/// @brief Get the local rotation of this node.
@@ -135,8 +176,7 @@ export namespace druid::graphics
 
 		/// @brief Create and attach a child node of type `T`.
 		///
-		/// The child is owned by this node (via the underlying `Object` hierarchy).
-		/// The child's constructor must accept `(Engine&, Args...)`.
+		/// The child is owned by this node via unique_ptr.
 		///
 		/// @tparam T Node type (must derive from Node).
 		/// @tparam Args Constructor argument types for T.
@@ -145,7 +185,7 @@ export namespace druid::graphics
 		template <NodeType T, typename... Args>
 		[[nodiscard]] auto create_node(Args&&... args) -> T&
 		{
-			auto child = std::make_unique<T>(engine(), std::forward<Args>(args)...);
+			auto child = std::make_unique<T>(std::forward<Args>(args)...);
 			auto* ptr = child.get();
 			add_child(std::move(child));
 			return *ptr;
@@ -156,17 +196,6 @@ export namespace druid::graphics
 		[[nodiscard]] auto create_node() -> Node&
 		{
 			return create_node<Node>();
-		}
-
-		/// @brief Get a mutable list of direct child nodes.
-		///
-		/// This list typically mirrors the node children stored in the underlying
-		/// `Object` hierarchy, but exposed as `Node*` for convenience.
-		///
-		/// @return Mutable list of pointers to child nodes.
-		[[nodiscard]] auto nodes() -> std::vector<Node*>&
-		{
-			return nodes_;
 		}
 
 		/// @brief Get the local transform matrix.
@@ -199,23 +228,23 @@ export namespace druid::graphics
 			{
 				if (parent_node_ != nullptr)
 				{
-					transform_global_cached_ = parent_node_->transform_global() * transform();
+					transform_global_ = parent_node_->transform_global() * transform();
 				}
 				else
 				{
-					transform_global_cached_ = transform();
+					transform_global_ = transform();
 				}
 
 				transform_global_dirty_ = false;
 			}
 
-			return transform_global_cached_;
+			return transform_global_;
 		}
 
 		/// @brief Draw this node using the provided renderer.
 		///
-		/// Typically emits `on_draw` for this node and may be used as the entry
-		/// point for drawing subtrees depending on implementation.
+		/// Applies the local transform, emits the on_draw signal, and recursively
+		/// draws all child nodes.
 		///
 		/// @param x Renderer used for issuing draw calls.
 		auto draw(Renderer& x) const -> void
@@ -225,9 +254,9 @@ export namespace druid::graphics
 
 			on_draw_(x);
 
-			for (auto* node : nodes_)
+			for (const auto& child : children_)
 			{
-				node->draw(x);
+				child->draw(x);
 			}
 
 			rlPopMatrix();
@@ -246,32 +275,22 @@ export namespace druid::graphics
 		}
 
 	private:
-		/// @brief Hide Object::create_child to only allow Node creation APIs.
-		using Object::create_child;
-
 		/// @brief Mark transforms as dirty and invalidate children.
-		auto update_transform() -> void
+		auto dirty() -> void
 		{
 			transform_dirty_ = true;
 			transform_global_dirty_ = true;
-			invalidate_children_global_transform();
-		}
-
-		/// @brief Recursively invalidate global transforms of all children.
-		auto invalidate_children_global_transform() -> void
-		{
-			for (auto* child : nodes_)
+			for (auto& child : children_)
 			{
-				child->transform_global_dirty_ = true;
-				child->invalidate_children_global_transform();
+				child->dirty();
 			}
 		}
 
-		std::vector<Node*> nodes_;
+		std::vector<std::unique_ptr<Node>> children_;
 		Node* parent_node_{nullptr};
 		Signal<void(Renderer&)> on_draw_;
 		mutable glm::mat4 transform_{glm::mat4(1.0F)};
-		mutable glm::mat4 transform_global_cached_{glm::mat4(1.0F)};
+		mutable glm::mat4 transform_global_{glm::mat4(1.0F)};
 		mutable bool transform_dirty_{true};
 		mutable bool transform_global_dirty_{true};
 		glm::vec2 position_{DefaultPosition};

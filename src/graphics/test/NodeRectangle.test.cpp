@@ -13,7 +13,7 @@ using druid::graphics::NodeRectangle;
 TEST(NodeRectangle, centered_bounds)
 {
 	Engine engine;
-	auto rect = std::make_unique<NodeRectangle>(engine);
+	auto rect = std::make_unique<NodeRectangle>();
 
 	rect->set_size({100.0F, 50.0F});
 
@@ -33,8 +33,8 @@ TEST(NodeRectangle, centered_bounds)
 TEST(NodeRectangle, collision_detection_overlapping)
 {
 	Engine engine;
-	auto rect1 = std::make_unique<NodeRectangle>(engine);
-	auto rect2 = std::make_unique<NodeRectangle>(engine);
+	auto rect1 = std::make_unique<NodeRectangle>();
+	auto rect2 = std::make_unique<NodeRectangle>();
 
 	// Rectangle 1: 100x100 at (0, 0)
 	// World bounds: (-50, -50) to (50, 50)
@@ -60,8 +60,8 @@ TEST(NodeRectangle, collision_detection_overlapping)
 TEST(NodeRectangle, collision_detection_not_overlapping)
 {
 	Engine engine;
-	auto rect1 = std::make_unique<NodeRectangle>(engine);
-	auto rect2 = std::make_unique<NodeRectangle>(engine);
+	auto rect1 = std::make_unique<NodeRectangle>();
+	auto rect2 = std::make_unique<NodeRectangle>();
 
 	// Rectangle 1: 100x100 at (0, 0)
 	rect1->set_size({100.0F, 100.0F});
@@ -87,8 +87,8 @@ TEST(NodeRectangle, collision_detection_not_overlapping)
 TEST(NodeRectangle, collision_detection_edge_touching)
 {
 	Engine engine;
-	auto rect1 = std::make_unique<NodeRectangle>(engine);
-	auto rect2 = std::make_unique<NodeRectangle>(engine);
+	auto rect1 = std::make_unique<NodeRectangle>();
+	auto rect2 = std::make_unique<NodeRectangle>();
 
 	// Rectangle 1: 100x100 at (0, 0)
 	// World bounds: (-50, -50) to (50, 50)
@@ -120,8 +120,8 @@ TEST(NodeRectangle, collision_detection_edge_touching)
 TEST(NodeRectangle, pong_ball_paddle_collision)
 {
 	Engine engine;
-	auto paddle = std::make_unique<NodeRectangle>(engine);
-	auto ball = std::make_unique<NodeRectangle>(engine);
+	auto paddle = std::make_unique<NodeRectangle>();
+	auto ball = std::make_unique<NodeRectangle>();
 
 	// Paddle: 25x100 at (128, 360)
 	paddle->set_size({25.0F, 100.0F});
