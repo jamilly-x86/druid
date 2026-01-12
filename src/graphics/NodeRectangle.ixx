@@ -26,7 +26,7 @@ export namespace druid::graphics
 		///
 		/// Registers an internal draw callback that renders a rectangle using the
 		/// current size and color.
-		explicit NodeRectangle() : Node{}
+		NodeRectangle()
 		{
 			on_draw(
 				[this](auto& renderer)

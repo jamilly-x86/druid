@@ -30,7 +30,7 @@ export namespace druid::graphics
 		///
 		/// Registers an internal draw callback that renders the stored text
 		/// using the current font size and color.
-		NodeText() : Node{}
+		NodeText()
 		{
 			on_draw([this](auto& renderer) { renderer.draw_text(0, 0, text_, font_size_, color_); });
 		}
