@@ -3,7 +3,6 @@
 
 import druid.graphics.NodeRectangle;
 
-using druid::core::Engine;
 using druid::graphics::NodeRectangle;
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
