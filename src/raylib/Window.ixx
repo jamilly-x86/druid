@@ -274,8 +274,9 @@ export namespace druid::raylib
 		/// @param x Owning engine instance.
 		explicit Window(druid::core::Engine& x) : druid::graphics::Window{x}
 		{
+			last_title_ = get_title();
 			set_renderer(std::make_unique<druid::raylib::Renderer>());
-			InitWindow(width_, height_, get_title().data());
+			InitWindow(width_, height_, last_title_.c_str());
 			SetWindowState(FLAG_WINDOW_RESIZABLE);
 		}
 
