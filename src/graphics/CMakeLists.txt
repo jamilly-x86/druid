@@ -10,22 +10,11 @@ target_sources(${PROJECT_NAME} PUBLIC
         NodeText.ixx
         Renderer.ixx
         Window.ixx
-        renderer/Raylib.ixx
 )
 
-find_package(raylib CONFIG REQUIRED)
-find_package(glfw3 CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
     druid-core
     glm::glm
-    raylib
-    glfw
 )
-
-if(WIN32)
-    target_link_libraries(${PROJECT_NAME} PRIVATE
-        winmm
-    )
-endif()

@@ -3,14 +3,14 @@ module;
 #include <raylib.h>
 #include <string>
 
-export module druid.graphics.renderer.Raylib;
+export module druid.raylib.Renderer;
 
 import druid.graphics.Color;
 import druid.graphics.Renderer;
 
-export namespace druid::graphics::renderer
+export namespace druid::raylib
 {
-	/// @class Raylib
+	/// @class Renderer
 	/// @brief Raylib-backed implementation of the Renderer interface.
 	///
 	/// This class adapts the abstract `druid::graphics::Renderer` API to the
@@ -20,19 +20,19 @@ export namespace druid::graphics::renderer
 	/// `Raylib` is intended to be owned and managed by higher-level services
 	/// (such as `graphics::Window`) and does not manage window creation or
 	/// lifetime itself.
-	class Raylib : public Renderer
+	class Renderer : public druid::graphics::Renderer
 	{
 	public:
 		/// @brief Default constructor.
-		Raylib() = default;
+		Renderer() = default;
 
 		/// @brief Virtual destructor.
-		~Raylib() override = default;
+		~Renderer() override = default;
 
-		Raylib(const Raylib&) = delete;
-		Raylib(Raylib&&) noexcept = delete;
-		auto operator=(const Raylib&) -> Raylib& = delete;
-		auto operator=(Raylib&&) noexcept -> Raylib& = delete;
+		Renderer(const Renderer&) = delete;
+		Renderer(Renderer&&) noexcept = delete;
+		auto operator=(const Renderer&) -> Renderer& = delete;
+		auto operator=(Renderer&&) noexcept -> Renderer& = delete;
 
 		/// @brief Begin a new rendering frame.
 		///

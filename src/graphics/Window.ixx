@@ -69,14 +69,42 @@ export namespace druid::graphics
 		/// nodes to build a renderable hierarchy.
 		///
 		/// @return Reference to the root node.
-		[[nodiscard]] virtual auto root_node() -> Node& = 0;
+		[[nodiscard]] auto root_node() -> Node&
+		{
+			return root_node_;
+		}
 
 		/// @brief Set the window title.
 		/// @param x New title string.
-		virtual auto set_title(std::string_view x) -> void = 0;
+		auto set_title(std::string_view x) -> void
+		{
+			title_ = x;
+		}
 
 		/// @brief Get the current window title.
 		/// @return Current title string view.
-		[[nodiscard]] virtual auto get_title() -> std::string_view = 0;
+		[[nodiscard]] auto get_title() -> std::string_view
+		{
+			return title_;
+		}
+
+		/// @brief Set the renderer for this window.
+		/// @param x The renderer to use for drawing.
+		auto set_renderer(std::unique_ptr<Renderer> x) -> void
+		{
+			renderer_ = std::move(x);
+		}
+
+		/// @brief Get the renderer for this window.
+		/// @return Pointer to the renderer, or nullptr if not set.
+		[[nodiscard]] auto get_renderer() -> Renderer*
+		{
+			return renderer_.get();
+		}
+
+	private:
+		Node root_node_;
+		std::unique_ptr<Renderer> renderer_;
+		std::string title_{DefaultTitle};
 	};
 }

@@ -19,7 +19,7 @@ import druid.core.Event;
 import druid.graphics.Color;
 import druid.graphics.Node;
 import druid.graphics.Renderer;
-import druid.graphics.renderer.Raylib;
+import druid.raylib.Renderer;
 import druid.graphics.Window;
 
 namespace
@@ -272,9 +272,10 @@ export namespace druid::raylib
 		/// raylib-based renderer.
 		///
 		/// @param x Owning engine instance.
-		explicit Window(druid::core::Engine& x) : druid::graphics::Window{x}, renderer_{std::make_unique<druid::graphics::renderer::Raylib>()}
+		explicit Window(druid::core::Engine& x) : druid::graphics::Window{x}
 		{
-			InitWindow(width_, height_, title_.c_str());
+			set_renderer(std::make_unique<druid::raylib::Renderer>());
+			InitWindow(width_, height_, get_title().data());
 			SetWindowState(FLAG_WINDOW_RESIZABLE);
 		}
 
@@ -297,6 +298,13 @@ export namespace druid::raylib
 		/// event system.
 		auto update(std::chrono::steady_clock::duration /*x*/) -> void override
 		{
+			// Check if title has changed and update raylib window
+			if (get_title() != last_title_)
+			{
+				last_title_ = get_title();
+				SetWindowTitle(last_title_.c_str());
+			}
+
 			if (WindowShouldClose())
 			{
 				using druid::core::EventWindow;
@@ -329,41 +337,16 @@ export namespace druid::raylib
 		auto update_end() -> void override
 		{
 			// Render the scene
-			if (renderer_)
+			if (auto* renderer = get_renderer())
 			{
-				renderer_->begin(druid::graphics::Color::Black);
-				root_node_.draw(*renderer_);
-				renderer_->end();
+				renderer->begin(druid::graphics::Color::Black);
+				root_node().draw(*renderer);
+				renderer->end();
 			}
 		}
 
-		/// @brief Get the root node of the window's scene graph.
-		///
-		/// @return Reference to the root node.
-		[[nodiscard]] auto root_node() -> druid::graphics::Node& override
-		{
-			return root_node_;
-		}
-
-		/// @brief Set the window title.
-		/// @param x New title string.
-		auto set_title(std::string_view x) -> void override
-		{
-			title_ = x;
-			SetWindowTitle(title_.c_str());
-		}
-
-		/// @brief Get the current window title.
-		/// @return Current title string view.
-		[[nodiscard]] auto get_title() -> std::string_view override
-		{
-			return title_;
-		}
-
 	private:
-		druid::graphics::Node root_node_;
-		std::unique_ptr<druid::graphics::Renderer> renderer_;
-		std::string title_{DefaultTitle};
+		std::string last_title_{DefaultTitle};
 		int width_{DefaultWidth};
 		int height_{DefaultHeight};
 	};
