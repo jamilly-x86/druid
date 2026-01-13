@@ -32,7 +32,12 @@ export namespace druid::graphics
 		/// using the current font size and color.
 		NodeText()
 		{
-			on_draw([this](auto& renderer) { renderer.draw_text(0, 0, text_, font_size_, color_); });
+			on_draw(
+				[this](auto& renderer)
+				{
+					const auto pos = get_position_global();
+					renderer.draw_text(pos.x, pos.y, text_, font_size_, color_);
+				});
 		}
 
 		/// @brief Virtual destructor.

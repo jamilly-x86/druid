@@ -1,7 +1,6 @@
 module;
 
 #include <raylib.h>
-#include <rlgl.h>
 #include <algorithm>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -73,7 +72,7 @@ export namespace druid::graphics
 			}
 
 			child->parent_node_ = this;
-			child->dirty();
+			child->dirty_global();
 			children_.emplace_back(std::move(child));
 		}
 
@@ -96,7 +95,7 @@ export namespace druid::graphics
 			auto node = std::move(*it);
 			auto* parent = parent_node_;
 			parent_node_ = nullptr;
-			dirty();
+			dirty_global();
 			parent->children_.erase(it);
 			return node;
 		}
@@ -127,6 +126,21 @@ export namespace druid::graphics
 		[[nodiscard]] auto get_position() const -> glm::vec2
 		{
 			return position_;
+		}
+
+		/// @brief Get the global position of this node.
+		///
+		/// Computed from the global transform and represents the node's position
+		/// in world space (including parent transforms).
+		///
+		/// @return Global/world position.
+		[[nodiscard]] auto get_position_global() const -> glm::vec2
+		{
+			// NOLINTNEXTLINE (cppcoreguidelines-pro-bounds-avoid-unchecked-container-access)
+			const auto pos = glm::vec3{transform_global()[3]};
+
+			// NOLINTNEXTLINE (cppcoreguidelines-pro-type-union-access,-warnings-as-errors)
+			return {pos.x, pos.y};
 		}
 
 		/// @brief Set the local scale of this node.
@@ -201,6 +215,31 @@ export namespace druid::graphics
 			return transform_;
 		}
 
+		/// @brief Get the global transform matrix.
+		///
+		/// The global transform composes this node's local transform with all
+		/// ancestor transforms up to the root.
+		///
+		/// @return Global/world transform matrix.
+		[[nodiscard]] auto transform_global() const -> glm::mat4
+		{
+			if (transform_global_dirty_)
+			{
+				if (parent_node_ != nullptr)
+				{
+					transform_global_ = parent_node_->transform_global() * transform();
+				}
+				else
+				{
+					transform_global_ = transform();
+				}
+
+				transform_global_dirty_ = false;
+			}
+
+			return transform_global_;
+		}
+
 		/// @brief Draw this node using the provided renderer.
 		///
 		/// Applies the local transform, emits the on_draw signal, and recursively
@@ -209,17 +248,12 @@ export namespace druid::graphics
 		/// @param x Renderer used for issuing draw calls.
 		auto draw(Renderer& x) const -> void
 		{
-			rlPushMatrix();
-			rlMultMatrixf(glm::value_ptr(transform()));
-
 			on_draw_(x);
 
 			for (const auto& child : children_)
 			{
 				child->draw(x);
 			}
-
-			rlPopMatrix();
 		}
 
 		/// @brief Subscribe to this node's draw callback.
@@ -235,13 +269,28 @@ export namespace druid::graphics
 		}
 
 	private:
-		/// @brief Mark transforms as dirty and invalidate children.
+		/// @brief Mark local transform dirty and propagate global dirty to children.
+		///
+		/// Called when local properties (position, scale, rotation) change.
+		/// This invalidates both the local transform and the global transform,
+		/// and propagates the global invalidation to all children.
 		auto dirty() -> void
 		{
 			transform_dirty_ = true;
+			dirty_global();
+		}
+
+		/// @brief Mark only global transform dirty and propagate to children.
+		///
+		/// Called when the parent relationship changes or when a parent's transform
+		/// changes. Children's global transforms depend on their parent's global
+		/// transform, so changes must propagate down the hierarchy.
+		auto dirty_global() -> void
+		{
+			transform_global_dirty_ = true;
 			for (auto& child : children_)
 			{
-				child->dirty();
+				child->dirty_global();
 			}
 		}
 
@@ -249,9 +298,11 @@ export namespace druid::graphics
 		Node* parent_node_{nullptr};
 		Signal<void(Renderer&)> on_draw_;
 		mutable glm::mat4 transform_{glm::mat4(1.0F)};
+		mutable glm::mat4 transform_global_{glm::mat4(1.0F)};
+		mutable bool transform_dirty_{true};
+		mutable bool transform_global_dirty_{true};
 		glm::vec2 position_{DefaultPosition};
 		glm::vec2 scale_{DefaultScale};
 		float rotation_{DefaultRotation};
-		mutable bool transform_dirty_{true};
 	};
 }
