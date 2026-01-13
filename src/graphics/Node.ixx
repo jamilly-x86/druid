@@ -210,7 +210,7 @@ export namespace druid::graphics
 		auto draw(Renderer& x) const -> void
 		{
 			rlPushMatrix();
-			rlMultMatrixf(glm::value_ptr(transform_));
+			rlMultMatrixf(glm::value_ptr(transform()));
 
 			on_draw_(x);
 
