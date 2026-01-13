@@ -10,4 +10,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 target_link_libraries(${PROJECT_NAME} PRIVATE
     druid-core
     druid-graphics
+    druid-raylib
 )
