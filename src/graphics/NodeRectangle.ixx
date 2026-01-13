@@ -31,8 +31,9 @@ export namespace druid::graphics
 			on_draw(
 				[this](auto& renderer)
 				{
+					const auto pos = get_position_global();
 					const auto tl = top_left();
-					renderer.draw_rectangle(tl.x, tl.y, size_.x, size_.y, color_);
+					renderer.draw_rectangle(tl.x + pos.x, tl.y + pos.y, size_.x, size_.y, color_);
 				});
 		}
 
