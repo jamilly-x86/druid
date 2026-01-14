@@ -94,6 +94,8 @@ jobs:
       - name: upload-llvm-coverage
         if: ${{ matrix.config.llvm-coverage }}
         uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
           files: build/coverage/coverage.info
           fail_ci_if_error: true
