@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/druidengine/druid/graph/badge.svg?token=NNUWV23L87)](https://codecov.io/gh/druidengine/druid)
 # Druid
 
 <p align="center">
