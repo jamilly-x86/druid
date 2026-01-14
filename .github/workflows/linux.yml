@@ -90,6 +90,13 @@ jobs:
         if: ${{ matrix.config.llvm-coverage }}
         run: cmake --build --preset ${{ matrix.config.preset }} --target llvm-coverage
 
+      - name: upload-llvm-coverage
+        if: ${{ matrix.config.llvm-coverage }}
+        uses: codecov/codecov-action@v5
+        with:
+          files: build/coverage/coverage.info
+          fail_ci_if_error: true
+
       - name: doxygen
         if: ${{ matrix.config.doxygen }}
         run: cmake --build --preset ${{ matrix.config.preset }} --target doxygen
