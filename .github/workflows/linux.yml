@@ -55,6 +55,7 @@ jobs:
           apt install -y curl tar git zip unzip make autoconf libtool ninja-build cmake
           apt install -y clang-20 clang-tidy-20 clang-format-20 llvm-20-tools g++-15
           apt install -y doxygen
+          apt install -y gnupg
           update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 10
           update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-15 10
           update-alternatives --install /usr/bin/clang clang /usr/bin/clang-20 200
