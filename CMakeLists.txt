@@ -80,8 +80,8 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         add_custom_target(llvm-coverage
             # Merge raw profiles.
             COMMAND ${LLVM_PROFDATA} merge -sparse
-                    ${CMAKE_BINARY_DIR}/coverage/*.profraw
-                    -o ${CMAKE_BINARY_DIR}/coverage/merged.profdata
+                ${CMAKE_BINARY_DIR}/coverage/*.profraw
+                -o ${CMAKE_BINARY_DIR}/coverage/merged.profdata
 
             COMMAND ${LLVM_COV} report
                 -instr-profile=${CMAKE_BINARY_DIR}/coverage/merged.profdata
@@ -92,6 +92,12 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
                 -output-dir=${CMAKE_BINARY_DIR}/coverage/html
                 -instr-profile=${CMAKE_BINARY_DIR}/coverage/merged.profdata
                 ${LLVM_COV_OBJECTS}
+
+            COMMAND ${LLVM_COV} export
+                -format=lcov
+                -instr-profile=${CMAKE_BINARY_DIR}/coverage/merged.profdata
+                ${LLVM_COV_OBJECTS}
+                > ${CMAKE_BINARY_DIR}/coverage/coverage.info
         )
     else()
         message(WARNING "llvm-profdata and llvm-cov executable(s) not found - llvm-coverage target will be skipped.")
