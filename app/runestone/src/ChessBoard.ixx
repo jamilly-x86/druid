@@ -151,7 +151,7 @@ export namespace runestone
 		/// @brief Pop (remove and return) the first occupied square.
 		/// @return Square index [0–63] that was cleared.
 		/// @post Removes the first occupied square from the chessboard.
-		constexpr auto pop_first_occupancy() noexcept -> int
+		auto pop_first_occupancy() noexcept -> int
 		{
 			const auto square = find_first_occupancy();
 			occupancy_ &= (occupancy_ - 1);
