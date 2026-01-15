@@ -24,17 +24,16 @@ TEST(ChessPiece, constructor)
 	{
 		for (auto type : magic_enum::enum_values<runestone::ChessPiece::Type>())
 		{
-			const auto found =
-				std::ranges::any_of(pieces,
-									[&](const runestone::ChessPiece& p)
-									{
-										auto c = p.color();
-										if (!c)
-										{
-											return p.type() == runestone::ChessPiece::Type::Empty;
-										}
-										return c.value() == color && p.type() == type && type != runestone::ChessPiece::Type::Empty;
-									});
+			const auto found = std::ranges::any_of(pieces,
+												   [&](const runestone::ChessPiece& p)
+												   {
+													   auto c = p.color();
+													   if (!c)
+													   {
+														   return p.type() == runestone::ChessPiece::Type::Empty;
+													   }
+													   return c.value() == color && p.type() == type && type != runestone::ChessPiece::Type::Empty;
+												   });
 			EXPECT_TRUE(found) << "Missing/invalid piece for color=" << magic_enum::enum_name(color) << " type=" << magic_enum::enum_name(type);
 		}
 	}
@@ -233,10 +232,12 @@ TEST(ChessPiece, pieceToCharBlackPieces)
 
 TEST(ChessPiece, pieceToCharInvalidInputPieces)
 {
-	EXPECT_EQ(runestone::ChessPiece::piece_to_char(runestone::ChessPiece(runestone::ChessPiece::Color::Black, runestone::ChessPiece::Type::Empty)).error(),
-			  runestone::ChessPiece::Error::InvalidInputPiece);
-	EXPECT_EQ(runestone::ChessPiece::piece_to_char(runestone::ChessPiece(runestone::ChessPiece::Color::White, runestone::ChessPiece::Type::Empty)).error(),
-			  runestone::ChessPiece::Error::InvalidInputPiece);
+	EXPECT_EQ(
+		runestone::ChessPiece::piece_to_char(runestone::ChessPiece(runestone::ChessPiece::Color::Black, runestone::ChessPiece::Type::Empty)).error(),
+		runestone::ChessPiece::Error::InvalidInputPiece);
+	EXPECT_EQ(
+		runestone::ChessPiece::piece_to_char(runestone::ChessPiece(runestone::ChessPiece::Color::White, runestone::ChessPiece::Type::Empty)).error(),
+		runestone::ChessPiece::Error::InvalidInputPiece);
 }
 
 TEST(ChessPiece, roundTripCharToPieceToChar)

@@ -43,15 +43,14 @@ TEST(Move, specialTypes)
 	EXPECT_EQ(ep.type(), runestone::Move::Type::EnPassant);
 
 	constexpr auto castle = runestone::Move::make({.from = runestone::ChessBoard::Square::E1, .to = runestone::ChessBoard::Square::G1},
-											  runestone::Move::Type::Castling, runestone::Move::Promo::Knight);
+												  runestone::Move::Type::Castling, runestone::Move::Promo::Knight);
 	EXPECT_EQ(castle.type(), runestone::Move::Type::Castling);
 }
 
-
 TEST(Move, rawBitLayout)
 {
-	constexpr auto move = runestone::Move::make({ .from = runestone::ChessBoard::Square::E2, .to = runestone::ChessBoard::Square::E4} ,
-										  runestone::Move::Type::Normal, runestone::Move::Promo::Queen);
+	constexpr auto move = runestone::Move::make({.from = runestone::ChessBoard::Square::E2, .to = runestone::ChessBoard::Square::E4},
+												runestone::Move::Type::Normal, runestone::Move::Promo::Queen);
 
 	constexpr auto raw = move.raw();
 
