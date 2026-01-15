@@ -126,7 +126,7 @@ export namespace runestone
 		/// to FileH and Rank8 (i.e. A1 -> H1 -> A2 -> H2 -> .... -> A7 -> H7 -> A8 -> H8).
 		/// @return Square index [0–63] of the first occupied square.
 		/// @pre ChessBoard must not be empty (undefined if `occupancy_ == 0`).
-		[[nodiscard]] constexpr auto find_first_occupancy() const noexcept -> int
+		[[nodiscard]] auto find_first_occupancy() const noexcept -> int
 		{
 			if (occupancy_ == 0ULL)
 			{
@@ -139,7 +139,7 @@ export namespace runestone
 		/// to FileA and Rank1 (i.e. H8 -> A8 -> H7 -> A7 -> ... -> H2 -> A2 -> H1 -> A1).
 		/// @return Square index [0–63] of the last occupied square.
 		/// @pre ChessBoard must not be empty (undefined if `value_ == 0`).
-		[[nodiscard]] constexpr auto find_last_occupancy() const noexcept -> int
+		[[nodiscard]] auto find_last_occupancy() const noexcept -> int
 		{
 			if (occupancy_ == 0ULL)
 			{

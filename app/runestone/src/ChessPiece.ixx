@@ -95,7 +95,7 @@ export namespace runestone
 		/// @brief Convert a character to chess piece.
 		/// @param c Character representing a piece ('K'=white king, 'k'=black king, etc.).
 		/// @return Corresponding Piece enum value, or Error::InvalidCharacter.
-		static constexpr auto char_to_piece(char c) noexcept -> std::expected<ChessPiece, Error>
+		static auto char_to_piece(char c) noexcept -> std::expected<ChessPiece, Error>
 		{
 			switch (c)
 			{
@@ -157,7 +157,7 @@ export namespace runestone
 		/// @brief Convert chess piece enum to FEN character.
 		/// @param chess_piece Piece enum value to convert.
 		/// @return Corresponding FEN character ('K', 'k', 'P', 'p', etc.) or Error::InvalidInputPiece.
-		static constexpr auto piece_to_char(ChessPiece chess_piece) noexcept -> std::expected<char, Error>
+		static auto piece_to_char(ChessPiece chess_piece) noexcept -> std::expected<char, Error>
 		{
 			switch (chess_piece.raw())
 			{
@@ -265,7 +265,7 @@ export namespace runestone
 
 		/// @brief Get the chess piece color.
 		/// @return The chess piece color.
-		[[nodiscard]] constexpr auto piece_color() const noexcept -> std::expected<Color, Error>
+		[[nodiscard]] auto piece_color() const noexcept -> std::expected<Color, Error>
 		{
 			if ((raw_bits() & HexSeven) == 0)
 			{
@@ -277,7 +277,7 @@ export namespace runestone
 		/// @brief Check if piece is white.
 		/// @return True if white, false otherwise. If piece is empty,
 		/// return Error::InvalidInputPiece.
-		[[nodiscard]] constexpr auto white() const noexcept -> std::expected<bool, Error>
+		[[nodiscard]] auto white() const noexcept -> std::expected<bool, Error>
 		{
 			if ((raw_bits() & HexSeven) == 0)
 			{
@@ -289,7 +289,7 @@ export namespace runestone
 		/// @brief Check if piece is black.
 		/// @return True if black, false otherwise. If piece is empty,
 		/// return Error::InvalidInputPiece.
-		[[nodiscard]] constexpr auto black() const noexcept -> std::expected<bool, Error>
+		[[nodiscard]] auto black() const noexcept -> std::expected<bool, Error>
 		{
 			if ((raw_bits() & HexSeven) == 0)
 			{
